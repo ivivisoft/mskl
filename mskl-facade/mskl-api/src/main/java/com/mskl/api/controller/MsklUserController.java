@@ -32,7 +32,7 @@ public class MsklUserController{
     private SmsClient smsClient;
 
     @RequestMapping("/{id}")
-    public @ResponseBody MsklUser getMsklUser(@PathVariable Long id){
+    public  MsklUser getMsklUser(@PathVariable Long id){
         if(logger.isInfoEnabled()){
             logger.info("222222222222");
         }
@@ -40,7 +40,7 @@ public class MsklUserController{
     }
 
     @RequestMapping("/verificationCode/{mobile}")
-    public @ResponseBody boolean getVerificationCode(@PathVariable String mobile){
+    public boolean getVerificationCode(@PathVariable String mobile){
         //String token = UUID.randomUUID().toString().replaceAll("-", "");
        // redisClient.set(mobile,token);
         smsClient.sendSMS(mobile,"789076");

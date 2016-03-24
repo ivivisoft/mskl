@@ -60,7 +60,6 @@ public class HttpClientUtil {
 		String response = "";
 
 		HttpMethod httpmethod = new GetMethod(urlstr);
-		httpmethod.getParams().setContentCharset("UTF-8");
 		try {
 			int statusCode = client.executeMethod(httpmethod);
 			InputStream _InputStream = null;
