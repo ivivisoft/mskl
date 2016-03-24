@@ -1,5 +1,7 @@
 package com.mskl.api.controller;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @RestController
 public class BaseController {
+    private Log logger = LogFactory.getLog(BaseController.class);
 
     @RequestMapping("/hello")
     public  Person getHello(){
@@ -20,7 +23,9 @@ public class BaseController {
 
     @RequestMapping("/get")
     public String getSomeInfo(@RequestBody Person1 pe){
-        System.out.print(pe.toString());
+        if(logger.isInfoEnabled()){
+            logger.info(pe.toString());
+        }
         return "true";
     }
 

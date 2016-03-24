@@ -41,7 +41,7 @@ public class SmsClientImpl implements SmsClient {
         url.append("?").append("account=").append(account)
                 .append("&pswd=").append(password)
                 .append("&mobile=").append(mobile)
-                .append("&msg=").append(String.format(SMS_TEMPLATE, msg))
+                .append("&msg=").append(String.format(SMS_TEMPLATE.replaceAll("\\s",""), msg))
                 .append("&needstatus=true").append("&product=");
         return url.toString();
     }

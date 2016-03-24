@@ -37,10 +37,8 @@ public class HttpClientUtil {
 		httpConnectionManager.setParams(params);
 
 		client = new HttpClient(httpConnectionManager);
-
 		client.getParams().setConnectionManagerTimeout(3000);
-		// client.getParams().setIntParameter("http.socket.timeout", 10000);
-		// client.getParams().setIntParameter("http.connection.timeout", 5000);
+		client.getParams().setContentCharset("UTF-8");
 	}
 
 	private static class ClientUtilInstance {
@@ -62,6 +60,7 @@ public class HttpClientUtil {
 		String response = "";
 
 		HttpMethod httpmethod = new GetMethod(urlstr);
+		httpmethod.getParams().setContentCharset("UTF-8");
 		try {
 			int statusCode = client.executeMethod(httpmethod);
 			InputStream _InputStream = null;
@@ -114,6 +113,5 @@ public class HttpClientUtil {
 
 	public static void main(String[] args) {
 		String url = "http://esms.etonenet.com/sms/mt?spid=3060&sppassword=hbkj3060&das=8618611178949&command=MULTI_MT_REQUEST&sm=a1beccd4b1a6a1bf20cda8b5c0bdd3c8ebcdeab3c9a3a1&dc=15";
-		// System.out.println(doGetRequest(url));
 	}
 }
