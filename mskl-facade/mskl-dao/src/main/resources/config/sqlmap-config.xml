@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+        <setting name="jdbcTypeForNull" value="VARCHAR"/>
+	</settings>
+
+
+	<plugins>
+		<plugin interceptor="com.mskl.dao.base.interceptor.PagePlugin">
+ 			<property name="dialect" value="com.mskl.dao.base.dialect.MySql5Dialect"/>
+			<property name="pageSqlId" value=".*[lL]istPage.*"/>
+		</plugin>
+	</plugins>
+</configuration>  
