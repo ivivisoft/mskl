@@ -1,10 +1,10 @@
 package com.mskl.api.controller;
 
+import com.mskl.common.dto.RestServiceResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -16,9 +16,14 @@ public class BaseController {
     private Log logger = LogFactory.getLog(BaseController.class);
 
     @RequestMapping("/hello")
-    public  Person getHello(){
+    public  RestServiceResult<List<Person>> getHello(){
         Person p = new Person("描述","点点滴滴","andy");
-        return p;
+        RestServiceResult<List<Person>> result = new RestServiceResult<List<Person>>();
+        result.setSuccess(true);
+        List<Person> list = new ArrayList<Person>();
+        list.add(p);
+        result.setData(list);
+        return result;
     }
 
     @RequestMapping("/get")
