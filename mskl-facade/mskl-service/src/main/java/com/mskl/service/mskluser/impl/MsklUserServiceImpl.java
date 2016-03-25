@@ -16,6 +16,8 @@ import com.mskl.service.mskluserloginlog.MsklUserLoginLogService;
 import com.mskl.service.redis.RedisClient;
 import com.mskl.service.smscheckcode.MsklSmsCheckcodeService;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,6 +27,8 @@ import java.util.UUID;
 
 @Service(value = "mskluser.msklUserService")
 public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> implements MsklUserService {
+
+    private Log logger = LogFactory.getLog(MsklUserServiceImpl.class);
 
     private MsklUserDao msklUserDao;
 
@@ -50,6 +54,9 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         result.setData(Boolean.FALSE);
         if (!checkSmsCode(registerDto.getMobile(), registerDto.getVerificationCode())) {
             result.setMessage("注册验证码不正确!");
+            if (logger.isInfoEnabled()){
+                logger.info("注册"+result.toString());
+            }
             return result;
         }
         MsklUser msklUser = new MsklUser();
@@ -66,6 +73,9 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         if (saveObject(msklUser) > 0) {
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
+            if (logger.isInfoEnabled()){
+                logger.info("注册"+result.toString());
+            }
             return result;
         }
         return result;
@@ -77,11 +87,17 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(loginDto.getUsername());
         if (null == msklUser) {
             result.setMessage("查无此账号!");
+            if (logger.isInfoEnabled()){
+                logger.info("登录"+result.toString());
+            }
             return result;
         }
         String passwd = MD5Util.encode(loginDto.getPassword());
         if ((!StringUtils.equals(msklUser.getMobile(), loginDto.getUsername()) && !StringUtils.equals(msklUser.getEmail(), loginDto.getUsername())) || !StringUtils.equals(msklUser.getUserPwd(), passwd)) {
             result.setMessage("用户名或者密码不正确!");
+            if (logger.isInfoEnabled()){
+                logger.info("登录"+result.toString());
+            }
             return result;
         }
 
