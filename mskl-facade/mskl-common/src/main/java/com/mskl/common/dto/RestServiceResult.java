@@ -43,4 +43,9 @@ public final class RestServiceResult<T> implements Serializable {
     public void setData(T data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return isSuccess()? "服务执行成功!" : "服务失败,原因是:"+message;
+    }
 }
