@@ -1,5 +1,6 @@
 package com.mskl.service.smscheckcode;
 
+import com.mskl.common.dto.RestServiceResult;
 import com.mskl.dao.model.MsklSmsCheckcode;
 import com.mskl.service.base.BaseService;
 
@@ -12,7 +13,7 @@ public interface MsklSmsCheckcodeService extends BaseService<MsklSmsCheckcode, S
    * @param mobile
    * @return
      */
-  String getRegisterCheckcode(String mobile);
+  RestServiceResult<String> getRegisterCheckcode(String mobile);
 
   /**
    * 通过手机号码和sms的业务类型获取验证码

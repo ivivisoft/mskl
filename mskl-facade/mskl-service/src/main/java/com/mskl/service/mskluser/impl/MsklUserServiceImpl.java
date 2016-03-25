@@ -3,6 +3,7 @@ package com.mskl.service.mskluser.impl;
 import com.mskl.common.constant.RedisKeyConstant;
 import com.mskl.common.dto.LoginDto;
 import com.mskl.common.dto.RegisterDto;
+import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.util.MD5Util;
 import com.mskl.dao.model.MsklSmsCheckcode;
 import com.mskl.dao.model.MsklUser;
@@ -43,47 +44,63 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
     @Resource(name = "mskluserloginlog.msklUserLoginLogService")
     private MsklUserLoginLogService msklUserLoginLogService;
 
-    public boolean register(RegisterDto registerDto) {
-        if (checkSmsCode(registerDto.getMobile(), registerDto.getVerificationCode())) {
-            MsklUser msklUser = new MsklUser();
-            msklUser.setMobile(registerDto.getMobile());
-            msklUser.setUserPwd(MD5Util.encode(registerDto.getPassword()));
-            msklUser.setRegisterDatetime(new Date());
-            msklUser.setUserInit("2");
-            msklUser.setUserStatus("1");
-            msklUser.setErrorCount(0);
-            msklUser.setLoginCount(0);
-            if (StringUtils.isNotBlank(registerDto.getInvitationCode())) {
-                msklUser.setRefUserId(Long.parseLong(registerDto.getInvitationCode()));
-            }
-            return saveObject(msklUser) > 0;
+    public RestServiceResult<Boolean> register(RegisterDto registerDto) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
+        result.setSuccess(false);
+        result.setData(Boolean.FALSE);
+        if (!checkSmsCode(registerDto.getMobile(), registerDto.getVerificationCode())) {
+            result.setMessage("注册验证码不正确!");
+            return result;
         }
-        return false;
+        MsklUser msklUser = new MsklUser();
+        msklUser.setMobile(registerDto.getMobile());
+        msklUser.setUserPwd(MD5Util.encode(registerDto.getPassword()));
+        msklUser.setRegisterDatetime(new Date());
+        msklUser.setUserInit("2");
+        msklUser.setUserStatus("1");
+        msklUser.setErrorCount(0);
+        msklUser.setLoginCount(0);
+        if (StringUtils.isNotBlank(registerDto.getInvitationCode())) {
+            msklUser.setRefUserId(Long.parseLong(registerDto.getInvitationCode()));
+        }
+        if (saveObject(msklUser) > 0) {
+            result.setSuccess(true);
+            result.setData(Boolean.TRUE);
+            return result;
+        }
+        return result;
     }
 
-    public String login(LoginDto loginDto) {
+    public RestServiceResult<String> login(LoginDto loginDto) {
+        RestServiceResult<String> result = new RestServiceResult<String>();
+        result.setSuccess(false);
         MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(loginDto.getUsername());
-        if (null != msklUser) {
-            String passwd = MD5Util.encode(loginDto.getPassword());
-            if ((StringUtils.equals(msklUser.getMobile(), loginDto.getUsername()) || StringUtils.equals(msklUser.getEmail(), loginDto.getUsername())) && StringUtils.equals(msklUser.getUserPwd(), passwd)) {
-                //产生登录token并将她存入redis
-                String loginKey = RedisKeyConstant.LOGINPRE + loginDto.getUsername();
-                String token = UUID.randomUUID().toString().replace("-", "");
-                redisClient.set(loginKey, token);
-                //更新登录次数
-                msklUserDao.increaseLoginCountAndChangeLastLoginTime(loginDto.getUsername());
-                //添加登录流水
-                MsklUserLoginLog msklUserLoginLog = new MsklUserLoginLog();
-                msklUserLoginLog.setIsSuccess("1");
-                msklUserLoginLog.setLoginDatetime(new Date());
-                msklUserLoginLog.setUserId(msklUser.getUserId());
-                msklUserLoginLogService.saveObject(msklUserLoginLog);
-                return token;
-            } else {
-                return "用户名或者密码错误!";
-            }
+        if (null == msklUser) {
+            result.setMessage("查无此账号!");
+            return result;
         }
-        return StringUtils.EMPTY;
+        String passwd = MD5Util.encode(loginDto.getPassword());
+        if ((!StringUtils.equals(msklUser.getMobile(), loginDto.getUsername()) && !StringUtils.equals(msklUser.getEmail(), loginDto.getUsername())) || !StringUtils.equals(msklUser.getUserPwd(), passwd)) {
+            result.setMessage("用户名或者密码不正确!");
+            return result;
+        }
+
+        //产生登录token并将她存入redis
+        String loginKey = RedisKeyConstant.LOGINPRE + loginDto.getUsername();
+        String token = UUID.randomUUID().toString().replace("-", "");
+        redisClient.set(loginKey, token);
+        //更新登录次数
+        msklUserDao.increaseLoginCountAndChangeLastLoginTime(loginDto.getUsername());
+        //添加登录流水
+        MsklUserLoginLog msklUserLoginLog = new MsklUserLoginLog();
+        msklUserLoginLog.setIsSuccess("1");
+        msklUserLoginLog.setLoginDatetime(new Date());
+        msklUserLoginLog.setUserId(msklUser.getUserId());
+        msklUserLoginLogService.saveObject(msklUserLoginLog);
+        result.setSuccess(true);
+        result.setData(token);
+        return result;
+
     }
 
     //检查注册验证码

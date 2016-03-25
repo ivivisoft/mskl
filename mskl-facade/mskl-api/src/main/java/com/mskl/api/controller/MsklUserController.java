@@ -3,6 +3,7 @@ package com.mskl.api.controller;
 
 import com.mskl.common.dto.LoginDto;
 import com.mskl.common.dto.RegisterDto;
+import com.mskl.common.dto.RestServiceResult;
 import com.mskl.dao.model.MsklSmsCheckcode;
 import com.mskl.dao.model.MsklUser;
 import com.mskl.service.constant.CheckcodeType;
@@ -38,33 +39,49 @@ public class MsklUserController {
     }
 
     @RequestMapping("/verificationCode/{mobile}")
-    public String getVerificationCode(@PathVariable String mobile) {
+    public RestServiceResult<String> getVerificationCode(@PathVariable String mobile) {
+        RestServiceResult<String> result = new RestServiceResult<String>();
+        if (checkParam(mobile)){
+            result.setSuccess(false);
+            result.setMessage("注册手机号码为空!");
+            return result;
+        }
         return msklSmsCheckcodeService.getRegisterCheckcode(mobile);
     }
 
+    private boolean checkParam(String mobile) {
+        return StringUtils.isBlank(mobile);
+    }
+
     @RequestMapping("/register")
-    public boolean register(@RequestBody RegisterDto registerDto) {
+    public RestServiceResult<Boolean> register(@RequestBody RegisterDto registerDto) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
         if (checkRegisterParam(registerDto)) {
-            return msklUserService.register(registerDto);
+            result.setSuccess(false);
+            result.setData(Boolean.FALSE);
+            result.setMessage("参数非法!");
         }
-        return false;
+        return  msklUserService.register(registerDto);
     }
 
     private boolean checkRegisterParam(RegisterDto registerDto) {
-        return null != registerDto && StringUtils.isNotBlank(registerDto.getMobile()) && StringUtils.isNotBlank(registerDto.getVerificationCode()) && StringUtils.isNotBlank(registerDto.getPassword());
+        return null == registerDto || StringUtils.isBlank(registerDto.getMobile()) || StringUtils.isBlank(registerDto.getVerificationCode()) || StringUtils.isBlank(registerDto.getPassword());
     }
 
 
     @RequestMapping("/login")
-    public String login(@RequestBody LoginDto loginDto) {
+    public RestServiceResult<String> login(@RequestBody LoginDto loginDto) {
+        RestServiceResult<String> result = new RestServiceResult<String>();
         if (checkLoginParam(loginDto)) {
-            return msklUserService.login(loginDto);
+            result.setSuccess(false);
+            result.setMessage("用户名或者密码不正确!");
+            return result;
         }
-        return StringUtils.EMPTY;
+        return msklUserService.login(loginDto);
     }
 
     private boolean checkLoginParam(LoginDto loginDto) {
-        return null != loginDto && StringUtils.isNotBlank(loginDto.getUsername()) && StringUtils.isNotBlank(loginDto.getPassword());
+        return null == loginDto || StringUtils.isBlank(loginDto.getUsername()) || StringUtils.isBlank(loginDto.getPassword());
     }
 
     @RequestMapping("/test")

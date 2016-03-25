@@ -1,6 +1,7 @@
 package com.mskl.service.smscheckcode.impl;
 
 import com.mskl.common.constant.RedisKeyConstant;
+import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.util.VerifyCodeUtil;
 import com.mskl.dao.model.MsklSmsCheckcode;
 import com.mskl.dao.smscheckcode.MsklSmsCheckcodeDao;
@@ -35,7 +36,8 @@ public class MsklSmsCheckcodeServiceImpl  extends BaseServiceImpl<MsklSmsCheckco
     @Resource
     private SmsClient smsClient;
 
-    public String getRegisterCheckcode(String mobile) {
+    public RestServiceResult<String> getRegisterCheckcode(String mobile) {
+        RestServiceResult<String> result = new RestServiceResult<String>();
         //保存手机验证码
         MsklSmsCheckcode msklSmsCheckcode = new MsklSmsCheckcode();
         msklSmsCheckcode.setMobile(mobile);
@@ -49,10 +51,12 @@ public class MsklSmsCheckcodeServiceImpl  extends BaseServiceImpl<MsklSmsCheckco
         redisClient.set(redisKey,checkCode);
         //发送验证码
         smsClient.sendSMS(mobile,checkCode);
+        result.setSuccess(true);
+        result.setData(checkCode);
         if (logger.isInfoEnabled()){
             logger.info("为手机号:"+mobile+",生成手机注册验证码:"+checkCode);
         }
-        return checkCode;
+        return result;
     }
 
     public MsklSmsCheckcode getSmsCheckCodeByMobileAndBizType(String mobile, String smsBizType) {
