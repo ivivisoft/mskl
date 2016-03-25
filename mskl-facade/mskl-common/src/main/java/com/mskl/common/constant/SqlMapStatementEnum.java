@@ -8,7 +8,7 @@ package com.mskl.common.constant;
 public enum SqlMapStatementEnum {
 
 	GET_BY_ID(".selectByPrimaryKey","根据ID去查询的通用statement"),
-	INSERT_OBJECT(".insert","插入对象的通用statement"),
+	INSERT_OBJECT(".insertSelective","插入对象的通用statement"),
 	UPDATE_OBJECT(".updateByPrimaryKeySelective","更新对象的通用statement"),
 	DELETE_OBJECT(".deleteByPrimaryKey","删除对象的通用statement"),
 	LIST_OBJECT(".list","查询对象的通用statement"),

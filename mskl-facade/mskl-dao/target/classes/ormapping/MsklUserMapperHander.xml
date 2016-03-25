@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace=".MsklUserMapper">
+
+    <select id="selectMsklUserByMobileOrEmail" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mskl_user
+        where mobile = #{username,jdbcType=VARCHAR} or email =#{username,jdbcType=VARCHAR}
+    </select>
+
+    <update id="increaseLoginCountAndChangeLastLoginTime">
+    UPDATE mskl_user
+    set login_count = login_count +1, last_login_datetime = now()
+    where mobile = #{username,jdbcType=VARCHAR} or email =#{username,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

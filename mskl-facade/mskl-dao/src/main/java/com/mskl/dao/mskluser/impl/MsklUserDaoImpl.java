@@ -10,8 +10,17 @@ import java.io.Serializable;
 
 @Repository(value = "mskluser.msklUserDao")
 public class MsklUserDaoImpl extends MsklBaseDao<MsklUser, Serializable> implements MsklUserDao {
-	@Override
-	public String getIbatisSqlMapNamespace() {
-		return ".MsklUserMapper";
-	}
+    @Override
+    public String getIbatisSqlMapNamespace() {
+        return ".MsklUserMapper";
+    }
+
+    public MsklUser selectMsklUserByMobileOrEmail(String username) {
+        return (MsklUser) selectOneObject("selectMsklUserByMobileOrEmail", username);
+    }
+
+    public int increaseLoginCountAndChangeLastLoginTime(String username) {
+        return updateByStatementName("increaseLoginCountAndChangeLastLoginTime",username);
+    }
 }
+
