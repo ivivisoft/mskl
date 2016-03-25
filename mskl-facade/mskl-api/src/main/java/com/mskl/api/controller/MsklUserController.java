@@ -10,9 +10,6 @@ import com.mskl.service.constant.CheckcodeType;
 import com.mskl.service.mskluser.MsklUserService;
 import com.mskl.service.smscheckcode.MsklSmsCheckcodeService;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -20,8 +17,6 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/mskluser")
 public class MsklUserController {
-
-    private Log logger = LogFactory.getLog(MsklUserController.class);
 
     @Resource(name = "mskluser.msklUserService")
     private MsklUserService msklUserService;
@@ -32,9 +27,6 @@ public class MsklUserController {
 
     @RequestMapping("/{id}")
     public MsklUser getMsklUser(@PathVariable Long id) {
-        if (logger.isInfoEnabled()) {
-            logger.info("222222222222");
-        }
         return msklUserService.getObjectById(id);
     }
 

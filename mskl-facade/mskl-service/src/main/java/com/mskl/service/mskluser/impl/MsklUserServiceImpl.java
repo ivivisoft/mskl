@@ -54,8 +54,8 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         result.setData(Boolean.FALSE);
         if (!checkSmsCode(registerDto.getMobile(), registerDto.getVerificationCode())) {
             result.setMessage("注册验证码不正确!");
-            if (logger.isInfoEnabled()){
-                logger.info("注册"+result.toString());
+            if (logger.isInfoEnabled()) {
+                logger.info("注册" + result.toString());
             }
             return result;
         }
@@ -73,8 +73,8 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         if (saveObject(msklUser) > 0) {
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
-            if (logger.isInfoEnabled()){
-                logger.info("注册"+result.toString());
+            if (logger.isInfoEnabled()) {
+                logger.info("注册" + result.toString());
             }
             return result;
         }
@@ -87,16 +87,16 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(loginDto.getUsername());
         if (null == msklUser) {
             result.setMessage("查无此账号!");
-            if (logger.isInfoEnabled()){
-                logger.info("登录"+result.toString());
+            if (logger.isInfoEnabled()) {
+                logger.info("登录" + result.toString());
             }
             return result;
         }
         String passwd = MD5Util.encode(loginDto.getPassword());
         if ((!StringUtils.equals(msklUser.getMobile(), loginDto.getUsername()) && !StringUtils.equals(msklUser.getEmail(), loginDto.getUsername())) || !StringUtils.equals(msklUser.getUserPwd(), passwd)) {
             result.setMessage("用户名或者密码不正确!");
-            if (logger.isInfoEnabled()){
-                logger.info("登录"+result.toString());
+            if (logger.isInfoEnabled()) {
+                logger.info("登录" + result.toString());
             }
             return result;
         }
