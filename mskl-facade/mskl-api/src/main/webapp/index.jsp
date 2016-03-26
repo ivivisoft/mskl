@@ -16,7 +16,8 @@
 <input type="button" onclick="login()" name="button" id="login" value="登录">
 <input type="button" onclick="promotionInfo()" name="button" id="promotion" value="推广活动">
 <input type="button" onclick="insertFeedback()" name="button" id="feedback" value="添加反馈意见">
-<input type="button" onclick="insertOverseer()" name="button" id="overseer" value="添加监督人">
+<input type="button" onclick="insertOverseer()" name="button" id="saveOverseer" value="添加监督人">
+<input type="button" onclick="selectOverseer()" name="button" id="selectOverseer" value="查询监督人">
 
 <script type="text/javascript">
 
@@ -84,7 +85,7 @@
             dataType: "json",
             url: "api/promotionInfo/all",
             success: function (data) {
-                var data=JSON.stringify(data)
+                var data = JSON.stringify(data)
                 alert(data)
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -93,42 +94,66 @@
         })
     }
 
-    function insertFeedback(){
-        var feedbackDto = {"userId": "0001", "userName": "yangxu","userMobile":"13545454567","feedbackMsg":"吃药"};
+    function insertFeedback() {
+        var feedbackDto = {"userId": "0001", "userName": "yangxu", "userMobile": "13545454567", "feedbackMsg": "吃药"};
 
         $.ajax({
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url:"api/feedback/insert",
+            url: "api/feedback/insert",
             data: JSON.stringify(feedbackDto),
-            success:function(data){
+            success: function (data) {
                 var data = JSON.stringify(data);
                 alert(data)
             },
-            error: function(jqXHR,textStatus,errorThrown){
+            error: function (jqXHR, textStatus, errorThrown) {
                 alert(jqXHR + " : " + textStatus + " : " + errorThrown);
             }
         })
     }
 
-    function insertOverseer(){
-        var overseerDto = {"userMobile":"13512122323","overseer":"yangxu","overseerMobile":"13422325533","userId":"001"}
+    function insertOverseer() {
+        var overseerDto = {
+            "userMobile": "13512122323",
+            "overseer": "yangxu",
+            "overseerMobile": "13422325533",
+            "userId": "001"
+        }
 
         $.ajax({
-            type:"post",
-            contentType:"application/json",
-            dataType:"json",
-            url:"api/overseer/insert",
-            data:JSON.stringify(overseerDto),
-            success:function(data){
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/overseer/insert",
+            data: JSON.stringify(overseerDto),
+            success: function (data) {
                 var data = JSON.stringify(data);
                 alert(data)
             },
-            error:function(jqXHR,textStatus,errorThrown){
+            error: function (jqXHR, textStatus, errorThrown) {
                 alert(jqXHR + " : " + textStatus + " : " + errorThrown);
             }
         })
+    }
+
+
+    function selectOverseer() {
+
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/overseer/1",
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+
     }
 
 </script>
