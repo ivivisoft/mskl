@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace=".MsklUserTradeMapper" >
+  <resultMap id="BaseResultMap" type="com.mskl.dao.model.MsklUserTrade" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="error_count" property="errorCount" jdbcType="INTEGER" />
+    <result column="user_trade_pwd" property="userTradePwd" jdbcType="VARCHAR" />
+    <result column="user_trade_pwd_strength" property="userTradePwdStrength" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, error_count, user_trade_pwd, user_trade_pwd_strength
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mskl_user_trade
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mskl_user_trade
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mskl.dao.model.MsklUserTrade" >
+    insert into mskl_user_trade (id, user_id, error_count, 
+      user_trade_pwd, user_trade_pwd_strength)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{errorCount,jdbcType=INTEGER}, 
+      #{userTradePwd,jdbcType=VARCHAR}, #{userTradePwdStrength,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklUserTrade" >
+    insert into mskl_user_trade
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="errorCount != null" >
+        error_count,
+      </if>
+      <if test="userTradePwd != null" >
+        user_trade_pwd,
+      </if>
+      <if test="userTradePwdStrength != null" >
+        user_trade_pwd_strength,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="errorCount != null" >
+        #{errorCount,jdbcType=INTEGER},
+      </if>
+      <if test="userTradePwd != null" >
+        #{userTradePwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userTradePwdStrength != null" >
+        #{userTradePwdStrength,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mskl.dao.model.MsklUserTrade" >
+    update mskl_user_trade
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="errorCount != null" >
+        error_count = #{errorCount,jdbcType=INTEGER},
+      </if>
+      <if test="userTradePwd != null" >
+        user_trade_pwd = #{userTradePwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userTradePwdStrength != null" >
+        user_trade_pwd_strength = #{userTradePwdStrength,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mskl.dao.model.MsklUserTrade" >
+    update mskl_user_trade
+    set user_id = #{userId,jdbcType=BIGINT},
+      error_count = #{errorCount,jdbcType=INTEGER},
+      user_trade_pwd = #{userTradePwd,jdbcType=VARCHAR},
+      user_trade_pwd_strength = #{userTradePwdStrength,jdbcType=CHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

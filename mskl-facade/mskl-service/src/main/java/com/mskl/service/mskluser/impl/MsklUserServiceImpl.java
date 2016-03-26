@@ -2,6 +2,7 @@ package com.mskl.service.mskluser.impl;
 
 import com.mskl.common.constant.RedisKeyConstant;
 import com.mskl.common.dto.LoginDto;
+import com.mskl.common.dto.ModifyPasswordDto;
 import com.mskl.common.dto.RegisterDto;
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.util.MD5Util;
@@ -54,8 +55,8 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         result.setData(Boolean.FALSE);
         if (!checkSmsCode(registerDto.getMobile(), registerDto.getVerificationCode())) {
             result.setMessage("注册验证码不正确!");
-            if (logger.isInfoEnabled()){
-                logger.info("注册"+result.toString());
+            if (logger.isInfoEnabled()) {
+                logger.info("注册" + result.toString());
             }
             return result;
         }
@@ -73,8 +74,8 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         if (saveObject(msklUser) > 0) {
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
-            if (logger.isInfoEnabled()){
-                logger.info("注册"+result.toString());
+            if (logger.isInfoEnabled()) {
+                logger.info("注册" + result.toString());
             }
             return result;
         }
@@ -87,16 +88,16 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(loginDto.getUsername());
         if (null == msklUser) {
             result.setMessage("查无此账号!");
-            if (logger.isInfoEnabled()){
-                logger.info("登录"+result.toString());
+            if (logger.isInfoEnabled()) {
+                logger.info("登录" + result.toString());
             }
             return result;
         }
         String passwd = MD5Util.encode(loginDto.getPassword());
         if ((!StringUtils.equals(msklUser.getMobile(), loginDto.getUsername()) && !StringUtils.equals(msklUser.getEmail(), loginDto.getUsername())) || !StringUtils.equals(msklUser.getUserPwd(), passwd)) {
             result.setMessage("用户名或者密码不正确!");
-            if (logger.isInfoEnabled()){
-                logger.info("登录"+result.toString());
+            if (logger.isInfoEnabled()) {
+                logger.info("登录" + result.toString());
             }
             return result;
         }
@@ -117,6 +118,47 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         result.setData(token);
         return result;
 
+    }
+
+    public RestServiceResult<Boolean> modifyPassword(ModifyPasswordDto modifyPasswordDto) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
+        result.setSuccess(false);
+        result.setData(Boolean.FALSE);
+        if (StringUtils.equals(modifyPasswordDto.getPassword(), modifyPasswordDto.getNewPassword())) {
+            result.setMessage("新密码与旧密码相同!");
+            if (logger.isInfoEnabled()) {
+                logger.info("修改密码" + result.toString());
+            }
+            return result;
+        }
+        MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(modifyPasswordDto.getUserName());
+        if (null == msklUser) {
+            result.setMessage("查无此账号!");
+            if (logger.isInfoEnabled()) {
+                logger.info("修改密码" + result.toString());
+            }
+            return result;
+        }
+        String passwd = MD5Util.encode(modifyPasswordDto.getPassword());
+        if (StringUtils.equals(msklUser.getUserPwd(), passwd)) {
+            result.setMessage("原密码不正确!");
+            if (logger.isInfoEnabled()) {
+                logger.info("修改密码" + result.toString());
+            }
+            return result;
+        }
+        String newPasswd = MD5Util.encode(modifyPasswordDto.getNewPassword());
+        msklUser.setUserPwd(newPasswd);
+        msklUser.setUserPwdStrength(modifyPasswordDto.getUserPwdStrength());
+
+        if (updateObject(msklUser) > 0) {
+            result.setSuccess(true);
+            result.setData(Boolean.TRUE);
+            result.setMessage("修改密码成功");
+            return result;
+        }
+        result.setMessage("修改密码失败");
+        return result;
     }
 
     //检查注册验证码
