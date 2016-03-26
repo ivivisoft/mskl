@@ -5,7 +5,7 @@
 
 <generatorConfiguration>
     <classPathEntry
-            location="/Users/andysoft/lib/mysql-connector-java-5.1.38.jar"/>
+            location="E:\mysql-connector-java-5.1.38.jar"/>
     <context id="my" targetRuntime="MyBatis3">
         <commentGenerator>
             <property name="suppressDate" value="false"/>
@@ -13,17 +13,17 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.99.100:3336/mskl" userId="root"
-                        password="mskl"/>
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/mskl" userId="root"
+                        password="123456"/>
 
         <javaModelGenerator targetPackage="com.mskl.dao.model"
-                            targetProject="/Users/andysoft/mskl/mskl-facade/mskl-dao/src/main/java">
+                            targetProject="E:/yiyaoWork/mskl/mskl-facade/mskl-dao/src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <sqlMapGenerator targetPackage=""
-                         targetProject="/Users/andysoft/mskl/mskl-facade/mskl-dao/src/main/resources/ormapping">
+                         targetProject="E:/yiyaoWork/mskl/mskl-facade/mskl-dao/src/main/resources/ormapping">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
@@ -37,7 +37,7 @@
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"/>-->
 
-        <table tableName="mskl_user_login_log" domainObjectName="MsklUserLoginLog"
+        <table tableName="mskl_overseer" domainObjectName="MsklOverseer"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

@@ -2,6 +2,7 @@ package com.mskl.api.controller;
 
 
 import com.mskl.common.dto.LoginDto;
+import com.mskl.common.dto.ModifyPasswordDto;
 import com.mskl.common.dto.RegisterDto;
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.dao.model.MsklSmsCheckcode;
@@ -33,7 +34,7 @@ public class MsklUserController {
     @RequestMapping("/verificationCode/{mobile}")
     public RestServiceResult<String> getVerificationCode(@PathVariable String mobile) {
         RestServiceResult<String> result = new RestServiceResult<String>();
-        if (checkParam(mobile)){
+        if (checkParam(mobile)) {
             result.setSuccess(false);
             result.setMessage("注册手机号码为空!");
             return result;
@@ -53,7 +54,7 @@ public class MsklUserController {
             result.setData(Boolean.FALSE);
             result.setMessage("参数非法!");
         }
-        return  msklUserService.register(registerDto);
+        return msklUserService.register(registerDto);
     }
 
     private boolean checkRegisterParam(RegisterDto registerDto) {
@@ -72,8 +73,24 @@ public class MsklUserController {
         return msklUserService.login(loginDto);
     }
 
+
     private boolean checkLoginParam(LoginDto loginDto) {
         return null == loginDto || StringUtils.isBlank(loginDto.getUsername()) || StringUtils.isBlank(loginDto.getPassword());
+    }
+
+    public RestServiceResult<Boolean> modifyPassword(@RequestBody ModifyPasswordDto modifyPasswordDto) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
+        if (checkModifyPasswordParam(modifyPasswordDto)) {
+            result.setSuccess(false);
+            result.setData(Boolean.FALSE);
+            result.setMessage("参数不正确！");
+            return result;
+        }
+        return msklUserService.modifyPassword(modifyPasswordDto);
+    }
+
+    private boolean checkModifyPasswordParam(ModifyPasswordDto modifyPasswordDto) {
+        return null == modifyPasswordDto || StringUtils.isBlank(modifyPasswordDto.getUserName()) || StringUtils.isBlank(modifyPasswordDto.getPassword()) || StringUtils.isBlank(modifyPasswordDto.getNewPassword()) || StringUtils.isBlank(modifyPasswordDto.getUserPwdStrength());
     }
 
     @RequestMapping("/test")

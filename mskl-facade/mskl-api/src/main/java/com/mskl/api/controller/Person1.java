@@ -1,8 +1,5 @@
 package com.mskl.api.controller;
 
-/**
- * Created by andy on 16/3/23.
- */
 public class Person1 {
     private String  username;
     private String sex;

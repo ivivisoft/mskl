@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace=".MsklPromotionInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.mskl.dao.model.MsklPromotionInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="promotion_name" property="promotionName" jdbcType="VARCHAR" />
+    <result column="info_channel" property="infoChannel" jdbcType="VARCHAR" />
+    <result column="info_title" property="infoTitle" jdbcType="VARCHAR" />
+    <result column="banner_url" property="bannerUrl" jdbcType="VARCHAR" />
+    <result column="content_url" property="contentUrl" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.mskl.dao.model.MsklPromotionInfo" extends="BaseResultMap" >
+    <result column="info_content" property="infoContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, promotion_name, info_channel, info_title, banner_url, content_url, sort, create_datetime
+  </sql>
+  <sql id="Blob_Column_List" >
+    info_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from mskl_promotion_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mskl_promotion_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mskl.dao.model.MsklPromotionInfo" >
+    insert into mskl_promotion_info (id, promotion_name, info_channel, 
+      info_title, banner_url, content_url, 
+      sort, create_datetime, info_content
+      )
+    values (#{id,jdbcType=BIGINT}, #{promotionName,jdbcType=VARCHAR}, #{infoChannel,jdbcType=VARCHAR}, 
+      #{infoTitle,jdbcType=VARCHAR}, #{bannerUrl,jdbcType=VARCHAR}, #{contentUrl,jdbcType=VARCHAR}, 
+      #{sort,jdbcType=DECIMAL}, #{createDatetime,jdbcType=TIMESTAMP}, #{infoContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklPromotionInfo" >
+    insert into mskl_promotion_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="promotionName != null" >
+        promotion_name,
+      </if>
+      <if test="infoChannel != null" >
+        info_channel,
+      </if>
+      <if test="infoTitle != null" >
+        info_title,
+      </if>
+      <if test="bannerUrl != null" >
+        banner_url,
+      </if>
+      <if test="contentUrl != null" >
+        content_url,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="infoContent != null" >
+        info_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="promotionName != null" >
+        #{promotionName,jdbcType=VARCHAR},
+      </if>
+      <if test="infoChannel != null" >
+        #{infoChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="infoTitle != null" >
+        #{infoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerUrl != null" >
+        #{bannerUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="contentUrl != null" >
+        #{contentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="infoContent != null" >
+        #{infoContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mskl.dao.model.MsklPromotionInfo" >
+    update mskl_promotion_info
+    <set >
+      <if test="promotionName != null" >
+        promotion_name = #{promotionName,jdbcType=VARCHAR},
+      </if>
+      <if test="infoChannel != null" >
+        info_channel = #{infoChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="infoTitle != null" >
+        info_title = #{infoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerUrl != null" >
+        banner_url = #{bannerUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="contentUrl != null" >
+        content_url = #{contentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="infoContent != null" >
+        info_content = #{infoContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mskl.dao.model.MsklPromotionInfo" >
+    update mskl_promotion_info
+    set promotion_name = #{promotionName,jdbcType=VARCHAR},
+      info_channel = #{infoChannel,jdbcType=VARCHAR},
+      info_title = #{infoTitle,jdbcType=VARCHAR},
+      banner_url = #{bannerUrl,jdbcType=VARCHAR},
+      content_url = #{contentUrl,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=DECIMAL},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      info_content = #{infoContent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mskl.dao.model.MsklPromotionInfo" >
+    update mskl_promotion_info
+    set promotion_name = #{promotionName,jdbcType=VARCHAR},
+      info_channel = #{infoChannel,jdbcType=VARCHAR},
+      info_title = #{infoTitle,jdbcType=VARCHAR},
+      banner_url = #{bannerUrl,jdbcType=VARCHAR},
+      content_url = #{contentUrl,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=DECIMAL},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="list" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from mskl_promotion_info
+    ORDER BY sort DESC
+  </select>
+</mapper>
