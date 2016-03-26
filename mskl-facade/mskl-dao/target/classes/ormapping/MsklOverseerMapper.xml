@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace=".MsklOverseerMapper" >
+  <resultMap id="BaseResultMap" type="com.mskl.dao.model.MsklOverseer" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_mobile" property="userMobile" jdbcType="VARCHAR" />
+    <result column="overseer" property="overseer" jdbcType="VARCHAR" />
+    <result column="overseer_mobile" property="overseerMobile" jdbcType="VARCHAR" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, user_mobile, overseer, overseer_mobile, update_datetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mskl_overseer
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mskl_overseer
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mskl.dao.model.MsklOverseer" >
+    insert into mskl_overseer (id, user_id, user_mobile, 
+      overseer, overseer_mobile, update_datetime
+      )
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userMobile,jdbcType=VARCHAR}, 
+      #{overseer,jdbcType=VARCHAR}, #{overseerMobile,jdbcType=VARCHAR}, #{updateDatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklOverseer" >
+    insert into mskl_overseer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userMobile != null" >
+        user_mobile,
+      </if>
+      <if test="overseer != null" >
+        overseer,
+      </if>
+      <if test="overseerMobile != null" >
+        overseer_mobile,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userMobile != null" >
+        #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="overseer != null" >
+        #{overseer,jdbcType=VARCHAR},
+      </if>
+      <if test="overseerMobile != null" >
+        #{overseerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mskl.dao.model.MsklOverseer" >
+    update mskl_overseer
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userMobile != null" >
+        user_mobile = #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="overseer != null" >
+        overseer = #{overseer,jdbcType=VARCHAR},
+      </if>
+      <if test="overseerMobile != null" >
+        overseer_mobile = #{overseerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mskl.dao.model.MsklOverseer" >
+    update mskl_overseer
+    set user_id = #{userId,jdbcType=BIGINT},
+      user_mobile = #{userMobile,jdbcType=VARCHAR},
+      overseer = #{overseer,jdbcType=VARCHAR},
+      overseer_mobile = #{overseerMobile,jdbcType=VARCHAR},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

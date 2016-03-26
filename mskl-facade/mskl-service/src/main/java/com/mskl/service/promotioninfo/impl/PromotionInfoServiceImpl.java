@@ -1,0 +1,44 @@
+package com.mskl.service.promotioninfo.impl;
+
+import com.mskl.common.dto.RestServiceResult;
+import com.mskl.dao.promotioninfo.PromotionInfoDao;
+import com.mskl.dao.model.MsklPromotionInfo;
+import com.mskl.service.base.impl.BaseServiceImpl;
+import com.mskl.service.promotioninfo.PromotionInfoService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+@Service(value = "promotionInfo.promotionInfoService")
+public class PromotionInfoServiceImpl extends BaseServiceImpl<MsklPromotionInfo,String> implements PromotionInfoService {
+
+    private Log logger = LogFactory.getLog(PromotionInfoServiceImpl.class);
+
+    private PromotionInfoDao promotionInfoDao;
+    @Resource(name="promotionInfo.promotionInfoDao")
+    public void setPromotionInfoDao(PromotionInfoDao promotionInfoDao) {
+        this.promotionInfoDao = promotionInfoDao;
+        super.setBaseDaoImpl(promotionInfoDao);
+    }
+
+    public RestServiceResult<List<MsklPromotionInfo>> getPromotionInfos() {
+
+        RestServiceResult<List<MsklPromotionInfo>> result = new RestServiceResult<List<MsklPromotionInfo>>();
+        result.setSuccess(false);
+
+        List<MsklPromotionInfo> promotionInfos = promotionInfoDao.getPromotionInfos();
+        if (null == promotionInfos) {
+            result.setMessage("推广活动异常!");
+            if (logger.isInfoEnabled()){
+                logger.info("推广活动"+result.toString());
+            }
+            return result;
+        }
+        result.setSuccess(true);
+        result.setData(promotionInfos);
+        return result;
+    }
+}
