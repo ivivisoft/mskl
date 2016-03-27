@@ -11,6 +11,24 @@ public final class RestServiceResult<T> implements Serializable {
     private String code;
     //返回对象
     private T data;
+    //服务描述
+    private String desc;
+
+    public RestServiceResult() {
+    }
+
+    public RestServiceResult(String desc, boolean isSuccess) {
+        this.desc = desc;
+        this.isSuccess = isSuccess;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
     public String getCode() {
         return code;
@@ -46,6 +64,6 @@ public final class RestServiceResult<T> implements Serializable {
 
     @Override
     public String toString() {
-        return isSuccess()? "服务执行成功!" : "服务失败,原因是:"+message;
+        return isSuccess()? desc+"执行成功!" : desc+"失败,原因是:"+message;
     }
 }

@@ -37,7 +37,7 @@ public class MsklSmsCheckcodeServiceImpl  extends BaseServiceImpl<MsklSmsCheckco
     private SmsClient smsClient;
 
     public RestServiceResult<String> getRegisterCheckcode(String mobile) {
-        RestServiceResult<String> result = new RestServiceResult<String>();
+        RestServiceResult<String> result = new RestServiceResult<String>("获取手机注册验证码服务",false);
         //保存手机验证码
         MsklSmsCheckcode msklSmsCheckcode = new MsklSmsCheckcode();
         msklSmsCheckcode.setMobile(mobile);
@@ -55,6 +55,7 @@ public class MsklSmsCheckcodeServiceImpl  extends BaseServiceImpl<MsklSmsCheckco
         result.setData(checkCode);
         if (logger.isInfoEnabled()){
             logger.info("为手机号:"+mobile+",生成手机注册验证码:"+checkCode);
+            logger.info(result.toString());
         }
         return result;
     }

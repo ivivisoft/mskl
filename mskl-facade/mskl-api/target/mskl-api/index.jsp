@@ -21,23 +21,6 @@
 
 <script type="text/javascript">
 
-    function get() {
-        var pe = {"username": "ddd", "sex": "222"};
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            dataType: "json",
-            url: "api/get",
-            data: JSON.stringify(pe),
-            success: function (data) {
-                alert("Success!!!");
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
-            }
-        });
-    }
-
     function register() {
 
         var registerDto = {
@@ -53,7 +36,7 @@
             url: "api/mskluser/register",
             data: JSON.stringify(registerDto),
             success: function (data) {
-                alert("Success!!!");
+                alert(JSON.stringify(data));
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(jqXHR + " : " + textStatus + " : " + errorThrown);
@@ -67,10 +50,10 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/mskluser/login",
+            url: "api/mskluser/login/122341514514/4a73541284d6666624cf5cabba295201",
             data: JSON.stringify(loginDto),
             success: function (data) {
-                alert("Success!!!");
+                alert(JSON.stringify(data));
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(jqXHR + " : " + textStatus + " : " + errorThrown);

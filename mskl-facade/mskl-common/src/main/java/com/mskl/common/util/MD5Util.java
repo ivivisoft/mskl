@@ -1,5 +1,7 @@
 package com.mskl.common.util;
 
+import com.mskl.common.dto.LoginDto;
+
 import java.security.MessageDigest;
 
 public class MD5Util {
@@ -40,8 +42,11 @@ public class MD5Util {
 	        return resultString;
 	    }
 
-//	    public static void main(String[] args) {
-//	        MD5 getMD5 = new MD5();
-//	        System.out.println(getMD5.GetMD5Code("000000"));
-//	    }
+	    public static void main(String[] args) {
+			LoginDto loginDto =new LoginDto();
+			loginDto.setUsername("15024480545");
+			loginDto.setPassword("123456");
+			System.out.println(MD5Util.encode(SignUtil.signMethod(loginDto,122341514514L)));
+
+	    }
 }

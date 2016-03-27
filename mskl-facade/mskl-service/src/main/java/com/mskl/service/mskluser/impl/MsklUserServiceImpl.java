@@ -50,13 +50,12 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
     private MsklUserLoginLogService msklUserLoginLogService;
 
     public RestServiceResult<Boolean> register(RegisterDto registerDto) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
-        result.setSuccess(false);
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("用户注册服务",false);
         result.setData(Boolean.FALSE);
         if (!checkSmsCode(registerDto.getMobile(), registerDto.getVerificationCode())) {
             result.setMessage("注册验证码不正确!");
             if (logger.isInfoEnabled()) {
-                logger.info("注册" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }
@@ -75,7 +74,7 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
             if (logger.isInfoEnabled()) {
-                logger.info("注册" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }
@@ -83,13 +82,12 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
     }
 
     public RestServiceResult<String> login(LoginDto loginDto) {
-        RestServiceResult<String> result = new RestServiceResult<String>();
-        result.setSuccess(false);
+        RestServiceResult<String> result = new RestServiceResult<String>("用户登录服务",false);
         MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(loginDto.getUsername());
         if (null == msklUser) {
             result.setMessage("查无此账号!");
             if (logger.isInfoEnabled()) {
-                logger.info("登录" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }
@@ -97,14 +95,14 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         if ((!StringUtils.equals(msklUser.getMobile(), loginDto.getUsername()) && !StringUtils.equals(msklUser.getEmail(), loginDto.getUsername())) || !StringUtils.equals(msklUser.getUserPwd(), passwd)) {
             result.setMessage("用户名或者密码不正确!");
             if (logger.isInfoEnabled()) {
-                logger.info("登录" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }
 
         //产生登录token并将她存入redis
         String loginKey = RedisKeyConstant.LOGINPRE + loginDto.getUsername();
-        String token = UUID.randomUUID().toString().replace("-", "");
+        String token = UUID.randomUUID().toString().replace("-", "")+"|"+msklUser.getUserId();
         redisClient.set(loginKey, token);
         //更新登录次数
         msklUserDao.increaseLoginCountAndChangeLastLoginTime(loginDto.getUsername());
@@ -121,13 +119,12 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
     }
 
     public RestServiceResult<Boolean> modifyPassword(ModifyPasswordDto modifyPasswordDto) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
-        result.setSuccess(false);
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("用户修改登录密码服务",false);
         result.setData(Boolean.FALSE);
         if (StringUtils.equals(modifyPasswordDto.getPassword(), modifyPasswordDto.getNewPassword())) {
             result.setMessage("新密码与旧密码相同!");
             if (logger.isInfoEnabled()) {
-                logger.info("修改密码" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }
@@ -135,7 +132,7 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         if (null == msklUser) {
             result.setMessage("查无此账号!");
             if (logger.isInfoEnabled()) {
-                logger.info("修改密码" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }
@@ -143,7 +140,7 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         if (StringUtils.equals(msklUser.getUserPwd(), passwd)) {
             result.setMessage("原密码不正确!");
             if (logger.isInfoEnabled()) {
-                logger.info("修改密码" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }

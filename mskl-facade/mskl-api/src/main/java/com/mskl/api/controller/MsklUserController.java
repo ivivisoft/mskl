@@ -5,12 +5,13 @@ import com.mskl.common.dto.LoginDto;
 import com.mskl.common.dto.ModifyPasswordDto;
 import com.mskl.common.dto.RegisterDto;
 import com.mskl.common.dto.RestServiceResult;
-import com.mskl.dao.model.MsklSmsCheckcode;
+import com.mskl.common.util.SignUtil;
 import com.mskl.dao.model.MsklUser;
-import com.mskl.service.constant.CheckcodeType;
 import com.mskl.service.mskluser.MsklUserService;
 import com.mskl.service.smscheckcode.MsklSmsCheckcodeService;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,6 +19,8 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/mskluser")
 public class MsklUserController {
+
+    private Log logger = LogFactory.getLog(MsklUserController.class);
 
     @Resource(name = "mskluser.msklUserService")
     private MsklUserService msklUserService;
@@ -62,9 +65,15 @@ public class MsklUserController {
     }
 
 
-    @RequestMapping("/login")
-    public RestServiceResult<String> login(@RequestBody LoginDto loginDto) {
+    @RequestMapping("/login/{time}/{md5str}")
+    public RestServiceResult<String> login(@RequestBody LoginDto loginDto,@PathVariable Long time,@PathVariable String md5str) {
         RestServiceResult<String> result = new RestServiceResult<String>();
+        result.setSuccess(true);
+        if(!StringUtils.equals(md5str, SignUtil.signMethod(loginDto,time))){
+            result.setSuccess(false);
+            result.setMessage("方法签名不正确!");
+            return result;
+        }
         if (checkLoginParam(loginDto)) {
             result.setSuccess(false);
             result.setMessage("用户名或者密码不正确!");
@@ -78,6 +87,7 @@ public class MsklUserController {
         return null == loginDto || StringUtils.isBlank(loginDto.getUsername()) || StringUtils.isBlank(loginDto.getPassword());
     }
 
+    @RequestMapping("/modifyPassword")
     public RestServiceResult<Boolean> modifyPassword(@RequestBody ModifyPasswordDto modifyPasswordDto) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
         if (checkModifyPasswordParam(modifyPasswordDto)) {
@@ -93,8 +103,4 @@ public class MsklUserController {
         return null == modifyPasswordDto || StringUtils.isBlank(modifyPasswordDto.getUserName()) || StringUtils.isBlank(modifyPasswordDto.getPassword()) || StringUtils.isBlank(modifyPasswordDto.getNewPassword()) || StringUtils.isBlank(modifyPasswordDto.getUserPwdStrength());
     }
 
-    @RequestMapping("/test")
-    public MsklSmsCheckcode go() {
-        return msklSmsCheckcodeService.getSmsCheckCodeByMobileAndBizType("15024480545", CheckcodeType.REGISTER.getCode());
-    }
 }

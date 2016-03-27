@@ -1,6 +1,7 @@
 package com.mskl.common.dto;
 
 
+
 import java.io.Serializable;
 
 public class LoginDto implements Serializable {
@@ -21,5 +22,10 @@ public class LoginDto implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        return "password='" + password + "'&username='" + username + "'";
     }
 }
