@@ -3,7 +3,6 @@ package com.mskl.api.controller;
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.dto.UserTradeDto;
 import com.mskl.service.usertrade.UserTradeService;
-import com.sun.org.apache.xpath.internal.operations.String;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/userTrade")
-public class userTradeController {
+public class UserTradeController {
 
     @Resource(name = "userTrade.userTradeService")
     private UserTradeService userTradeService;
