@@ -3,6 +3,7 @@ package com.mskl.service.mskluser.impl;
 import com.mskl.common.constant.RedisKeyConstant;
 import com.mskl.common.dto.*;
 import com.mskl.common.util.MD5Util;
+import com.mskl.common.util.TokenUtil;
 import com.mskl.dao.model.MsklUser;
 import com.mskl.dao.model.MsklUserLoginLog;
 import com.mskl.dao.mskluser.MsklUserDao;
@@ -57,7 +58,7 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
             }
             return result;
         }
-        if (!msklSmsCheckcodeService.checkSmsCode(registerDto.getMobile(), registerDto.getVerificationCode(),CheckcodeType.REGISTER)) {
+        if (!msklSmsCheckcodeService.checkSmsCode(registerDto.getMobile(), registerDto.getVerificationCode(), CheckcodeType.REGISTER)) {
             result.setMessage("注册验证码不正确!");
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
@@ -155,7 +156,6 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         String newPasswd = MD5Util.encode(modifyPasswordDto.getNewPassword());
         msklUser.setUserPwd(newPasswd);
         msklUser.setUserPwdStrength(modifyPasswordDto.getUserPwdStrength());
-
         if (updateObject(msklUser) > 0) {
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
@@ -185,13 +185,21 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         }
         String newPasswd = MD5Util.encode(findLoginPswDto.getNewPassword());
         msklUser.setUserPwd(newPasswd);
-        if (updateObject(msklUser) > 0) {
+        try {
+            updateObject(msklUser);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
             result.setMessage("找回密码成功!");
+            //清除token
+            String redisKey = RedisKeyConstant.LOGINPRE + TokenUtil.getUserIdFromToken(token);
+            redisClient.delete(redisKey);
             return result;
+        } catch (Exception e) {
+            result.setMessage("找回密码更新用户到数据库失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
         }
-        result.setMessage("找回密码失败!");
         return result;
     }
 
