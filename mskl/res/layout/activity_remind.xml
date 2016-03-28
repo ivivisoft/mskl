@@ -1,0 +1,174 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_mine"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:orientation="vertical" >
+
+    <include layout="@layout/title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/pic_attention" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/drug_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="云芝肝肽胶囊"
+                android:textColor="@color/color_black_text"
+                android:textSize="14dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2粒"
+                    android:textColor="@color/color_black_text"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12:00"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/color_gray"
+                    android:textSize="12sp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="145dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="服药心情"
+            android:textColor="@color/color_black_dark"
+            android:textSize="14sp" />
+
+        <RadioGroup
+            android:id="@+id/rg_mood"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/rb_good"
+                style="@style/Bottom_Tab_Style"
+                
+                android:drawableTop="@drawable/mood_not_good_selector"
+                android:text="不太好" />
+
+            <RadioButton
+                android:id="@+id/rb_soso"
+                style="@style/Bottom_Tab_Style"
+                android:drawableTop="@drawable/mood_soso_selector"
+                android:text="一般" />
+
+            <RadioButton
+                android:id="@+id/rb_ok"
+                style="@style/Bottom_Tab_Style"
+                android:checked="true"
+                android:drawableTop="@drawable/mood_ok_selector"
+                android:text="不错" />
+
+            <RadioButton
+                android:id="@+id/rb_happy"
+                style="@style/Bottom_Tab_Style"
+                android:drawableTop="@drawable/mood_happy_selector"
+                android:text="很开心" />
+
+            <RadioButton
+                android:id="@+id/rb_amazing"
+                style="@style/Bottom_Tab_Style"
+                android:drawableTop="@drawable/mood_amazing_selector"
+                android:text="棒极了" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="10dp"
+        android:background="@color/color_line" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="心情语录"
+        android:textColor="@color/color_black_dark"
+        android:textSize="14sp" />
+
+    <com.meishengkangle.mskl.view.ClearEditText
+        android:id="@+id/et_edit"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:text="天气不错，心情也不错！"
+        android:background="@drawable/plan_bg_circle" />
+
+    <Button
+        android:id="@+id/btn_finish"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/orange_button"
+        android:gravity="center"
+        android:text="已服用"
+        android:textColor="@color/color_white" />
+
+    <Button
+        android:id="@+id/btn_remind"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/orange_button"
+        android:gravity="center"
+        android:text="稍后提醒"
+        android:textColor="@color/color_white" />
+
+</LinearLayout>

@@ -1,0 +1,66 @@
+<resources>
+
+    <dimen name="historyscore_tb">10dp</dimen>
+    <dimen name="uperdragview_dividerWidth_default">1dp</dimen>
+    <dimen name="uperdragview_dividerHeight_default">1dp</dimen>
+    <dimen name="uperdragview_minRowHeight_default">100dp</dimen>
+    <dimen name="uperdragview_maxRowHeight_default">800dp</dimen>
+    <dimen name="uperdragview_separateLen_default">20dp</dimen>
+    <dimen name="uperdragview_maxNearbyLen_default">20dp</dimen>
+    <dimen name="uperdragview_startScrollTopLen_default">50dp</dimen>
+    <dimen name="uperdragview_startScrollBottomLen_default">50dp</dimen>
+
+    <dimen name="button_height">45.0dip</dimen>
+    <dimen name="bottom_tab_padding_up">8dip</dimen>
+    <dimen name="bottom_tab_padding_drawable">2.0dip</dimen>
+    <dimen name="switch_logo_bottom_padding">30.0sp</dimen>
+    <dimen name="recorder_title_height">56dip</dimen>
+    <dimen name="all_title_height">50dip</dimen>
+    <dimen name="chat_head">40dip</dimen>
+    <dimen name="up_title_height">35dip</dimen>
+    <dimen name="person_action_include">30dip</dimen>
+    <dimen name="attention_btn_height">25dip</dimen>
+    <dimen name="up_title_width">240dip</dimen>
+    <dimen name="bottom_height">60dip</dimen>
+    <dimen name="publish_send_image">70dip</dimen>
+    <dimen name="new_height">80dip</dimen>
+    <dimen name="card_top_height">100dip</dimen>
+    <dimen name="card_bottom_height">160dip</dimen>
+    <dimen name="water_xiangqing_height">260dip</dimen>
+    <dimen name="me_news_ad_height">150dip</dimen>
+    <dimen name="person_image_top_height">200dip</dimen>
+    <dimen name="face_height">180dip</dimen>
+    <dimen name="link_image">155dip</dimen>
+    <dimen name="channel_height">90dip</dimen>
+    <dimen name="person_image_middle_height">100dip</dimen>
+    <dimen name="hot_image_height">97dp</dimen>
+    <dimen name="swipe_menu_item_with">90dp</dimen>
+
+    <dimen name="find_item_height">160dip</dimen>
+    <dimen name="flexible_space_image_height">240dp</dimen>
+    <dimen name="flexible_space_image_height_fragment">144dp</dimen>
+    <dimen name="tab_height">48dp</dimen>
+
+    <!-- font -->
+    <dimen name="up_middle_group_size">18dp</dimen>
+    <dimen name="font_small">12dp</dimen>
+    <dimen name="font_medium">14dp</dimen>
+    <dimen name="font_large">16dp</dimen>
+    <dimen name="font_xlarge">18dp</dimen>
+    <dimen name="font_xxlarge">20dp</dimen>
+
+    <!-- padding -->
+    <dimen name="padding_small">5dip</dimen>
+    <dimen name="padding_medium">10dip</dimen>
+    <dimen name="padding_large">15dip</dimen>
+    <dimen name="padding_xlarge">20dip</dimen>
+    <!-- margin -->
+    <dimen name="margin_small">5dip</dimen>
+    <dimen name="margin_medium">10dip</dimen>
+    <dimen name="margin_large">15dip</dimen>
+    <dimen name="margin_xlarge">20dip</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+</resources>

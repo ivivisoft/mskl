@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_popuwindw"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:background="@drawable/plan_bg_circle"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tv_timeunit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上午"
+            android:textColor="@color/color_orange"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6：00"
+            android:textColor="@color/color_orange"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/drug_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="云芝肝肽胶囊"
+            android:textColor="@color/color_black_text"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2粒"
+            android:textStyle="bold"
+            android:textColor="@color/color_black_text"
+            android:textSize="21sp" />
+    </LinearLayout>
+    
+    <ImageView 
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/color_wait"/>
+</LinearLayout>

@@ -1,4 +1,4 @@
-package com.mskl.service.constant;
+package com.mskl.common.constant;
 
 public enum CheckcodeType {
     REGISTER("1", "注册"),

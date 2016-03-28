@@ -1,9 +1,6 @@
 package com.mskl.service.mskluser;
 
-import com.mskl.common.dto.LoginDto;
-import com.mskl.common.dto.ModifyPasswordDto;
-import com.mskl.common.dto.RegisterDto;
-import com.mskl.common.dto.RestServiceResult;
+import com.mskl.common.dto.*;
 import com.mskl.dao.model.MsklUser;
 import com.mskl.service.base.BaseService;
 
@@ -32,4 +29,12 @@ public interface MsklUserService extends BaseService<MsklUser,Serializable>{
      * @return
      */
     RestServiceResult<Boolean> modifyPassword(ModifyPasswordDto modifyPasswordDto);
+
+    /**
+     * 找回用户密码
+     * @param findLoginPswDto
+     * @param token
+     * @return
+     */
+    RestServiceResult<Boolean> findLoginPassword(FindLoginPswDto findLoginPswDto, String token);
 }
