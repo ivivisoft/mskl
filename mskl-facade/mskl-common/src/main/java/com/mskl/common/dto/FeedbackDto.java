@@ -5,21 +5,11 @@ import java.util.Date;
 
 public class FeedbackDto implements Serializable {
 
-    private String userId;
-
-    private String userName;
+    private String feedbackMsg;
 
     private String userMobile;
 
-    private String feedbackMsg;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    private String userName;
 
     public String getUserName() {
         return userName;
@@ -44,4 +34,11 @@ public class FeedbackDto implements Serializable {
     public void setFeedbackMsg(String feedbackMsg) {
         this.feedbackMsg = feedbackMsg;
     }
+
+    @Override
+    public String toString() {
+        return "feedbackMsg='" + feedbackMsg + "'&userMobile='" + userMobile + "'&userName='" + userName + "'";
+    }
+
+
 }

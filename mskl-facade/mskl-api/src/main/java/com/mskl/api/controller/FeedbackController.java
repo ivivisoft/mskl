@@ -1,13 +1,11 @@
 package com.mskl.api.controller;
 
 import com.mskl.common.dto.FeedbackDto;
-import com.mskl.common.dto.RegisterDto;
 import com.mskl.common.dto.RestServiceResult;
+import com.mskl.common.util.SignUtil;
 import com.mskl.service.feedback.FeedbackService;
-import com.sun.org.apache.xpath.internal.operations.String;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,19 +20,25 @@ public class FeedbackController {
     private FeedbackService feedbackService;
 
 
-    @RequestMapping("/insert")
-    public RestServiceResult<Boolean> insertFeedback(@RequestBody FeedbackDto feedbackDto) {
+    @RequestMapping("/insert/{time}/{md5str}/{token}")
+    public RestServiceResult<Boolean> insertFeedback(@RequestBody FeedbackDto feedbackDto, @PathVariable Long time, @PathVariable String md5str,@PathVariable String token) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
+        if(!StringUtils.equals(md5str, SignUtil.signMethod(feedbackDto,time))){
+            result.setSuccess(false);
+            result.setMessage("方法签名不正确!");
+            return result;
+        }
         if (checkFeedbackParam(feedbackDto)) {
             result.setSuccess(false);
             result.setData(Boolean.FALSE);
             result.setMessage("参数非法!");
             return result;
         }
+
         return feedbackService.insertFeedback(feedbackDto);
     }
 
     private boolean checkFeedbackParam(FeedbackDto feedbackDto) {
-        return null == feedbackDto || StringUtils.isBlank(feedbackDto.getUserId()) || StringUtils.isBlank(feedbackDto.getUserMobile()) || StringUtils.isBlank(feedbackDto.getFeedbackMsg());
+        return null == feedbackDto || StringUtils.isBlank(feedbackDto.getUserMobile()) || StringUtils.isBlank(feedbackDto.getFeedbackMsg());
     }
 }
