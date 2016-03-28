@@ -27,9 +27,11 @@ public class ValidatorUtil {
                 }
             }
             restServiceResult.setSuccess(false);
-            if (msg.toString().endsWith(",")) {
-                restServiceResult.setMessage(msg.toString().substring(0, msg.length() - 1));
+            String message = msg.toString();
+            if (message.endsWith(",")) {
+                message = message.substring(0, message.length() - 1);
             }
+            restServiceResult.setMessage(message);
             return false;
         }
         return true;
