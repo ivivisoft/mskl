@@ -7,9 +7,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.io.Serializable;
 
 public class LoginDto implements Serializable {
-    @NotEmpty(message = "用户名或者密码错误!!")
+    @NotEmpty(message = "用户名或者密码错误!")
     private String username;
-    @NotEmpty(message = "用户名或者密码错误!!")
+    @NotEmpty(message = "用户名或者密码错误!")
     private String password;
 
     public String getPassword() {
