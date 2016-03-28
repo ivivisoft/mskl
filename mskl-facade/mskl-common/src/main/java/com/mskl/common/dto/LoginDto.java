@@ -2,10 +2,14 @@ package com.mskl.common.dto;
 
 
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 public class LoginDto implements Serializable {
+    @NotEmpty
     private String username;
+    @NotEmpty
     private String password;
 
     public String getPassword() {

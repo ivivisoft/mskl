@@ -67,7 +67,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/mskluser/getLoginPassword/349358c613254a0aa62108a8fccf43e2|10006",
+            url: "api/mskluser/getLoginPassword/454c4c1033bc46608df4838479b9c1c2|10006",
             data: JSON.stringify(findLoginPswDto),
             success: function (data) {
                 alert(JSON.stringify(data));

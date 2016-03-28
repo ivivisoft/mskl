@@ -1,11 +1,16 @@
 package com.mskl.common.dto;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 
 public class RegisterDto implements Serializable {
+    @NotEmpty
     private String mobile;
+    @NotEmpty
     private String verificationCode;
+    @NotEmpty
     private String password;
     private String invitationCode;
 
