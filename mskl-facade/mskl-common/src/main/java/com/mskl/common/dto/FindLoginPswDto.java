@@ -1,6 +1,7 @@
 package com.mskl.common.dto;
 
 
+
 import java.io.Serializable;
 
 public class FindLoginPswDto implements Serializable {
