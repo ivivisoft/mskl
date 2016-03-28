@@ -2,14 +2,14 @@ package com.mskl.common.dto;
 
 
 
-import org.hibernate.validator.constraints.NotEmpty;
+import com.mskl.common.annotation.LoginCheck;
 
 import java.io.Serializable;
 
 public class LoginDto implements Serializable {
-    @NotEmpty
+    @LoginCheck
     private String username;
-    @NotEmpty
+    @LoginCheck
     private String password;
 
     public String getPassword() {

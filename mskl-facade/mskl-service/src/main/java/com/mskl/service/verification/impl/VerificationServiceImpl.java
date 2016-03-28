@@ -30,13 +30,6 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     public <T> boolean verification(T t, String token, Long time, String md5str, RestServiceResult restServiceResult) {
-        if (StringUtils.isNotBlank(md5str) && time != null && time > 0) {
-            if (!StringUtils.equals(md5str, SignUtil.signMethod(t, time))) {
-                restServiceResult.setSuccess(false);
-                restServiceResult.setMessage("方法签名不正确!");
-                return false;
-            }
-        }
         if (null == t) {
             restServiceResult.setSuccess(false);
             restServiceResult.setMessage("参数不正确!");
@@ -48,12 +41,19 @@ public class VerificationServiceImpl implements VerificationService {
                 return false;
             }
         } else {
-            if (!ValidatorUtil.checkBean(t)) {
-                restServiceResult.setSuccess(false);
-                restServiceResult.setMessage("参数不正确!");
+            if (!ValidatorUtil.checkBean(t, restServiceResult)) {
                 return false;
             }
         }
+
+        if (StringUtils.isNotBlank(md5str) && time != null && time > 0) {
+            if (!StringUtils.equals(md5str, SignUtil.signMethod(t, time))) {
+                restServiceResult.setSuccess(false);
+                restServiceResult.setMessage("方法签名不正确!");
+                return false;
+            }
+        }
+
         if (StringUtils.isNotBlank(token)) {
             if (!tokenService.checkToken(token)) {
                 restServiceResult.setSuccess(false);
