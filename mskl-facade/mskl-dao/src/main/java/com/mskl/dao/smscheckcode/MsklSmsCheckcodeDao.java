@@ -1,5 +1,6 @@
 package com.mskl.dao.smscheckcode;
 
+import com.mskl.common.constant.CheckcodeType;
 import com.mskl.dao.base.Dao;
 import com.mskl.dao.model.MsklSmsCheckcode;
 
@@ -14,5 +15,5 @@ public interface MsklSmsCheckcodeDao extends Dao<MsklSmsCheckcode,Serializable> 
      * @param smsBizType 业务类型
      * @return
      */
-    MsklSmsCheckcode selectByMobileAndSmsBizType(String mobile,String smsBizType);
+    MsklSmsCheckcode selectByMobileAndSmsBizType(String mobile, CheckcodeType smsBizType);
 }

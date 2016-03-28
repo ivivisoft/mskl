@@ -1,17 +1,14 @@
 package com.mskl.service.mskluser.impl;
 
 import com.mskl.common.constant.RedisKeyConstant;
-import com.mskl.common.dto.LoginDto;
-import com.mskl.common.dto.ModifyPasswordDto;
-import com.mskl.common.dto.RegisterDto;
-import com.mskl.common.dto.RestServiceResult;
+import com.mskl.common.dto.*;
 import com.mskl.common.util.MD5Util;
-import com.mskl.dao.model.MsklSmsCheckcode;
+import com.mskl.common.util.TokenUtil;
 import com.mskl.dao.model.MsklUser;
 import com.mskl.dao.model.MsklUserLoginLog;
 import com.mskl.dao.mskluser.MsklUserDao;
 import com.mskl.service.base.impl.BaseServiceImpl;
-import com.mskl.service.constant.CheckcodeType;
+import com.mskl.common.constant.CheckcodeType;
 import com.mskl.service.mskluser.MsklUserService;
 import com.mskl.service.mskluserloginlog.MsklUserLoginLogService;
 import com.mskl.service.redis.RedisClient;
@@ -50,16 +47,25 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
     private MsklUserLoginLogService msklUserLoginLogService;
 
     public RestServiceResult<Boolean> register(RegisterDto registerDto) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("用户注册服务",false);
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("用户注册服务", false);
         result.setData(Boolean.FALSE);
-        if (!checkSmsCode(registerDto.getMobile(), registerDto.getVerificationCode())) {
+        //查看用户是否已经注册了
+        MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(registerDto.getMobile());
+        if (null != msklUser) {
+            result.setMessage("此用户手机号已经被注册了!");
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
+        }
+        if (!msklSmsCheckcodeService.checkSmsCode(registerDto.getMobile(), registerDto.getVerificationCode(), CheckcodeType.REGISTER)) {
             result.setMessage("注册验证码不正确!");
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }
             return result;
         }
-        MsklUser msklUser = new MsklUser();
+        msklUser = new MsklUser();
         msklUser.setMobile(registerDto.getMobile());
         msklUser.setUserPwd(MD5Util.encode(registerDto.getPassword()));
         msklUser.setRegisterDatetime(new Date());
@@ -67,22 +73,25 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         msklUser.setUserStatus("1");
         msklUser.setErrorCount(0);
         msklUser.setLoginCount(0);
+        msklUser.setUserKind("01");
         if (StringUtils.isNotBlank(registerDto.getInvitationCode())) {
             msklUser.setRefUserId(Long.parseLong(registerDto.getInvitationCode()));
         }
-        if (saveObject(msklUser) > 0) {
+        try {
+            saveObject(msklUser);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
-            if (logger.isInfoEnabled()) {
-                logger.info(result.toString());
+        } catch (Exception e) {
+            result.setMessage("增加用户到数据库失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
             }
-            return result;
         }
         return result;
     }
 
     public RestServiceResult<String> login(LoginDto loginDto) {
-        RestServiceResult<String> result = new RestServiceResult<String>("用户登录服务",false);
+        RestServiceResult<String> result = new RestServiceResult<String>("用户登录服务", false);
         MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(loginDto.getUsername());
         if (null == msklUser) {
             result.setMessage("查无此账号!");
@@ -101,8 +110,8 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         }
 
         //产生登录token并将她存入redis
-        String loginKey = RedisKeyConstant.LOGINPRE + loginDto.getUsername();
-        String token = UUID.randomUUID().toString().replace("-", "")+"|"+msklUser.getUserId();
+        String loginKey = RedisKeyConstant.LOGINPRE + msklUser.getUserId();
+        String token = UUID.randomUUID().toString().replace("-", "") + "|" + msklUser.getUserId();
         redisClient.set(loginKey, token);
         //更新登录次数
         msklUserDao.increaseLoginCountAndChangeLastLoginTime(loginDto.getUsername());
@@ -119,7 +128,7 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
     }
 
     public RestServiceResult<Boolean> modifyPassword(ModifyPasswordDto modifyPasswordDto) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("用户修改登录密码服务",false);
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("用户修改登录密码服务", false);
         result.setData(Boolean.FALSE);
         if (StringUtils.equals(modifyPasswordDto.getPassword(), modifyPasswordDto.getNewPassword())) {
             result.setMessage("新密码与旧密码相同!");
@@ -147,7 +156,6 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         String newPasswd = MD5Util.encode(modifyPasswordDto.getNewPassword());
         msklUser.setUserPwd(newPasswd);
         msklUser.setUserPwdStrength(modifyPasswordDto.getUserPwdStrength());
-
         if (updateObject(msklUser) > 0) {
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
@@ -158,14 +166,41 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         return result;
     }
 
-    //检查注册验证码
-    private boolean checkSmsCode(String mobile, String verificationCode) {
-        String code = redisClient.get(RedisKeyConstant.REGISTORCHECKCODEPRE + mobile);
-        if (StringUtils.isNotBlank(code)) {
-            return StringUtils.equals(code, verificationCode);
-        } else {
-            MsklSmsCheckcode msklSmsCheckcode = msklSmsCheckcodeService.getSmsCheckCodeByMobileAndBizType(mobile, CheckcodeType.REGISTER.getCode());
-            return null != msklSmsCheckcode && StringUtils.isNotBlank(msklSmsCheckcode.getCheckCode()) && StringUtils.equals(msklSmsCheckcode.getCheckCode(), verificationCode);
+    public RestServiceResult<Boolean> findLoginPassword(FindLoginPswDto findLoginPswDto, String token) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("用户找回登录密码服务", false);
+        if (!msklSmsCheckcodeService.checkSmsCode(findLoginPswDto.getMobile(), findLoginPswDto.getVerificationCode(), CheckcodeType.GETLOGINPSW)) {
+            result.setMessage("找回密码验证码不正确!");
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
         }
+        MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(findLoginPswDto.getMobile());
+        if (null == msklUser) {
+            result.setMessage("查无此账号!");
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
+        }
+        String newPasswd = MD5Util.encode(findLoginPswDto.getNewPassword());
+        msklUser.setUserPwd(newPasswd);
+        try {
+            updateObject(msklUser);
+            result.setSuccess(true);
+            result.setData(Boolean.TRUE);
+            result.setMessage("找回密码成功!");
+            //清除token
+            String redisKey = RedisKeyConstant.LOGINPRE + TokenUtil.getUserIdFromToken(token);
+            redisClient.delete(redisKey);
+            return result;
+        } catch (Exception e) {
+            result.setMessage("找回密码更新用户到数据库失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
+        }
+        return result;
     }
+
 }
