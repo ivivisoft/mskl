@@ -9,10 +9,9 @@ public interface VerificationService {
      * 验证token
      * @param token
      * @param restServiceResult
-     * @param <T>
      * @return
      */
-    <T> boolean  verification(String token,  RestServiceResult restServiceResult);
+    boolean  verificationToken(String token,  RestServiceResult restServiceResult);
 
     /**
      * 验证实体

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace=".MsklMedicineMapper" >
+  <resultMap id="BaseResultMap" type="com.mskl.dao.model.MsklMedicine" >
+    <id column="mskl_medicine_id" property="msklMedicineId" jdbcType="BIGINT" />
+    <result column="medical_name" property="medicalName" jdbcType="VARCHAR" />
+    <result column="normal_name" property="normalName" jdbcType="VARCHAR" />
+    <result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
+    <result column="medicine_unit" property="medicineUnit" jdbcType="VARCHAR" />
+    <result column="package_amount" property="packageAmount" jdbcType="DECIMAL" />
+    <result column="dose" property="dose" jdbcType="DECIMAL" />
+    <result column="daily_times" property="dailyTimes" jdbcType="DECIMAL" />
+    <result column="med_code" property="medCode" jdbcType="VARCHAR" />
+    <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    mskl_medicine_id, medical_name, normal_name, manufacturer, medicine_unit, package_amount, 
+    dose, daily_times, med_code, bar_code, update_datetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mskl_medicine
+    where mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mskl_medicine
+    where mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mskl.dao.model.MsklMedicine" >
+    insert into mskl_medicine (mskl_medicine_id, medical_name, normal_name, 
+      manufacturer, medicine_unit, package_amount, 
+      dose, daily_times, med_code, 
+      bar_code, update_datetime)
+    values (#{msklMedicineId,jdbcType=BIGINT}, #{medicalName,jdbcType=VARCHAR}, #{normalName,jdbcType=VARCHAR}, 
+      #{manufacturer,jdbcType=VARCHAR}, #{medicineUnit,jdbcType=VARCHAR}, #{packageAmount,jdbcType=DECIMAL}, 
+      #{dose,jdbcType=DECIMAL}, #{dailyTimes,jdbcType=DECIMAL}, #{medCode,jdbcType=VARCHAR}, 
+      #{barCode,jdbcType=VARCHAR}, #{updateDatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklMedicine" >
+    insert into mskl_medicine
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="msklMedicineId != null" >
+        mskl_medicine_id,
+      </if>
+      <if test="medicalName != null" >
+        medical_name,
+      </if>
+      <if test="normalName != null" >
+        normal_name,
+      </if>
+      <if test="manufacturer != null" >
+        manufacturer,
+      </if>
+      <if test="medicineUnit != null" >
+        medicine_unit,
+      </if>
+      <if test="packageAmount != null" >
+        package_amount,
+      </if>
+      <if test="dose != null" >
+        dose,
+      </if>
+      <if test="dailyTimes != null" >
+        daily_times,
+      </if>
+      <if test="medCode != null" >
+        med_code,
+      </if>
+      <if test="barCode != null" >
+        bar_code,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="msklMedicineId != null" >
+        #{msklMedicineId,jdbcType=BIGINT},
+      </if>
+      <if test="medicalName != null" >
+        #{medicalName,jdbcType=VARCHAR},
+      </if>
+      <if test="normalName != null" >
+        #{normalName,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturer != null" >
+        #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="medicineUnit != null" >
+        #{medicineUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="packageAmount != null" >
+        #{packageAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dose != null" >
+        #{dose,jdbcType=DECIMAL},
+      </if>
+      <if test="dailyTimes != null" >
+        #{dailyTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="medCode != null" >
+        #{medCode,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode != null" >
+        #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mskl.dao.model.MsklMedicine" >
+    update mskl_medicine
+    <set >
+      <if test="medicalName != null" >
+        medical_name = #{medicalName,jdbcType=VARCHAR},
+      </if>
+      <if test="normalName != null" >
+        normal_name = #{normalName,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturer != null" >
+        manufacturer = #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="medicineUnit != null" >
+        medicine_unit = #{medicineUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="packageAmount != null" >
+        package_amount = #{packageAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dose != null" >
+        dose = #{dose,jdbcType=DECIMAL},
+      </if>
+      <if test="dailyTimes != null" >
+        daily_times = #{dailyTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="medCode != null" >
+        med_code = #{medCode,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode != null" >
+        bar_code = #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mskl.dao.model.MsklMedicine" >
+    update mskl_medicine
+    set medical_name = #{medicalName,jdbcType=VARCHAR},
+      normal_name = #{normalName,jdbcType=VARCHAR},
+      manufacturer = #{manufacturer,jdbcType=VARCHAR},
+      medicine_unit = #{medicineUnit,jdbcType=VARCHAR},
+      package_amount = #{packageAmount,jdbcType=DECIMAL},
+      dose = #{dose,jdbcType=DECIMAL},
+      daily_times = #{dailyTimes,jdbcType=DECIMAL},
+      med_code = #{medCode,jdbcType=VARCHAR},
+      bar_code = #{barCode,jdbcType=VARCHAR},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}
+    where mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT}
+  </update>
+</mapper>

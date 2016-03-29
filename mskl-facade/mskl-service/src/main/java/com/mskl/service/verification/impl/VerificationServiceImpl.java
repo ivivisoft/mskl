@@ -17,7 +17,7 @@ public class VerificationServiceImpl implements VerificationService {
     @Resource(name = "tokenService")
     private TokenService tokenService;
 
-    public <T> boolean verification(String token, RestServiceResult restServiceResult) {
+    public boolean verificationToken(String token, RestServiceResult restServiceResult) {
         if (StringUtils.isBlank(token)) {
             return false;
         }
