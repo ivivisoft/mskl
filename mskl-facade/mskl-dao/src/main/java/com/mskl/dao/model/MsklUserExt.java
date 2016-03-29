@@ -25,6 +25,8 @@ public class MsklUserExt {
 
     private String userDisease;
 
+    private Integer userAge;
+
     public Long getUserId() {
         return userId;
     }
@@ -119,5 +121,13 @@ public class MsklUserExt {
 
     public void setUserDisease(String userDisease) {
         this.userDisease = userDisease == null ? null : userDisease.trim();
+    }
+
+    public Integer getUserAge() {
+        return userAge;
+    }
+
+    public void setUserAge(Integer userAge) {
+        this.userAge = userAge;
     }
 }

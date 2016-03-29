@@ -22,6 +22,7 @@
 <input type="button" onclick="insertFeedback()" name="button" id="feedback" value="添加反馈意见">
 <input type="button" onclick="insertOverseer()" name="button" id="saveOverseer" value="添加监督人">
 <input type="button" onclick="selectOverseer()" name="button" id="selectOverseer" value="查询监督人">
+<input type="button" onclick="getMsklMedicineByBarCode()" name="button" id="getMsklMedicineByBarCode" value="根据药品二维码获取药品信息">
 
 <script type="text/javascript">
     function getVerificationCode() {
@@ -30,6 +31,22 @@
             contentType: "application/json",
             dataType: "json",
             url: "api/verificationCode/register/15024480545",
+            data: "",
+            success: function (data) {
+                alert(JSON.stringify(data));
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        });
+    }
+
+    function getMsklMedicineByBarCode() {
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/msklmedicine/12345678",
             data: "",
             success: function (data) {
                 alert(JSON.stringify(data));
@@ -67,7 +84,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/mskluser/getLoginPassword/349358c613254a0aa62108a8fccf43e2|10006",
+            url: "api/mskluser/getLoginPassword/454c4c1033bc46608df4838479b9c1c2|10006",
             data: JSON.stringify(findLoginPswDto),
             success: function (data) {
                 alert(JSON.stringify(data));

@@ -1,12 +1,16 @@
 package com.mskl.common.dto;
 
 
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 
 public class FindLoginPswDto implements Serializable {
+    @NotEmpty
     private String mobile;
+    @NotEmpty
     private String verificationCode;
+    @NotEmpty
     private String newPassword;
 
     public String getMobile() {

@@ -18,6 +18,7 @@ public class UserTradeController {
     private UserTradeService userTradeService;
 
 
+
     @RequestMapping("/tradePassword/insert")
     public RestServiceResult<Boolean> insertTradePassword(@RequestBody UserTradeDto userTradeDto) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();

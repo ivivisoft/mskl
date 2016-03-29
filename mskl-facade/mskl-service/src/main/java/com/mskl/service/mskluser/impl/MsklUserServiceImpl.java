@@ -2,13 +2,17 @@ package com.mskl.service.mskluser.impl;
 
 import com.mskl.common.constant.RedisKeyConstant;
 import com.mskl.common.dto.*;
+import com.mskl.common.util.FileUtil;
 import com.mskl.common.util.MD5Util;
 import com.mskl.common.util.TokenUtil;
+import com.mskl.common.vo.UserInfoVo;
 import com.mskl.dao.model.MsklUser;
+import com.mskl.dao.model.MsklUserExt;
 import com.mskl.dao.model.MsklUserLoginLog;
 import com.mskl.dao.mskluser.MsklUserDao;
 import com.mskl.service.base.impl.BaseServiceImpl;
 import com.mskl.common.constant.CheckcodeType;
+import com.mskl.service.mskluser.MsklUserExtService;
 import com.mskl.service.mskluser.MsklUserService;
 import com.mskl.service.mskluserloginlog.MsklUserLoginLogService;
 import com.mskl.service.redis.RedisClient;
@@ -45,6 +49,9 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
 
     @Resource(name = "mskluserloginlog.msklUserLoginLogService")
     private MsklUserLoginLogService msklUserLoginLogService;
+
+    @Resource(name = "mskluser.msklUserExtService")
+    private MsklUserExtService msklUserExtService;
 
     public RestServiceResult<Boolean> register(RegisterDto registerDto) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("用户注册服务", false);
@@ -203,4 +210,101 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         return result;
     }
 
+    public RestServiceResult<Boolean> addUserExtInfo(UserExtDto userExtDto, String token) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("添加用户扩展信息服务", false);
+        MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(userExtDto.getMobile());
+        if (null == msklUser) {
+            result.setMessage("查无此账号!");
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
+        }
+        boolean updateMsklUser = false;
+        if (StringUtils.isNotBlank(userExtDto.getEmail())) {
+            msklUser.setEmail(userExtDto.getEmail());
+            updateMsklUser = true;
+        }
+        if (StringUtils.isNotBlank(userExtDto.getNickName())) {
+            msklUser.setUserNickName(userExtDto.getNickName());
+            updateMsklUser = true;
+        }
+        //更新主用户信息
+        if (updateMsklUser) {
+            updateObject(msklUser);
+        }
+        //获取原来信息
+        MsklUserExt msklUserExt = msklUserExtService.getObjectById(msklUser.getUserId());
+        if (null == msklUserExt) {
+            msklUserExt = new MsklUserExt();
+            msklUserExt.setGender(userExtDto.getSex());
+            msklUserExt.setUserComefrom(userExtDto.getComeFrom());
+            msklUserExt.setUserId(msklUser.getUserId());
+            msklUserExt.setUserAge(userExtDto.getAge());
+            msklUserExt.setUserPhone(userExtDto.getMobile());
+            if (!updateHeaderImg(userExtDto, result, msklUserExt)) {
+                return result;
+            }
+            msklUserExtService.saveObject(msklUserExt);
+        } else {
+            msklUserExt.setGender(userExtDto.getSex());
+            msklUserExt.setUserComefrom(userExtDto.getComeFrom());
+            msklUserExt.setUserAge(userExtDto.getAge());
+            if (!updateHeaderImg(userExtDto, result, msklUserExt)) {
+                return result;
+            }
+            msklUserExtService.updateObject(msklUserExt);
+        }
+        result.setSuccess(true);
+        result.setData(Boolean.TRUE);
+        return result;
+    }
+
+    public RestServiceResult<UserInfoVo> getUserInfo(String token) {
+        RestServiceResult<UserInfoVo> result = new RestServiceResult<UserInfoVo>("获取用户信息服务", false);
+        Long userId = TokenUtil.getUserIdFromToken(token);
+        MsklUser msklUser = getObjectById(userId);
+        UserInfoVo userInfoVo = new UserInfoVo();
+        if (null == msklUser) {
+            result.setMessage("查无此账号!");
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
+        }
+        userInfoVo.setEmail(msklUser.getEmail());
+        userInfoVo.setMobile(msklUser.getMobile());
+        userInfoVo.setNickName(msklUser.getUserNickName());
+        MsklUserExt msklUserExt = msklUserExtService.getObjectById(userId);
+        if (null != msklUserExt) {
+            userInfoVo.setAge(msklUserExt.getUserAge());
+            userInfoVo.setComeFrom(msklUserExt.getUserComefrom());
+            userInfoVo.setPhoto(msklUserExt.getUserPhoto());
+            userInfoVo.setSex(msklUserExt.getGender());
+        }
+
+        result.setSuccess(true);
+        result.setData(userInfoVo);
+        return result;
+    }
+
+    private boolean updateHeaderImg(UserExtDto userExtDto, RestServiceResult<Boolean> result, MsklUserExt msklUserExt) {
+        if (StringUtils.isBlank(userExtDto.getPhoto())) {
+            try {
+                String filePath = FileUtil.mobileFileUpload("/upload/image/", userExtDto.getPhoto(), "header.png");
+                msklUserExt.setUserPhoto(filePath);
+                return true;
+            } catch (Exception e) {
+                result.setMessage("更新图像失败!");
+                if (logger.isErrorEnabled()) {
+                    logger.error(result.toString());
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }
+

@@ -1,6 +1,7 @@
 package com.mskl.service.mskluser;
 
 import com.mskl.common.dto.*;
+import com.mskl.common.vo.UserInfoVo;
 import com.mskl.dao.model.MsklUser;
 import com.mskl.service.base.BaseService;
 
@@ -37,4 +38,19 @@ public interface MsklUserService extends BaseService<MsklUser,Serializable>{
      * @return
      */
     RestServiceResult<Boolean> findLoginPassword(FindLoginPswDto findLoginPswDto, String token);
+
+    /**
+     * 添加用户扩展信息
+     * @param userExtDto
+     * @param token
+     * @return
+     */
+    RestServiceResult<Boolean> addUserExtInfo(UserExtDto userExtDto, String token);
+
+    /**
+     * 获取用户信息
+     * @param token
+     * @return
+     */
+    RestServiceResult<UserInfoVo> getUserInfo(String token);
 }
