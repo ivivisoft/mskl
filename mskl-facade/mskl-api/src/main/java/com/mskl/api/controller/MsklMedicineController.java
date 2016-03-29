@@ -2,7 +2,6 @@ package com.mskl.api.controller;
 
 
 import com.mskl.common.dto.RestServiceResult;
-import com.mskl.common.vo.UserInfoVo;
 import com.mskl.dao.model.MsklMedicine;
 import com.mskl.service.msklmedicine.MsklMedicineService;
 import com.mskl.service.verification.VerificationService;
