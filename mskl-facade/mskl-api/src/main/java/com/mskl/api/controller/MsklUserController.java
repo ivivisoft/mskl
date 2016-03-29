@@ -2,6 +2,7 @@ package com.mskl.api.controller;
 
 
 import com.mskl.common.dto.*;
+import com.mskl.common.vo.UserInfoVo;
 import com.mskl.dao.model.MsklUser;
 import com.mskl.service.mskluser.MsklUserService;
 import com.mskl.service.verification.VerificationService;
@@ -23,9 +24,17 @@ public class MsklUserController {
     @Resource(name = "verificationService")
     private VerificationService verificationService;
 
-    @RequestMapping("/{id}")
-    public MsklUser getMsklUser(@PathVariable Long id) {
-        return msklUserService.getObjectById(id);
+    @RequestMapping("/{token}")
+    public RestServiceResult<UserInfoVo> getUserInfo(@PathVariable String token) {
+        RestServiceResult<UserInfoVo> result = new RestServiceResult<UserInfoVo>("进入获取用户信息controller类", false);
+        if (!verificationService.verification(token, result)) {
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
+        }
+
+        return msklUserService.getUserInfo(token);
     }
 
 
@@ -79,4 +88,15 @@ public class MsklUserController {
         return msklUserService.modifyPassword(modifyPasswordDto);
     }
 
+    @RequestMapping("/addUserExtInfo/{token}")
+    public RestServiceResult<Boolean> addUserExtInfo(@RequestBody UserExtDto userExtDto,@PathVariable String token){
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入找回密码服务controller类", true);
+        if (!verificationService.verification(userExtDto, token, result)) {
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
+        }
+        return msklUserService.addUserExtInfo(userExtDto,token);
+    }
 }
