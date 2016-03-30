@@ -2,9 +2,11 @@ package com.mskl.api.controller;
 
 import com.mskl.common.dto.FeedbackDto;
 import com.mskl.common.dto.RestServiceResult;
-import com.mskl.common.util.SignUtil;
 import com.mskl.service.feedback.FeedbackService;
+import com.mskl.service.verification.VerificationService;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,29 +18,26 @@ import javax.annotation.Resource;
 @RequestMapping("/feedback")
 public class FeedbackController {
 
+    private Log logger = LogFactory.getLog(FeedbackController.class);
+
     @Resource(name = "feedback.feedbackService")
     private FeedbackService feedbackService;
 
+    @Resource(name = "verificationService")
+    private VerificationService verificationService;
+
 
     @RequestMapping("/insert/{time}/{md5str}/{token}")
-    public RestServiceResult<Boolean> insertFeedback(@RequestBody FeedbackDto feedbackDto, @PathVariable Long time, @PathVariable String md5str,@PathVariable String token) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
-        if(!StringUtils.equals(md5str, SignUtil.signMethod(feedbackDto,time))){
-            result.setSuccess(false);
-            result.setMessage("方法签名不正确!");
+    public RestServiceResult<Boolean> insertFeedback(@RequestBody FeedbackDto feedbackDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入意见反馈Controller类", true);
+        if (!verificationService.verification(feedbackDto, token, time, md5str, result)) {
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
             return result;
         }
-        if (checkFeedbackParam(feedbackDto)) {
-            result.setSuccess(false);
-            result.setData(Boolean.FALSE);
-            result.setMessage("参数非法!");
-            return result;
-        }
-
-        return feedbackService.insertFeedback(feedbackDto);
+        return feedbackService.insertFeedback(feedbackDto,token);
     }
 
-    private boolean checkFeedbackParam(FeedbackDto feedbackDto) {
-        return null == feedbackDto || StringUtils.isBlank(feedbackDto.getUserMobile()) || StringUtils.isBlank(feedbackDto.getFeedbackMsg());
-    }
 }

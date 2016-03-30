@@ -1,14 +1,17 @@
 package com.mskl.common.dto;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class FeedbackDto implements Serializable {
 
+    @NotEmpty
     private String feedbackMsg;
-
+    @NotEmpty
     private String userMobile;
-
+    @NotEmpty
     private String userName;
 
     public String getUserName() {

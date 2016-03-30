@@ -23,4 +23,11 @@ public interface UserBankcardServcie extends BaseService<MsklUserBankcard,Serial
      * @return
      */
     RestServiceResult<Boolean> insertBankcard(UserBankcardDto userBankcardDto);
+
+    /**
+     * 根据userId查询银行卡
+     * @param userId
+     * @return
+     */
+    List<MsklUserBankcard> getBankcardsByUserId(Long userId);
 }
