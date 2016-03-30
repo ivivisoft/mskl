@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace=".MsklTreatLogMapper" >
+  <resultMap id="BaseResultMap" type="com.mskl.dao.model.MsklTreatLog" >
+    <id column="mskl_treatlog_id" property="msklTreatlogId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_mobile" property="userMobile" jdbcType="VARCHAR" />
+    <result column="mskl_medicine_id" property="msklMedicineId" jdbcType="BIGINT" />
+    <result column="medical_name" property="medicalName" jdbcType="VARCHAR" />
+    <result column="normal_name" property="normalName" jdbcType="VARCHAR" />
+    <result column="set_alarm" property="setAlarm" jdbcType="INTEGER" />
+    <result column="finish_at" property="finishAt" jdbcType="INTEGER" />
+    <result column="taken_status" property="takenStatus" jdbcType="DECIMAL" />
+    <result column="taken_mood" property="takenMood" jdbcType="DECIMAL" />
+    <result column="taken_words" property="takenWords" jdbcType="VARCHAR" />
+    <result column="dose" property="dose" jdbcType="DECIMAL" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    mskl_treatlog_id, user_id, user_mobile, mskl_medicine_id, medical_name, normal_name, 
+    set_alarm, finish_at, taken_status, taken_mood, taken_words, dose, update_datetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mskl_treat_log
+    where mskl_treatlog_id = #{msklTreatlogId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mskl_treat_log
+    where mskl_treatlog_id = #{msklTreatlogId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mskl.dao.model.MsklTreatLog" >
+    insert into mskl_treat_log (mskl_treatlog_id, user_id, user_mobile, 
+      mskl_medicine_id, medical_name, normal_name, 
+      set_alarm, finish_at, taken_status, 
+      taken_mood, taken_words, dose, 
+      update_datetime)
+    values (#{msklTreatlogId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userMobile,jdbcType=VARCHAR}, 
+      #{msklMedicineId,jdbcType=BIGINT}, #{medicalName,jdbcType=VARCHAR}, #{normalName,jdbcType=VARCHAR}, 
+      #{setAlarm,jdbcType=INTEGER}, #{finishAt,jdbcType=INTEGER}, #{takenStatus,jdbcType=DECIMAL}, 
+      #{takenMood,jdbcType=DECIMAL}, #{takenWords,jdbcType=VARCHAR}, #{dose,jdbcType=DECIMAL}, 
+      #{updateDatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklTreatLog" >
+    insert into mskl_treat_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="msklTreatlogId != null" >
+        mskl_treatlog_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userMobile != null" >
+        user_mobile,
+      </if>
+      <if test="msklMedicineId != null" >
+        mskl_medicine_id,
+      </if>
+      <if test="medicalName != null" >
+        medical_name,
+      </if>
+      <if test="normalName != null" >
+        normal_name,
+      </if>
+      <if test="setAlarm != null" >
+        set_alarm,
+      </if>
+      <if test="finishAt != null" >
+        finish_at,
+      </if>
+      <if test="takenStatus != null" >
+        taken_status,
+      </if>
+      <if test="takenMood != null" >
+        taken_mood,
+      </if>
+      <if test="takenWords != null" >
+        taken_words,
+      </if>
+      <if test="dose != null" >
+        dose,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="msklTreatlogId != null" >
+        #{msklTreatlogId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userMobile != null" >
+        #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="msklMedicineId != null" >
+        #{msklMedicineId,jdbcType=BIGINT},
+      </if>
+      <if test="medicalName != null" >
+        #{medicalName,jdbcType=VARCHAR},
+      </if>
+      <if test="normalName != null" >
+        #{normalName,jdbcType=VARCHAR},
+      </if>
+      <if test="setAlarm != null" >
+        #{setAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="finishAt != null" >
+        #{finishAt,jdbcType=INTEGER},
+      </if>
+      <if test="takenStatus != null" >
+        #{takenStatus,jdbcType=DECIMAL},
+      </if>
+      <if test="takenMood != null" >
+        #{takenMood,jdbcType=DECIMAL},
+      </if>
+      <if test="takenWords != null" >
+        #{takenWords,jdbcType=VARCHAR},
+      </if>
+      <if test="dose != null" >
+        #{dose,jdbcType=DECIMAL},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mskl.dao.model.MsklTreatLog" >
+    update mskl_treat_log
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userMobile != null" >
+        user_mobile = #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="msklMedicineId != null" >
+        mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT},
+      </if>
+      <if test="medicalName != null" >
+        medical_name = #{medicalName,jdbcType=VARCHAR},
+      </if>
+      <if test="normalName != null" >
+        normal_name = #{normalName,jdbcType=VARCHAR},
+      </if>
+      <if test="setAlarm != null" >
+        set_alarm = #{setAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="finishAt != null" >
+        finish_at = #{finishAt,jdbcType=INTEGER},
+      </if>
+      <if test="takenStatus != null" >
+        taken_status = #{takenStatus,jdbcType=DECIMAL},
+      </if>
+      <if test="takenMood != null" >
+        taken_mood = #{takenMood,jdbcType=DECIMAL},
+      </if>
+      <if test="takenWords != null" >
+        taken_words = #{takenWords,jdbcType=VARCHAR},
+      </if>
+      <if test="dose != null" >
+        dose = #{dose,jdbcType=DECIMAL},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where mskl_treatlog_id = #{msklTreatlogId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mskl.dao.model.MsklTreatLog" >
+    update mskl_treat_log
+    set user_id = #{userId,jdbcType=BIGINT},
+      user_mobile = #{userMobile,jdbcType=VARCHAR},
+      mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT},
+      medical_name = #{medicalName,jdbcType=VARCHAR},
+      normal_name = #{normalName,jdbcType=VARCHAR},
+      set_alarm = #{setAlarm,jdbcType=INTEGER},
+      finish_at = #{finishAt,jdbcType=INTEGER},
+      taken_status = #{takenStatus,jdbcType=DECIMAL},
+      taken_mood = #{takenMood,jdbcType=DECIMAL},
+      taken_words = #{takenWords,jdbcType=VARCHAR},
+      dose = #{dose,jdbcType=DECIMAL},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}
+    where mskl_treatlog_id = #{msklTreatlogId,jdbcType=BIGINT}
+  </update>
+</mapper>

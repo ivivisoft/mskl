@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace=".MsklTreatPlanMapper" >
+  <resultMap id="BaseResultMap" type="com.mskl.dao.model.MsklTreatPlan" >
+    <id column="mskl_treatplan_id" property="msklTreatplanId" jdbcType="BIGINT" />
+    <result column="mskl_medicine_id" property="msklMedicineId" jdbcType="BIGINT" />
+    <result column="medical_name" property="medicalName" jdbcType="VARCHAR" />
+    <result column="normal_name" property="normalName" jdbcType="VARCHAR" />
+    <result column="medicine_unit" property="medicineUnit" jdbcType="VARCHAR" />
+    <result column="package_amount" property="packageAmount" jdbcType="DECIMAL" />
+    <result column="taken_amount" property="takenAmount" jdbcType="DECIMAL" />
+    <result column="dose" property="dose" jdbcType="DECIMAL" />
+    <result column="daily_times" property="dailyTimes" jdbcType="DECIMAL" />
+    <result column="morning_alarm" property="morningAlarm" jdbcType="INTEGER" />
+    <result column="noon_alarm" property="noonAlarm" jdbcType="INTEGER" />
+    <result column="night_alarm" property="nightAlarm" jdbcType="INTEGER" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    mskl_treatplan_id, mskl_medicine_id, medical_name, normal_name, medicine_unit, package_amount, 
+    taken_amount, dose, daily_times, morning_alarm, noon_alarm, night_alarm, update_datetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mskl_treat_plan
+    where mskl_treatplan_id = #{msklTreatplanId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mskl_treat_plan
+    where mskl_treatplan_id = #{msklTreatplanId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mskl.dao.model.MsklTreatPlan" >
+    insert into mskl_treat_plan (mskl_treatplan_id, mskl_medicine_id, medical_name, 
+      normal_name, medicine_unit, package_amount, 
+      taken_amount, dose, daily_times, 
+      morning_alarm, noon_alarm, night_alarm, 
+      update_datetime)
+    values (#{msklTreatplanId,jdbcType=BIGINT}, #{msklMedicineId,jdbcType=BIGINT}, #{medicalName,jdbcType=VARCHAR}, 
+      #{normalName,jdbcType=VARCHAR}, #{medicineUnit,jdbcType=VARCHAR}, #{packageAmount,jdbcType=DECIMAL}, 
+      #{takenAmount,jdbcType=DECIMAL}, #{dose,jdbcType=DECIMAL}, #{dailyTimes,jdbcType=DECIMAL}, 
+      #{morningAlarm,jdbcType=INTEGER}, #{noonAlarm,jdbcType=INTEGER}, #{nightAlarm,jdbcType=INTEGER}, 
+      #{updateDatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklTreatPlan" >
+    insert into mskl_treat_plan
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="msklTreatplanId != null" >
+        mskl_treatplan_id,
+      </if>
+      <if test="msklMedicineId != null" >
+        mskl_medicine_id,
+      </if>
+      <if test="medicalName != null" >
+        medical_name,
+      </if>
+      <if test="normalName != null" >
+        normal_name,
+      </if>
+      <if test="medicineUnit != null" >
+        medicine_unit,
+      </if>
+      <if test="packageAmount != null" >
+        package_amount,
+      </if>
+      <if test="takenAmount != null" >
+        taken_amount,
+      </if>
+      <if test="dose != null" >
+        dose,
+      </if>
+      <if test="dailyTimes != null" >
+        daily_times,
+      </if>
+      <if test="morningAlarm != null" >
+        morning_alarm,
+      </if>
+      <if test="noonAlarm != null" >
+        noon_alarm,
+      </if>
+      <if test="nightAlarm != null" >
+        night_alarm,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="msklTreatplanId != null" >
+        #{msklTreatplanId,jdbcType=BIGINT},
+      </if>
+      <if test="msklMedicineId != null" >
+        #{msklMedicineId,jdbcType=BIGINT},
+      </if>
+      <if test="medicalName != null" >
+        #{medicalName,jdbcType=VARCHAR},
+      </if>
+      <if test="normalName != null" >
+        #{normalName,jdbcType=VARCHAR},
+      </if>
+      <if test="medicineUnit != null" >
+        #{medicineUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="packageAmount != null" >
+        #{packageAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="takenAmount != null" >
+        #{takenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dose != null" >
+        #{dose,jdbcType=DECIMAL},
+      </if>
+      <if test="dailyTimes != null" >
+        #{dailyTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="morningAlarm != null" >
+        #{morningAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="noonAlarm != null" >
+        #{noonAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="nightAlarm != null" >
+        #{nightAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mskl.dao.model.MsklTreatPlan" >
+    update mskl_treat_plan
+    <set >
+      <if test="msklMedicineId != null" >
+        mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT},
+      </if>
+      <if test="medicalName != null" >
+        medical_name = #{medicalName,jdbcType=VARCHAR},
+      </if>
+      <if test="normalName != null" >
+        normal_name = #{normalName,jdbcType=VARCHAR},
+      </if>
+      <if test="medicineUnit != null" >
+        medicine_unit = #{medicineUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="packageAmount != null" >
+        package_amount = #{packageAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="takenAmount != null" >
+        taken_amount = #{takenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dose != null" >
+        dose = #{dose,jdbcType=DECIMAL},
+      </if>
+      <if test="dailyTimes != null" >
+        daily_times = #{dailyTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="morningAlarm != null" >
+        morning_alarm = #{morningAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="noonAlarm != null" >
+        noon_alarm = #{noonAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="nightAlarm != null" >
+        night_alarm = #{nightAlarm,jdbcType=INTEGER},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where mskl_treatplan_id = #{msklTreatplanId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mskl.dao.model.MsklTreatPlan" >
+    update mskl_treat_plan
+    set mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT},
+      medical_name = #{medicalName,jdbcType=VARCHAR},
+      normal_name = #{normalName,jdbcType=VARCHAR},
+      medicine_unit = #{medicineUnit,jdbcType=VARCHAR},
+      package_amount = #{packageAmount,jdbcType=DECIMAL},
+      taken_amount = #{takenAmount,jdbcType=DECIMAL},
+      dose = #{dose,jdbcType=DECIMAL},
+      daily_times = #{dailyTimes,jdbcType=DECIMAL},
+      morning_alarm = #{morningAlarm,jdbcType=INTEGER},
+      noon_alarm = #{noonAlarm,jdbcType=INTEGER},
+      night_alarm = #{nightAlarm,jdbcType=INTEGER},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}
+    where mskl_treatplan_id = #{msklTreatplanId,jdbcType=BIGINT}
+  </update>
+</mapper>

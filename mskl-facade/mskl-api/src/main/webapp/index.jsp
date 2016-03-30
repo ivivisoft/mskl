@@ -24,13 +24,15 @@
 <input type="button" onclick="selectOverseer()" name="button" id="selectOverseer" value="查询监督人">
 <input type="button" onclick="getMsklMedicineByBarCode()" name="button" id="getMsklMedicineByBarCode" value="根据药品二维码获取药品信息">
 
+<input type="button" onclick="apllyAmount()" name="button" id="apllyAmount" value="用户提现申请">
+
 <script type="text/javascript">
     function getVerificationCode() {
         $.ajax({
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/verificationCode/register/15024480545",
+            url: "api/verificationCode/register/18514208469",
             data: "",
             success: function (data) {
                 alert(JSON.stringify(data));
@@ -98,8 +100,8 @@
     function register() {
 
         var registerDto = {
-            "mobile": "15024480545",
-            "verificationCode": "679615",
+            "mobile": "18514208469",
+            "verificationCode": "929333",
             "password": "123456",
             "invitationCode": ""
         };
@@ -120,12 +122,12 @@
 
 
     function login() {
-        var loginDto = {"username": "15024480545", "password": "123456"};
+        var loginDto = {"username": "18514208469", "password": "123456"};
         $.ajax({
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/mskluser/login/122341514514/4a73541284d6666624cf5cabba295201",
+            url: "api/mskluser/login/122341514514/7d71362ffcf8f1dd45c52fab29e58ecf",
             data: JSON.stringify(loginDto),
             success: function (data) {
                 alert(JSON.stringify(data));
@@ -153,13 +155,13 @@
     }
 
     function insertFeedback() {
-        var feedbackDto = {"userId": "0001", "userName": "yangxu", "userMobile": "13545454567", "feedbackMsg": "吃药"};
+        var feedbackDto = {"userName": "yangxu", "userMobile": "13545454567", "feedbackMsg": "吃药"};
 
         $.ajax({
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/feedback/insert",
+            url: "api/feedback/insert/122341514514/f9d8a2c3db7e3a5db324bfea29df5efe/18b04227c42748498c2227e20c66e3b4|2",
             data: JSON.stringify(feedbackDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -212,6 +214,27 @@
             }
         })
 
+    }
+
+    function apllyAmount(){
+        var userCashoutDto = {
+            "amount": "100"
+        }
+
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/userCashout/apply/1/1/aasdasdasdasd|1",
+            data: JSON.stringify(userCashoutDto),
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
     }
 
 </script>

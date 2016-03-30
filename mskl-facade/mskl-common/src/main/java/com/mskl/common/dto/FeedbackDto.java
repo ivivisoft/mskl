@@ -1,25 +1,18 @@
 package com.mskl.common.dto;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class FeedbackDto implements Serializable {
 
-    private String userId;
-
-    private String userName;
-
-    private String userMobile;
-
+    @NotEmpty
     private String feedbackMsg;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    @NotEmpty
+    private String userMobile;
+    @NotEmpty
+    private String userName;
 
     public String getUserName() {
         return userName;
@@ -44,4 +37,11 @@ public class FeedbackDto implements Serializable {
     public void setFeedbackMsg(String feedbackMsg) {
         this.feedbackMsg = feedbackMsg;
     }
+
+    @Override
+    public String toString() {
+        return "feedbackMsg='" + feedbackMsg + "'&userMobile='" + userMobile + "'&userName='" + userName + "'";
+    }
+
+
 }

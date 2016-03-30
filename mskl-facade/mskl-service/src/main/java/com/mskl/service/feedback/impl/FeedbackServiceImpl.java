@@ -2,6 +2,7 @@ package com.mskl.service.feedback.impl;
 
 import com.mskl.common.dto.FeedbackDto;
 import com.mskl.common.dto.RestServiceResult;
+import com.mskl.common.util.TokenUtil;
 import com.mskl.dao.feedback.FeedbackDao;
 import com.mskl.dao.model.MsklFeedback;
 import com.mskl.service.base.impl.BaseServiceImpl;
@@ -27,26 +28,27 @@ public class FeedbackServiceImpl extends BaseServiceImpl<MsklFeedback, Serializa
         super.setBaseDaoImpl(feedbackDao);
     }
 
-    public RestServiceResult<Boolean> insertFeedback(FeedbackDto feedbackDto) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
-        result.setSuccess(false);
-        result.setData(Boolean.FALSE);
+    public RestServiceResult<Boolean> insertFeedback(FeedbackDto feedbackDto, String token) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("添加用户拓展信息服务", false);
+        Long userId = TokenUtil.getUserIdFromToken(token);
 
         MsklFeedback msklFeedback = new MsklFeedback();
         msklFeedback.setFeedbackMsg(feedbackDto.getFeedbackMsg());
-        msklFeedback.setUserId(Long.parseLong(feedbackDto.getUserId()));
+        msklFeedback.setUserId(userId);
         msklFeedback.setUserMobile(feedbackDto.getUserMobile());
         msklFeedback.setUserName(feedbackDto.getUserName());
         msklFeedback.setUpdateDatetime(new Date());
-        if(saveObject(msklFeedback)>0){
+
+        if (saveObject(msklFeedback) > 0) {
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
-            if (logger.isInfoEnabled()){
-                logger.info("添加反馈意见"+result.toString());
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
             }
             return result;
         }
 
         return result;
+
     }
 }

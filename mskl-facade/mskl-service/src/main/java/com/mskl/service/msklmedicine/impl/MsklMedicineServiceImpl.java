@@ -35,4 +35,16 @@ public class MsklMedicineServiceImpl extends BaseServiceImpl<MsklMedicine, Strin
         result.setData(msklMedicine);
         return result;
     }
+
+    public RestServiceResult<MsklMedicine> getMsklMedicineByNormalName(String normalName) {
+        RestServiceResult<MsklMedicine> result = new RestServiceResult<MsklMedicine>("根据药品通用名获取药品信息服务", false);
+        MsklMedicine msklMedicine = msklMedicineDao.getMsklMedicineByNormalName(normalName);
+        if (null == msklMedicine) {
+            result.setMessage("没有对应的药品信息!");
+            return result;
+        }
+        result.setSuccess(true);
+        result.setData(msklMedicine);
+        return result;
+    }
 }

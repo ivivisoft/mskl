@@ -18,4 +18,8 @@ public class MsklMedicineDaoImpl extends MsklBaseDao<MsklMedicine, Serializable>
     public MsklMedicine getMsklMedicineByBarCode(String barCode) {
         return (MsklMedicine) selectOneObject("getMsklMedicineByBarCode", barCode);
     }
+
+    public MsklMedicine getMsklMedicineByNormalName(String normalName) {
+        return (MsklMedicine) selectOneObject("getMsklMedicineByNormalName",normalName);
+    }
 }

@@ -8,5 +8,11 @@
         from mskl_medicine
         where bar_code = #{barCode,jdbcType=VARCHAR}
     </select>
+    <select id="getMsklMedicineByNormalName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from mskl_medicine
+        where normal_name = #{normalName,jdbcType=VARCHAR}
+    </select>
 
 </mapper>

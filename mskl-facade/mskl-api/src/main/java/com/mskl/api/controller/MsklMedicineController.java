@@ -37,4 +37,16 @@ public class MsklMedicineController {
         }
         return msklMedicineService.getMsklMedicineByBarCode(barCode);
     }
+
+    @RequestMapping("/name/{normalName}")
+    public RestServiceResult<MsklMedicine> getMsklMedicineByNormalName(@PathVariable String normalName){
+        RestServiceResult<MsklMedicine> result = new RestServiceResult<MsklMedicine>("进入根据药品通用名获取药品信息controller类", false);
+        if (!verificationService.verification(normalName, result)) {
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
+        }
+        return msklMedicineService.getMsklMedicineByNormalName(normalName);
+    }
 }
