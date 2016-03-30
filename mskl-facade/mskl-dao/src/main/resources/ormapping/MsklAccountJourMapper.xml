@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace=".MsklAccountJourMapper" >
+  <resultMap id="BaseResultMap" type="com.mskl.dao.model.MsklAccountJour" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="mskl_account_id" property="msklAccountId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="trans_datetime" property="transDatetime" jdbcType="TIMESTAMP" />
+    <result column="account_biz_type" property="accountBizType" jdbcType="VARCHAR" />
+    <result column="trans_amount" property="transAmount" jdbcType="BIGINT" />
+    <result column="pre_amount" property="preAmount" jdbcType="BIGINT" />
+    <result column="post_amount" property="postAmount" jdbcType="BIGINT" />
+    <result column="seq_flag" property="seqFlag" jdbcType="VARCHAR" />
+    <result column="ref_serial_no" property="refSerialNo" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="work_date" property="workDate" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="BIGINT" />
+  </resultMap>
+  <insert id="insert" parameterType="com.mskl.dao.model.MsklAccountJour" >
+    insert into mskl_account_jour (id, mskl_account_id, user_id, 
+      trans_datetime, account_biz_type, trans_amount, 
+      pre_amount, post_amount, seq_flag, 
+      ref_serial_no, remark, work_date, 
+      version)
+    values (#{id,jdbcType=BIGINT}, #{msklAccountId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{transDatetime,jdbcType=TIMESTAMP}, #{accountBizType,jdbcType=VARCHAR}, #{transAmount,jdbcType=BIGINT}, 
+      #{preAmount,jdbcType=BIGINT}, #{postAmount,jdbcType=BIGINT}, #{seqFlag,jdbcType=VARCHAR}, 
+      #{refSerialNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{workDate,jdbcType=VARCHAR}, 
+      #{version,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklAccountJour" >
+    insert into mskl_account_jour
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="msklAccountId != null" >
+        mskl_account_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="transDatetime != null" >
+        trans_datetime,
+      </if>
+      <if test="accountBizType != null" >
+        account_biz_type,
+      </if>
+      <if test="transAmount != null" >
+        trans_amount,
+      </if>
+      <if test="preAmount != null" >
+        pre_amount,
+      </if>
+      <if test="postAmount != null" >
+        post_amount,
+      </if>
+      <if test="seqFlag != null" >
+        seq_flag,
+      </if>
+      <if test="refSerialNo != null" >
+        ref_serial_no,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="workDate != null" >
+        work_date,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="msklAccountId != null" >
+        #{msklAccountId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="transDatetime != null" >
+        #{transDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountBizType != null" >
+        #{accountBizType,jdbcType=VARCHAR},
+      </if>
+      <if test="transAmount != null" >
+        #{transAmount,jdbcType=BIGINT},
+      </if>
+      <if test="preAmount != null" >
+        #{preAmount,jdbcType=BIGINT},
+      </if>
+      <if test="postAmount != null" >
+        #{postAmount,jdbcType=BIGINT},
+      </if>
+      <if test="seqFlag != null" >
+        #{seqFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="refSerialNo != null" >
+        #{refSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null" >
+        #{workDate,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>
