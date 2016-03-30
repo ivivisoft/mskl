@@ -16,6 +16,8 @@
 # .idea/workspace.xml
 # .idea/tasks.xml
 # .idea/dictionaries
+/mskl-api/src/main/resources/jdbc.properties
+/mskl-api/src/main/resources/conf.properties
 /mskl-dao/src/main/resources/config/generatorConfig.xml
 
 # Sensitive or high-churn files:
