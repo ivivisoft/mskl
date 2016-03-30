@@ -47,6 +47,7 @@ public class UserBankcardServcieImpl extends BaseServiceImpl<MsklUserBankcard,Se
         return result;
     }
 
+
     public RestServiceResult<Boolean> insertBankcard(UserBankcardDto userBankcardDto) {
 
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
@@ -73,5 +74,10 @@ public class UserBankcardServcieImpl extends BaseServiceImpl<MsklUserBankcard,Se
         }
         result.setMessage("添加银行卡失败");
         return result;
+    }
+
+    public List<MsklUserBankcard> getBankcardsByUserId(Long userId) {
+        List<MsklUserBankcard> lists = userBankcardDao.getBankcardByUserId(userId);
+        return lists;
     }
 }

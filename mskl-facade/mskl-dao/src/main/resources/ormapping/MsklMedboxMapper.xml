@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace=".MsklMedboxMapper" >
+  <resultMap id="BaseResultMap" type="com.mskl.dao.model.MsklMedbox" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_mobile" property="userMobile" jdbcType="VARCHAR" />
+    <result column="user_real_name" property="userRealName" jdbcType="VARCHAR" />
+    <result column="mskl_medicine_id" property="msklMedicineId" jdbcType="BIGINT" />
+    <result column="medical_name" property="medicalName" jdbcType="VARCHAR" />
+    <result column="normal_name" property="normalName" jdbcType="VARCHAR" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="taken_amount" property="takenAmount" jdbcType="DECIMAL" />
+    <result column="remaining_amount" property="remainingAmount" jdbcType="DECIMAL" />
+    <result column="dose" property="dose" jdbcType="DECIMAL" />
+    <result column="daily_times" property="dailyTimes" jdbcType="DECIMAL" />
+    <result column="start_day" property="startDay" jdbcType="INTEGER" />
+    <result column="finish_day" property="finishDay" jdbcType="INTEGER" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, user_mobile, user_real_name, mskl_medicine_id, medical_name, normal_name, 
+    total_amount, taken_amount, remaining_amount, dose, daily_times, start_day, finish_day, 
+    update_datetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mskl_medbox
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mskl_medbox
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mskl.dao.model.MsklMedbox" >
+    insert into mskl_medbox (id, user_id, user_mobile, 
+      user_real_name, mskl_medicine_id, medical_name, 
+      normal_name, total_amount, taken_amount, 
+      remaining_amount, dose, daily_times, 
+      start_day, finish_day, update_datetime
+      )
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userMobile,jdbcType=VARCHAR}, 
+      #{userRealName,jdbcType=VARCHAR}, #{msklMedicineId,jdbcType=BIGINT}, #{medicalName,jdbcType=VARCHAR}, 
+      #{normalName,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{takenAmount,jdbcType=DECIMAL}, 
+      #{remainingAmount,jdbcType=DECIMAL}, #{dose,jdbcType=DECIMAL}, #{dailyTimes,jdbcType=DECIMAL}, 
+      #{startDay,jdbcType=INTEGER}, #{finishDay,jdbcType=INTEGER}, #{updateDatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklMedbox" >
+    insert into mskl_medbox
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userMobile != null" >
+        user_mobile,
+      </if>
+      <if test="userRealName != null" >
+        user_real_name,
+      </if>
+      <if test="msklMedicineId != null" >
+        mskl_medicine_id,
+      </if>
+      <if test="medicalName != null" >
+        medical_name,
+      </if>
+      <if test="normalName != null" >
+        normal_name,
+      </if>
+      <if test="totalAmount != null" >
+        total_amount,
+      </if>
+      <if test="takenAmount != null" >
+        taken_amount,
+      </if>
+      <if test="remainingAmount != null" >
+        remaining_amount,
+      </if>
+      <if test="dose != null" >
+        dose,
+      </if>
+      <if test="dailyTimes != null" >
+        daily_times,
+      </if>
+      <if test="startDay != null" >
+        start_day,
+      </if>
+      <if test="finishDay != null" >
+        finish_day,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userMobile != null" >
+        #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="userRealName != null" >
+        #{userRealName,jdbcType=VARCHAR},
+      </if>
+      <if test="msklMedicineId != null" >
+        #{msklMedicineId,jdbcType=BIGINT},
+      </if>
+      <if test="medicalName != null" >
+        #{medicalName,jdbcType=VARCHAR},
+      </if>
+      <if test="normalName != null" >
+        #{normalName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="takenAmount != null" >
+        #{takenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="remainingAmount != null" >
+        #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dose != null" >
+        #{dose,jdbcType=DECIMAL},
+      </if>
+      <if test="dailyTimes != null" >
+        #{dailyTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="startDay != null" >
+        #{startDay,jdbcType=INTEGER},
+      </if>
+      <if test="finishDay != null" >
+        #{finishDay,jdbcType=INTEGER},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mskl.dao.model.MsklMedbox" >
+    update mskl_medbox
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userMobile != null" >
+        user_mobile = #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="userRealName != null" >
+        user_real_name = #{userRealName,jdbcType=VARCHAR},
+      </if>
+      <if test="msklMedicineId != null" >
+        mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT},
+      </if>
+      <if test="medicalName != null" >
+        medical_name = #{medicalName,jdbcType=VARCHAR},
+      </if>
+      <if test="normalName != null" >
+        normal_name = #{normalName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="takenAmount != null" >
+        taken_amount = #{takenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="remainingAmount != null" >
+        remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dose != null" >
+        dose = #{dose,jdbcType=DECIMAL},
+      </if>
+      <if test="dailyTimes != null" >
+        daily_times = #{dailyTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="startDay != null" >
+        start_day = #{startDay,jdbcType=INTEGER},
+      </if>
+      <if test="finishDay != null" >
+        finish_day = #{finishDay,jdbcType=INTEGER},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mskl.dao.model.MsklMedbox" >
+    update mskl_medbox
+    set user_id = #{userId,jdbcType=BIGINT},
+      user_mobile = #{userMobile,jdbcType=VARCHAR},
+      user_real_name = #{userRealName,jdbcType=VARCHAR},
+      mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT},
+      medical_name = #{medicalName,jdbcType=VARCHAR},
+      normal_name = #{normalName,jdbcType=VARCHAR},
+      total_amount = #{totalAmount,jdbcType=DECIMAL},
+      taken_amount = #{takenAmount,jdbcType=DECIMAL},
+      remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
+      dose = #{dose,jdbcType=DECIMAL},
+      daily_times = #{dailyTimes,jdbcType=DECIMAL},
+      start_day = #{startDay,jdbcType=INTEGER},
+      finish_day = #{finishDay,jdbcType=INTEGER},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -17,13 +17,21 @@
                         password="mskl"/>
 
         <javaModelGenerator targetPackage="com.mskl.dao.model"
+<<<<<<< HEAD
+                            targetProject="E:\mskl\mskl-facade\mskl-dao\src\main\java">
+=======
                             targetProject="/Users/andysoft/mskl/mskl-facade/mskl-dao/src/main/java">
+>>>>>>> upstream/master
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <sqlMapGenerator targetPackage=""
+<<<<<<< HEAD
+                         targetProject="E:\mskl\mskl-facade\mskl-dao\src\main\resources/ormapping">
+=======
                          targetProject="/Users/andysoft/mskl/mskl-facade/mskl-dao/src/main/resources/ormapping">
+>>>>>>> upstream/master
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
@@ -37,7 +45,11 @@
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"/>-->
 
+<<<<<<< HEAD
+        <table tableName="mskl_user_cashout_application" domainObjectName="MsklUserCashoutApplication"
+=======
         <table tableName="mskl_medicine" domainObjectName="MsklMedicine"
+>>>>>>> upstream/master
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

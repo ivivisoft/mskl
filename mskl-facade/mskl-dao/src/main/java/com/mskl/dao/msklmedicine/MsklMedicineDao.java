@@ -13,4 +13,11 @@ public interface MsklMedicineDao extends Dao<MsklMedicine,Serializable> {
      * @return
      */
     MsklMedicine getMsklMedicineByBarCode(String barCode);
+
+    /**
+     * 根据药品通用名获取药品信息
+     * @param normalName
+     * @return
+     */
+    MsklMedicine getMsklMedicineByNormalName(String normalName);
 }

@@ -2,6 +2,7 @@ package com.mskl.service.overseer.impl;
 
 import com.mskl.common.dto.OverseerDto;
 import com.mskl.common.dto.RestServiceResult;
+import com.mskl.common.util.TokenUtil;
 import com.mskl.dao.overseer.OverseerDao;
 import com.mskl.dao.model.MsklOverseer;
 import com.mskl.service.base.impl.BaseServiceImpl;
@@ -27,25 +28,25 @@ public class OverseerServiceImpl extends BaseServiceImpl<MsklOverseer, Serializa
         super.setBaseDaoImpl(overseerDao);
     }
 
-    public RestServiceResult<Boolean> insertOverseer(OverseerDto overseerDto) {
+    public RestServiceResult<Boolean> insertOverseer(OverseerDto overseerDto, String token) {
 
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
-        result.setSuccess(false);
-        result.setData(Boolean.FALSE);
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("添加监督人服务",false);
+
+        Long userId = TokenUtil.getUserIdFromToken(token);
 
         MsklOverseer msklOverseer = new MsklOverseer();
 
         msklOverseer.setOverseer(overseerDto.getOverseer());
         msklOverseer.setOverseerMobile(overseerDto.getOverseerMobile());
         msklOverseer.setUserMobile(overseerDto.getUserMobile());
-        msklOverseer.setUserId(Long.parseLong(overseerDto.getUserId()));
+        msklOverseer.setUserId(userId);
         msklOverseer.setUpdateDatetime(new Date());
 
         if (saveObject(msklOverseer) > 0) {
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
             if (logger.isInfoEnabled()) {
-                logger.info("添加监督人" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }
@@ -53,8 +54,7 @@ public class OverseerServiceImpl extends BaseServiceImpl<MsklOverseer, Serializa
     }
 
     public RestServiceResult<List<MsklOverseer>> getOverseersByUserId(String userId) {
-        RestServiceResult<List<MsklOverseer>> result = new RestServiceResult<List<MsklOverseer>>();
-        result.setSuccess(false);
+        RestServiceResult<List<MsklOverseer>> result = new RestServiceResult<List<MsklOverseer>>("查询监督人服务",false);
 
         List<MsklOverseer> lists = overseerDao.getOverseersByUserId(Long.parseLong(userId));
         if (null == lists) {

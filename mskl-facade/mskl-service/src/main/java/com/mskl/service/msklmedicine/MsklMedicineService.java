@@ -14,4 +14,11 @@ public interface MsklMedicineService extends BaseService<MsklMedicine,Serializab
      * @return
      */
     RestServiceResult<MsklMedicine> getMsklMedicineByBarCode(String barCode);
+
+    /**
+     * 根据通用名获取药品信息
+     * @param normalName
+     * @return
+     */
+    RestServiceResult<MsklMedicine> getMsklMedicineByNormalName(String normalName);
 }

@@ -2,21 +2,12 @@ package com.mskl.common.dto;
 
 public class OverseerDto {
 
-    private String userId;
-
-    private String userMobile;
-
     private String overseer;
 
     private String overseerMobile;
 
-    public String getUserId() {
-        return userId;
-    }
+    private String userMobile;
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getUserMobile() {
         return userMobile;
@@ -40,5 +31,10 @@ public class OverseerDto {
 
     public void setOverseerMobile(String overseerMobile) {
         this.overseerMobile = overseerMobile;
+    }
+
+    @Override
+    public String toString() {
+        return "overseer='" + overseer + "'&overseerMobile='" + overseerMobile + "'&userMobile='" + userMobile + "'";
     }
 }

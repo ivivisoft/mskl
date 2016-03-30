@@ -14,9 +14,10 @@ public interface OverseerService extends BaseService<MsklOverseer,Serializable> 
     /**
      * 添加监督人
      * @param overseerDto
+     * @param token
      * @return
      */
-    RestServiceResult<Boolean> insertOverseer(OverseerDto overseerDto);
+    RestServiceResult<Boolean> insertOverseer(OverseerDto overseerDto, String token);
 
     RestServiceResult<List<MsklOverseer>> getOverseersByUserId(String userId);
 }
