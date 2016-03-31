@@ -7,7 +7,7 @@
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio
 
 *.iml
-
+l
 ## Directory-based project format:
 .idea/
 # if you remove the above rule, at least ignore the following:
@@ -16,8 +16,8 @@
 # .idea/workspace.xml
 # .idea/tasks.xml
 # .idea/dictionaries
-/mskl-api/src/main/resources/jdbc.properties
-/mskl-dao/src/main/resources/config/generatorConfig.xml
+/mskl-dao/src/main/rels
+sources/config/generatorConfig.xml
 
 # Sensitive or high-churn files:
 # .idea/dataSources.ids

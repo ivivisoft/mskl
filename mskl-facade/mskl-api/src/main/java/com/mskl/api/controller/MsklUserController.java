@@ -90,7 +90,7 @@ public class MsklUserController {
 
     @RequestMapping("/addUserExtInfo/{token}")
     public RestServiceResult<Boolean> addUserExtInfo(@RequestBody UserExtDto userExtDto,@PathVariable String token){
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入找回密码服务controller类", true);
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加用户信息服务controller类", true);
         if (!verificationService.verification(userExtDto, token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
