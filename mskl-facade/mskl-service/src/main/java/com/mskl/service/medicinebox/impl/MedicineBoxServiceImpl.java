@@ -19,4 +19,8 @@ public class MedicineBoxServiceImpl extends BaseServiceImpl<MsklMedbox,Serializa
         this.medicineBoxDao = medicineBoxDao;
         super.setBaseDaoImpl(medicineBoxDao);
     }
+
+    public MsklMedbox getBoxByMedicine(Long msklMedicineId) {
+        return medicineBoxDao.getBoxByMedicine(msklMedicineId);
+    }
 }

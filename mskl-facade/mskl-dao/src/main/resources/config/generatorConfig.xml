@@ -5,7 +5,7 @@
 
 <generatorConfiguration>
     <classPathEntry
-            location="/Users/andysoft/lib/mysql-connector-java-5.1.38.jar"/>
+            location="E:/mysql-connector-java-5.1.38.jar"/>
     <context id="my" targetRuntime="MyBatis3">
         <commentGenerator>
             <property name="suppressDate" value="false"/>
@@ -13,48 +13,41 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.99.100:3336/mskl" userId="root"
-                        password="mskl"/>
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/mskl" userId="root"
+                        password="123456"/>
 
         <javaModelGenerator targetPackage="com.mskl.dao.model"
-<<<<<<< HEAD
                             targetProject="E:\mskl\mskl-facade\mskl-dao\src\main\java">
-=======
-                            targetProject="/Users/andysoft/mskl/mskl-facade/mskl-dao/src/main/java">
->>>>>>> upstream/master
+
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <sqlMapGenerator targetPackage=""
-<<<<<<< HEAD
                          targetProject="E:\mskl\mskl-facade\mskl-dao\src\main\resources/ormapping">
-=======
-                         targetProject="/Users/andysoft/mskl/mskl-facade/mskl-dao/src/main/resources/ormapping">
->>>>>>> upstream/master
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!--<javaClientGenerator targetPackage="ctas.test.mapper"-->
-                             <!--targetProject="D:/yangjm/Code/CTAS/JAVAEE/CTAS2CCSP/src/main/java" type="XMLMAPPER">-->
-            <!--<property name="enableSubPackages" value="true"/>-->
+        <!--targetProject="D:/yangjm/Code/CTAS/JAVAEE/CTAS2CCSP/src/main/java" type="XMLMAPPER">-->
+        <!--<property name="enableSubPackages" value="true"/>-->
         <!--</javaClientGenerator>-->
 
         <!--<table tableName="T_FEE_AGTBILL" domainObjectName="FeeAgentBill"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"/>-->
+        <table tableName="mskl_treat_log" domainObjectName="MsklTreatLog"
 
-<<<<<<< HEAD
-        <table tableName="mskl_user_cashout_application" domainObjectName="MsklUserCashoutApplication"
-=======
-        <table tableName="mskl_medicine" domainObjectName="MsklMedicine"
->>>>>>> upstream/master
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
-            <!--<columnRenamingRule searchString="^D_"
-                                replaceString=""/>-->
+        </table>
+        <table tableName="mskl_treat_plan" domainObjectName="MsklTreatPlan"
+
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
         </table>
 
     </context>
