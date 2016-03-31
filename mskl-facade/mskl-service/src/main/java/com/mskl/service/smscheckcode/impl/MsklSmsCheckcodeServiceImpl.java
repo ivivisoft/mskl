@@ -52,10 +52,8 @@ public class MsklSmsCheckcodeServiceImpl extends BaseServiceImpl<MsklSmsCheckcod
         String checkCodeInRedis =   redisClient.get(redisKey);
         if (StringUtils.isNotBlank(checkCodeInRedis)) {
             return StringUtils.equals(checkCodeInRedis, verificationCode);
-        } else {
-            MsklSmsCheckcode msklSmsCheckcode = getSmsCheckCodeByMobileAndBizType(mobile, checkcodeType);
-            return null != msklSmsCheckcode && StringUtils.isNotBlank(msklSmsCheckcode.getCheckCode()) && StringUtils.equals(msklSmsCheckcode.getCheckCode(), verificationCode);
         }
+        return false;
     }
 
     private String getRedisKey(String mobile, CheckcodeType checkcodeType) {
@@ -116,6 +114,8 @@ public class MsklSmsCheckcodeServiceImpl extends BaseServiceImpl<MsklSmsCheckcod
         if (null != msklSmsCheckcode) {
             msklSmsCheckcode.setCheckTimes(msklSmsCheckcode.getCheckTimes() + 1);
             msklSmsCheckcode.setLastCheckDatetime(new Date());
+            String checkCode = VerifyCodeUtil.verifyCode(6);
+            msklSmsCheckcode.setCheckCode(checkCode);
             updateObject(msklSmsCheckcode);
         } else {
             //保存手机验证码
@@ -138,7 +138,7 @@ public class MsklSmsCheckcodeServiceImpl extends BaseServiceImpl<MsklSmsCheckcod
      * @param checkcode 验证码
      */
     private void saveVerifyCodeToRedis(String mobile, CheckcodeType checkcodeType, String  checkcode) {
-        redisClient.set(getRedisKey(mobile,checkcodeType), checkcode);
+        redisClient.set(getRedisKey(mobile,checkcodeType), checkcode,1800);
     }
 
     public MsklSmsCheckcode getSmsCheckCodeByMobileAndBizType(String mobile, CheckcodeType smsBizType) {

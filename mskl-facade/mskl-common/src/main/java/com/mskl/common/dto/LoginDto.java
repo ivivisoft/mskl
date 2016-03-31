@@ -28,8 +28,4 @@ public class LoginDto implements Serializable {
         this.username = username;
     }
 
-    @Override
-    public String toString() {
-        return "password='" + password + "'&username='" + username + "'";
-    }
 }

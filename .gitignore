@@ -1,13 +1,10 @@
-/mskl-api/target
-/mskl-common/target
-/mskl-dao/target
-/mskl-service/target
 # Created by .ignore support plugin (hsz.mobi)
+/mskl-facade/mskl-api/src/main/resources/conf.properties
 ### JetBrains template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio
 
 *.iml
-l
+
 ## Directory-based project format:
 .idea/
 # if you remove the above rule, at least ignore the following:
@@ -16,8 +13,6 @@ l
 # .idea/workspace.xml
 # .idea/tasks.xml
 # .idea/dictionaries
-/mskl-dao/src/main/rels
-sources/config/generatorConfig.xml
 
 # Sensitive or high-churn files:
 # .idea/dataSources.ids

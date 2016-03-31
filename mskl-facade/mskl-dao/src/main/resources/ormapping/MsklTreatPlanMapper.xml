@@ -11,9 +11,9 @@
     <result column="taken_amount" property="takenAmount" jdbcType="DECIMAL" />
     <result column="dose" property="dose" jdbcType="DECIMAL" />
     <result column="daily_times" property="dailyTimes" jdbcType="DECIMAL" />
-    <result column="morning_alarm" property="morningAlarm" jdbcType="INTEGER" />
-    <result column="noon_alarm" property="noonAlarm" jdbcType="INTEGER" />
-    <result column="night_alarm" property="nightAlarm" jdbcType="INTEGER" />
+    <result column="morning_alarm" property="morningAlarm" jdbcType="DATE" />
+    <result column="noon_alarm" property="noonAlarm" jdbcType="DATE" />
+    <result column="night_alarm" property="nightAlarm" jdbcType="DATE" />
     <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -39,7 +39,7 @@
     values (#{msklTreatplanId,jdbcType=BIGINT}, #{msklMedicineId,jdbcType=BIGINT}, #{medicalName,jdbcType=VARCHAR}, 
       #{normalName,jdbcType=VARCHAR}, #{medicineUnit,jdbcType=VARCHAR}, #{packageAmount,jdbcType=DECIMAL}, 
       #{takenAmount,jdbcType=DECIMAL}, #{dose,jdbcType=DECIMAL}, #{dailyTimes,jdbcType=DECIMAL}, 
-      #{morningAlarm,jdbcType=INTEGER}, #{noonAlarm,jdbcType=INTEGER}, #{nightAlarm,jdbcType=INTEGER}, 
+      #{morningAlarm,jdbcType=DATE}, #{noonAlarm,jdbcType=DATE}, #{nightAlarm,jdbcType=DATE}, 
       #{updateDatetime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklTreatPlan" >
@@ -114,13 +114,13 @@
         #{dailyTimes,jdbcType=DECIMAL},
       </if>
       <if test="morningAlarm != null" >
-        #{morningAlarm,jdbcType=INTEGER},
+        #{morningAlarm,jdbcType=DATE},
       </if>
       <if test="noonAlarm != null" >
-        #{noonAlarm,jdbcType=INTEGER},
+        #{noonAlarm,jdbcType=DATE},
       </if>
       <if test="nightAlarm != null" >
-        #{nightAlarm,jdbcType=INTEGER},
+        #{nightAlarm,jdbcType=DATE},
       </if>
       <if test="updateDatetime != null" >
         #{updateDatetime,jdbcType=TIMESTAMP},
@@ -155,13 +155,13 @@
         daily_times = #{dailyTimes,jdbcType=DECIMAL},
       </if>
       <if test="morningAlarm != null" >
-        morning_alarm = #{morningAlarm,jdbcType=INTEGER},
+        morning_alarm = #{morningAlarm,jdbcType=DATE},
       </if>
       <if test="noonAlarm != null" >
-        noon_alarm = #{noonAlarm,jdbcType=INTEGER},
+        noon_alarm = #{noonAlarm,jdbcType=DATE},
       </if>
       <if test="nightAlarm != null" >
-        night_alarm = #{nightAlarm,jdbcType=INTEGER},
+        night_alarm = #{nightAlarm,jdbcType=DATE},
       </if>
       <if test="updateDatetime != null" >
         update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
@@ -179,9 +179,9 @@
       taken_amount = #{takenAmount,jdbcType=DECIMAL},
       dose = #{dose,jdbcType=DECIMAL},
       daily_times = #{dailyTimes,jdbcType=DECIMAL},
-      morning_alarm = #{morningAlarm,jdbcType=INTEGER},
-      noon_alarm = #{noonAlarm,jdbcType=INTEGER},
-      night_alarm = #{nightAlarm,jdbcType=INTEGER},
+      morning_alarm = #{morningAlarm,jdbcType=DATE},
+      noon_alarm = #{noonAlarm,jdbcType=DATE},
+      night_alarm = #{nightAlarm,jdbcType=DATE},
       update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}
     where mskl_treatplan_id = #{msklTreatplanId,jdbcType=BIGINT}
   </update>

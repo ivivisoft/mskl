@@ -8,8 +8,8 @@
     <result column="mskl_medicine_id" property="msklMedicineId" jdbcType="BIGINT" />
     <result column="medical_name" property="medicalName" jdbcType="VARCHAR" />
     <result column="normal_name" property="normalName" jdbcType="VARCHAR" />
-    <result column="set_alarm" property="setAlarm" jdbcType="INTEGER" />
-    <result column="finish_at" property="finishAt" jdbcType="INTEGER" />
+    <result column="set_alarm" property="setAlarm" jdbcType="DATE" />
+    <result column="finish_at" property="finishAt" jdbcType="DATE" />
     <result column="taken_status" property="takenStatus" jdbcType="DECIMAL" />
     <result column="taken_mood" property="takenMood" jdbcType="DECIMAL" />
     <result column="taken_words" property="takenWords" jdbcType="VARCHAR" />
@@ -38,7 +38,7 @@
       update_datetime)
     values (#{msklTreatlogId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userMobile,jdbcType=VARCHAR}, 
       #{msklMedicineId,jdbcType=BIGINT}, #{medicalName,jdbcType=VARCHAR}, #{normalName,jdbcType=VARCHAR}, 
-      #{setAlarm,jdbcType=INTEGER}, #{finishAt,jdbcType=INTEGER}, #{takenStatus,jdbcType=DECIMAL}, 
+      #{setAlarm,jdbcType=DATE}, #{finishAt,jdbcType=DATE}, #{takenStatus,jdbcType=DECIMAL}, 
       #{takenMood,jdbcType=DECIMAL}, #{takenWords,jdbcType=VARCHAR}, #{dose,jdbcType=DECIMAL}, 
       #{updateDatetime,jdbcType=TIMESTAMP})
   </insert>
@@ -105,10 +105,10 @@
         #{normalName,jdbcType=VARCHAR},
       </if>
       <if test="setAlarm != null" >
-        #{setAlarm,jdbcType=INTEGER},
+        #{setAlarm,jdbcType=DATE},
       </if>
       <if test="finishAt != null" >
-        #{finishAt,jdbcType=INTEGER},
+        #{finishAt,jdbcType=DATE},
       </if>
       <if test="takenStatus != null" >
         #{takenStatus,jdbcType=DECIMAL},
@@ -146,10 +146,10 @@
         normal_name = #{normalName,jdbcType=VARCHAR},
       </if>
       <if test="setAlarm != null" >
-        set_alarm = #{setAlarm,jdbcType=INTEGER},
+        set_alarm = #{setAlarm,jdbcType=DATE},
       </if>
       <if test="finishAt != null" >
-        finish_at = #{finishAt,jdbcType=INTEGER},
+        finish_at = #{finishAt,jdbcType=DATE},
       </if>
       <if test="takenStatus != null" >
         taken_status = #{takenStatus,jdbcType=DECIMAL},
@@ -176,8 +176,8 @@
       mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT},
       medical_name = #{medicalName,jdbcType=VARCHAR},
       normal_name = #{normalName,jdbcType=VARCHAR},
-      set_alarm = #{setAlarm,jdbcType=INTEGER},
-      finish_at = #{finishAt,jdbcType=INTEGER},
+      set_alarm = #{setAlarm,jdbcType=DATE},
+      finish_at = #{finishAt,jdbcType=DATE},
       taken_status = #{takenStatus,jdbcType=DECIMAL},
       taken_mood = #{takenMood,jdbcType=DECIMAL},
       taken_words = #{takenWords,jdbcType=VARCHAR},
