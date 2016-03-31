@@ -16,9 +16,9 @@ public class MsklTreatLog {
 
     private String normalName;
 
-    private Integer setAlarm;
+    private Date setAlarm;
 
-    private Integer finishAt;
+    private Date finishAt;
 
     private Short takenStatus;
 
@@ -78,19 +78,19 @@ public class MsklTreatLog {
         this.normalName = normalName == null ? null : normalName.trim();
     }
 
-    public Integer getSetAlarm() {
+    public Date getSetAlarm() {
         return setAlarm;
     }
 
-    public void setSetAlarm(Integer setAlarm) {
+    public void setSetAlarm(Date setAlarm) {
         this.setAlarm = setAlarm;
     }
 
-    public Integer getFinishAt() {
+    public Date getFinishAt() {
         return finishAt;
     }
 
-    public void setFinishAt(Integer finishAt) {
+    public void setFinishAt(Date finishAt) {
         this.finishAt = finishAt;
     }
 

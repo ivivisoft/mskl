@@ -22,11 +22,11 @@ public class MsklTreatPlan {
 
     private Short dailyTimes;
 
-    private Integer morningAlarm;
+    private Date morningAlarm;
 
-    private Integer noonAlarm;
+    private Date noonAlarm;
 
-    private Integer nightAlarm;
+    private Date nightAlarm;
 
     private Date updateDatetime;
 
@@ -102,27 +102,27 @@ public class MsklTreatPlan {
         this.dailyTimes = dailyTimes;
     }
 
-    public Integer getMorningAlarm() {
+    public Date getMorningAlarm() {
         return morningAlarm;
     }
 
-    public void setMorningAlarm(Integer morningAlarm) {
+    public void setMorningAlarm(Date morningAlarm) {
         this.morningAlarm = morningAlarm;
     }
 
-    public Integer getNoonAlarm() {
+    public Date getNoonAlarm() {
         return noonAlarm;
     }
 
-    public void setNoonAlarm(Integer noonAlarm) {
+    public void setNoonAlarm(Date noonAlarm) {
         this.noonAlarm = noonAlarm;
     }
 
-    public Integer getNightAlarm() {
+    public Date getNightAlarm() {
         return nightAlarm;
     }
 
-    public void setNightAlarm(Integer nightAlarm) {
+    public void setNightAlarm(Date nightAlarm) {
         this.nightAlarm = nightAlarm;
     }
 

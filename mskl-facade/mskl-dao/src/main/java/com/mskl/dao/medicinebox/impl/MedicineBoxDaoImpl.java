@@ -16,4 +16,7 @@ public class MedicineBoxDaoImpl extends MsklBaseDao<MsklMedbox,Serializable> imp
     }
 
 
+    public MsklMedbox getBoxByMedicine(Long msklMedicineId) {
+        return (MsklMedbox) this.selectOneObject("getBoxByMedicine",msklMedicineId);
+    }
 }
