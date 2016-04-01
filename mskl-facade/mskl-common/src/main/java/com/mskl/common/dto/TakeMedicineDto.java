@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class TakeMedicineDto implements Serializable{
 
     @NotEmpty
-    private String MsklTreatlogId;
+    private String msklTreatlogId;
 
     public String getMsklTreatlogId() {
-        return MsklTreatlogId;
+        return msklTreatlogId;
     }
 
     public void setMsklTreatlogId(String msklTreatlogId) {
-        MsklTreatlogId = msklTreatlogId;
+        this.msklTreatlogId = msklTreatlogId;
     }
 }

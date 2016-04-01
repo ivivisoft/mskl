@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace=".MsklPushMsgMapper" >
+  <resultMap id="BaseResultMap" type="com.mskl.dao.model.MsklPushMsg" >
+    <id column="push_msg_id" property="pushMsgId" jdbcType="BIGINT" />
+    <result column="push_model" property="pushModel" jdbcType="CHAR" />
+    <result column="push_type" property="pushType" jdbcType="VARCHAR" />
+    <result column="push_msg_kind" property="pushMsgKind" jdbcType="CHAR" />
+    <result column="push_msg_title" property="pushMsgTitle" jdbcType="VARCHAR" />
+    <result column="push_msg_digest" property="pushMsgDigest" jdbcType="VARCHAR" />
+    <result column="push_extend" property="pushExtend" jdbcType="VARCHAR" />
+    <result column="msg_from" property="msgFrom" jdbcType="BIGINT" />
+    <result column="recv_user_id" property="recvUserId" jdbcType="VARCHAR" />
+    <result column="html_url" property="htmlUrl" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="is_read" property="isRead" jdbcType="CHAR" />
+    <result column="business_type" property="businessType" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    push_msg_id, push_model, push_type, push_msg_kind, push_msg_title, push_msg_digest, 
+    push_extend, msg_from, recv_user_id, html_url, create_datetime, is_read, business_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mskl_push_msg
+    where push_msg_id = #{pushMsgId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mskl_push_msg
+    where push_msg_id = #{pushMsgId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mskl.dao.model.MsklPushMsg" >
+    insert into mskl_push_msg (push_msg_id, push_model, push_type, 
+      push_msg_kind, push_msg_title, push_msg_digest, 
+      push_extend, msg_from, recv_user_id, 
+      html_url, create_datetime, is_read, 
+      business_type)
+    values (#{pushMsgId,jdbcType=BIGINT}, #{pushModel,jdbcType=CHAR}, #{pushType,jdbcType=VARCHAR}, 
+      #{pushMsgKind,jdbcType=CHAR}, #{pushMsgTitle,jdbcType=VARCHAR}, #{pushMsgDigest,jdbcType=VARCHAR}, 
+      #{pushExtend,jdbcType=VARCHAR}, #{msgFrom,jdbcType=BIGINT}, #{recvUserId,jdbcType=VARCHAR}, 
+      #{htmlUrl,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, #{isRead,jdbcType=CHAR}, 
+      #{businessType,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklPushMsg" >
+    insert into mskl_push_msg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pushMsgId != null" >
+        push_msg_id,
+      </if>
+      <if test="pushModel != null" >
+        push_model,
+      </if>
+      <if test="pushType != null" >
+        push_type,
+      </if>
+      <if test="pushMsgKind != null" >
+        push_msg_kind,
+      </if>
+      <if test="pushMsgTitle != null" >
+        push_msg_title,
+      </if>
+      <if test="pushMsgDigest != null" >
+        push_msg_digest,
+      </if>
+      <if test="pushExtend != null" >
+        push_extend,
+      </if>
+      <if test="msgFrom != null" >
+        msg_from,
+      </if>
+      <if test="recvUserId != null" >
+        recv_user_id,
+      </if>
+      <if test="htmlUrl != null" >
+        html_url,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="isRead != null" >
+        is_read,
+      </if>
+      <if test="businessType != null" >
+        business_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pushMsgId != null" >
+        #{pushMsgId,jdbcType=BIGINT},
+      </if>
+      <if test="pushModel != null" >
+        #{pushModel,jdbcType=CHAR},
+      </if>
+      <if test="pushType != null" >
+        #{pushType,jdbcType=VARCHAR},
+      </if>
+      <if test="pushMsgKind != null" >
+        #{pushMsgKind,jdbcType=CHAR},
+      </if>
+      <if test="pushMsgTitle != null" >
+        #{pushMsgTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushMsgDigest != null" >
+        #{pushMsgDigest,jdbcType=VARCHAR},
+      </if>
+      <if test="pushExtend != null" >
+        #{pushExtend,jdbcType=VARCHAR},
+      </if>
+      <if test="msgFrom != null" >
+        #{msgFrom,jdbcType=BIGINT},
+      </if>
+      <if test="recvUserId != null" >
+        #{recvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="htmlUrl != null" >
+        #{htmlUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isRead != null" >
+        #{isRead,jdbcType=CHAR},
+      </if>
+      <if test="businessType != null" >
+        #{businessType,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mskl.dao.model.MsklPushMsg" >
+    update mskl_push_msg
+    <set >
+      <if test="pushModel != null" >
+        push_model = #{pushModel,jdbcType=CHAR},
+      </if>
+      <if test="pushType != null" >
+        push_type = #{pushType,jdbcType=VARCHAR},
+      </if>
+      <if test="pushMsgKind != null" >
+        push_msg_kind = #{pushMsgKind,jdbcType=CHAR},
+      </if>
+      <if test="pushMsgTitle != null" >
+        push_msg_title = #{pushMsgTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushMsgDigest != null" >
+        push_msg_digest = #{pushMsgDigest,jdbcType=VARCHAR},
+      </if>
+      <if test="pushExtend != null" >
+        push_extend = #{pushExtend,jdbcType=VARCHAR},
+      </if>
+      <if test="msgFrom != null" >
+        msg_from = #{msgFrom,jdbcType=BIGINT},
+      </if>
+      <if test="recvUserId != null" >
+        recv_user_id = #{recvUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="htmlUrl != null" >
+        html_url = #{htmlUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isRead != null" >
+        is_read = #{isRead,jdbcType=CHAR},
+      </if>
+      <if test="businessType != null" >
+        business_type = #{businessType,jdbcType=CHAR},
+      </if>
+    </set>
+    where push_msg_id = #{pushMsgId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mskl.dao.model.MsklPushMsg" >
+    update mskl_push_msg
+    set push_model = #{pushModel,jdbcType=CHAR},
+      push_type = #{pushType,jdbcType=VARCHAR},
+      push_msg_kind = #{pushMsgKind,jdbcType=CHAR},
+      push_msg_title = #{pushMsgTitle,jdbcType=VARCHAR},
+      push_msg_digest = #{pushMsgDigest,jdbcType=VARCHAR},
+      push_extend = #{pushExtend,jdbcType=VARCHAR},
+      msg_from = #{msgFrom,jdbcType=BIGINT},
+      recv_user_id = #{recvUserId,jdbcType=VARCHAR},
+      html_url = #{htmlUrl,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      is_read = #{isRead,jdbcType=CHAR},
+      business_type = #{businessType,jdbcType=CHAR}
+    where push_msg_id = #{pushMsgId,jdbcType=BIGINT}
+  </update>
+</mapper>

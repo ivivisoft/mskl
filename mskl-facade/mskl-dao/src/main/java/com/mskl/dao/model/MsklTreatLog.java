@@ -1,6 +1,5 @@
 package com.mskl.dao.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class MsklTreatLog {
@@ -20,13 +19,13 @@ public class MsklTreatLog {
 
     private Date finishAt;
 
-    private Short takenStatus;
+    private Integer takenStatus;
 
-    private Short takenMood;
+    private Integer takenMood;
 
     private String takenWords;
 
-    private BigDecimal dose;
+    private Double dose;
 
     private Date updateDatetime;
 
@@ -94,19 +93,19 @@ public class MsklTreatLog {
         this.finishAt = finishAt;
     }
 
-    public Short getTakenStatus() {
+    public Integer getTakenStatus() {
         return takenStatus;
     }
 
-    public void setTakenStatus(Short takenStatus) {
+    public void setTakenStatus(Integer takenStatus) {
         this.takenStatus = takenStatus;
     }
 
-    public Short getTakenMood() {
+    public Integer getTakenMood() {
         return takenMood;
     }
 
-    public void setTakenMood(Short takenMood) {
+    public void setTakenMood(Integer takenMood) {
         this.takenMood = takenMood;
     }
 
@@ -118,11 +117,11 @@ public class MsklTreatLog {
         this.takenWords = takenWords == null ? null : takenWords.trim();
     }
 
-    public BigDecimal getDose() {
+    public Double getDose() {
         return dose;
     }
 
-    public void setDose(BigDecimal dose) {
+    public void setDose(Double dose) {
         this.dose = dose;
     }
 

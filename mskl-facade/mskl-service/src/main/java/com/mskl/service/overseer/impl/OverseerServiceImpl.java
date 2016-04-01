@@ -3,8 +3,8 @@ package com.mskl.service.overseer.impl;
 import com.mskl.common.dto.OverseerDto;
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.util.TokenUtil;
-import com.mskl.dao.overseer.OverseerDao;
 import com.mskl.dao.model.MsklOverseer;
+import com.mskl.dao.overseer.OverseerDao;
 import com.mskl.service.base.impl.BaseServiceImpl;
 import com.mskl.service.overseer.OverseerService;
 import org.apache.commons.logging.Log;
@@ -30,7 +30,7 @@ public class OverseerServiceImpl extends BaseServiceImpl<MsklOverseer, Serializa
 
     public RestServiceResult<Boolean> insertOverseer(OverseerDto overseerDto, String token) {
 
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("添加监督人服务",false);
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("添加监督人服务", false);
 
         Long userId = TokenUtil.getUserIdFromToken(token);
 
@@ -53,10 +53,11 @@ public class OverseerServiceImpl extends BaseServiceImpl<MsklOverseer, Serializa
         return result;
     }
 
-    public RestServiceResult<List<MsklOverseer>> getOverseersByUserId(String userId) {
-        RestServiceResult<List<MsklOverseer>> result = new RestServiceResult<List<MsklOverseer>>("查询监督人服务",false);
+    public RestServiceResult<List<MsklOverseer>> getOverseersByUserId(String token) {
+        RestServiceResult<List<MsklOverseer>> result = new RestServiceResult<List<MsklOverseer>>("查询监督人服务", false);
 
-        List<MsklOverseer> lists = overseerDao.getOverseersByUserId(Long.parseLong(userId));
+        Long userId = TokenUtil.getUserIdFromToken(token);
+        List<MsklOverseer> lists = overseerDao.getOverseersByUserId(userId);
         if (null == lists) {
             result.setMessage("查询监督人异常！");
             if (logger.isInfoEnabled()) {

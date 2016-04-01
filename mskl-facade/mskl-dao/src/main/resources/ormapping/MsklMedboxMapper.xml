@@ -9,13 +9,13 @@
     <result column="mskl_medicine_id" property="msklMedicineId" jdbcType="BIGINT" />
     <result column="medical_name" property="medicalName" jdbcType="VARCHAR" />
     <result column="normal_name" property="normalName" jdbcType="VARCHAR" />
-    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
-    <result column="taken_amount" property="takenAmount" jdbcType="DECIMAL" />
-    <result column="remaining_amount" property="remainingAmount" jdbcType="DECIMAL" />
-    <result column="dose" property="dose" jdbcType="DECIMAL" />
-    <result column="daily_times" property="dailyTimes" jdbcType="DECIMAL" />
-    <result column="start_day" property="startDay" jdbcType="INTEGER" />
-    <result column="finish_day" property="finishDay" jdbcType="INTEGER" />
+    <result column="total_amount" property="totalAmount" jdbcType="INTEGER" />
+    <result column="taken_amount" property="takenAmount" jdbcType="DOUBLE" />
+    <result column="remaining_amount" property="remainingAmount" jdbcType="DOUBLE" />
+    <result column="dose" property="dose" jdbcType="DOUBLE" />
+    <result column="daily_times" property="dailyTimes" jdbcType="INTEGER" />
+    <result column="start_day" property="startDay" jdbcType="TIMESTAMP" />
+    <result column="finish_day" property="finishDay" jdbcType="TIMESTAMP" />
     <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -42,9 +42,9 @@
       )
     values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userMobile,jdbcType=VARCHAR}, 
       #{userRealName,jdbcType=VARCHAR}, #{msklMedicineId,jdbcType=BIGINT}, #{medicalName,jdbcType=VARCHAR}, 
-      #{normalName,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{takenAmount,jdbcType=DECIMAL}, 
-      #{remainingAmount,jdbcType=DECIMAL}, #{dose,jdbcType=DECIMAL}, #{dailyTimes,jdbcType=DECIMAL}, 
-      #{startDay,jdbcType=INTEGER}, #{finishDay,jdbcType=INTEGER}, #{updateDatetime,jdbcType=TIMESTAMP}
+      #{normalName,jdbcType=VARCHAR}, #{totalAmount,jdbcType=INTEGER}, #{takenAmount,jdbcType=DOUBLE}, 
+      #{remainingAmount,jdbcType=DOUBLE}, #{dose,jdbcType=DOUBLE}, #{dailyTimes,jdbcType=INTEGER}, 
+      #{startDay,jdbcType=TIMESTAMP}, #{finishDay,jdbcType=TIMESTAMP}, #{updateDatetime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklMedbox" >
@@ -119,25 +119,25 @@
         #{normalName,jdbcType=VARCHAR},
       </if>
       <if test="totalAmount != null" >
-        #{totalAmount,jdbcType=DECIMAL},
+        #{totalAmount,jdbcType=INTEGER},
       </if>
       <if test="takenAmount != null" >
-        #{takenAmount,jdbcType=DECIMAL},
+        #{takenAmount,jdbcType=DOUBLE},
       </if>
       <if test="remainingAmount != null" >
-        #{remainingAmount,jdbcType=DECIMAL},
+        #{remainingAmount,jdbcType=DOUBLE},
       </if>
       <if test="dose != null" >
-        #{dose,jdbcType=DECIMAL},
+        #{dose,jdbcType=DOUBLE},
       </if>
       <if test="dailyTimes != null" >
-        #{dailyTimes,jdbcType=DECIMAL},
+        #{dailyTimes,jdbcType=INTEGER},
       </if>
       <if test="startDay != null" >
-        #{startDay,jdbcType=INTEGER},
+        #{startDay,jdbcType=TIMESTAMP},
       </if>
       <if test="finishDay != null" >
-        #{finishDay,jdbcType=INTEGER},
+        #{finishDay,jdbcType=TIMESTAMP},
       </if>
       <if test="updateDatetime != null" >
         #{updateDatetime,jdbcType=TIMESTAMP},
@@ -166,25 +166,25 @@
         normal_name = #{normalName,jdbcType=VARCHAR},
       </if>
       <if test="totalAmount != null" >
-        total_amount = #{totalAmount,jdbcType=DECIMAL},
+        total_amount = #{totalAmount,jdbcType=INTEGER},
       </if>
       <if test="takenAmount != null" >
-        taken_amount = #{takenAmount,jdbcType=DECIMAL},
+        taken_amount = #{takenAmount,jdbcType=DOUBLE},
       </if>
       <if test="remainingAmount != null" >
-        remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
+        remaining_amount = #{remainingAmount,jdbcType=DOUBLE},
       </if>
       <if test="dose != null" >
-        dose = #{dose,jdbcType=DECIMAL},
+        dose = #{dose,jdbcType=DOUBLE},
       </if>
       <if test="dailyTimes != null" >
-        daily_times = #{dailyTimes,jdbcType=DECIMAL},
+        daily_times = #{dailyTimes,jdbcType=INTEGER},
       </if>
       <if test="startDay != null" >
-        start_day = #{startDay,jdbcType=INTEGER},
+        start_day = #{startDay,jdbcType=TIMESTAMP},
       </if>
       <if test="finishDay != null" >
-        finish_day = #{finishDay,jdbcType=INTEGER},
+        finish_day = #{finishDay,jdbcType=TIMESTAMP},
       </if>
       <if test="updateDatetime != null" >
         update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
@@ -200,13 +200,13 @@
       mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT},
       medical_name = #{medicalName,jdbcType=VARCHAR},
       normal_name = #{normalName,jdbcType=VARCHAR},
-      total_amount = #{totalAmount,jdbcType=DECIMAL},
-      taken_amount = #{takenAmount,jdbcType=DECIMAL},
-      remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
-      dose = #{dose,jdbcType=DECIMAL},
-      daily_times = #{dailyTimes,jdbcType=DECIMAL},
-      start_day = #{startDay,jdbcType=INTEGER},
-      finish_day = #{finishDay,jdbcType=INTEGER},
+      total_amount = #{totalAmount,jdbcType=INTEGER},
+      taken_amount = #{takenAmount,jdbcType=DOUBLE},
+      remaining_amount = #{remainingAmount,jdbcType=DOUBLE},
+      dose = #{dose,jdbcType=DOUBLE},
+      daily_times = #{dailyTimes,jdbcType=INTEGER},
+      start_day = #{startDay,jdbcType=TIMESTAMP},
+      finish_day = #{finishDay,jdbcType=TIMESTAMP},
       update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>

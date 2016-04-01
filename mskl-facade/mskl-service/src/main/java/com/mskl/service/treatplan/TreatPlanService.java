@@ -6,6 +6,7 @@ import com.mskl.dao.model.MsklTreatPlan;
 import com.mskl.service.base.BaseService;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface TreatPlanService extends BaseService<MsklTreatPlan,Serializable>{
 
@@ -18,10 +19,9 @@ public interface TreatPlanService extends BaseService<MsklTreatPlan,Serializable
     RestServiceResult<Boolean> insertTreatPlan(TreatPlanDto treatPlanDto, String token);
 
     /**
-     * 更新服药计划
-     * @param treatPlanDto
-     * @param token
+     *
      * @return
+     * @param token
      */
-    RestServiceResult<Boolean> updateTreatPlan(TreatPlanDto treatPlanDto, String token);
+    RestServiceResult<List<MsklTreatPlan>> getAllTreatPlan(String token);
 }

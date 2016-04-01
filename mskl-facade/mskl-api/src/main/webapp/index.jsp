@@ -25,6 +25,16 @@
 <input type="button" onclick="getMsklMedicineByBarCode()" name="button" id="getMsklMedicineByBarCode" value="根据药品二维码获取药品信息">
 
 <input type="button" onclick="apllyAmount()" name="button" id="apllyAmount" value="用户提现申请">
+<input type="button" onclick="takeMedicine()" name="button" id="takeMedicine" value="服药">
+<input type="button" onclick="insertTreatPlan()" name="button" id="insertTreatPlan" value="添加服药计划">
+<input type="button" onclick="selectTreatPlan()" name="button" id="selectTreatPlan" value="查询服药计划">
+<input type="button" onclick="insertBankCard()" name="button" id="insertBankCard" value="添加银行卡">
+<input type="button" onclick="selectBankCard()" name="button" id="selectBankCard" value="查询银行卡">
+<input type="button" onclick="insertTradePassword()" name="button" id="insertTradePassword" value="添加提现密码">
+<input type="button" onclick="updateTradePassword()" name="button" id="updateTradePassword" value="修改提现密码">
+<input type="button" onclick="getMsklMedicineByName()" name="button" id="getMsklMedicineByName" value="根据药品通用名查询药品">
+<input type="button" onclick="userInfo()" name="button" id="userInfo" value="获取用户信息">
+
 
 <script type="text/javascript">
     function getVerificationCode() {
@@ -177,15 +187,14 @@
         var overseerDto = {
             "userMobile": "13512122323",
             "overseer": "yangxu",
-            "overseerMobile": "13422325533",
-            "userId": "001"
+            "overseerMobile": "13422325533"
         }
 
         $.ajax({
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/overseer/insert",
+            url: "api/overseer/insert/122341514514/f9d8a2c3db7e3a5db324bfea29df5efe/18b04227c42748498c2227e20c66e3b4|2",
             data: JSON.stringify(overseerDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -204,7 +213,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/overseer/1",
+            url: "api/overseer/select/18b04227c42748498c2227e20c66e3b4|2",
             success: function (data) {
                 var data = JSON.stringify(data);
                 alert(data)
@@ -225,7 +234,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/userCashout/apply/1/1/aasdasdasdasd|1",
+            url: "api/userCashout/apply/122341514514/0f7d375f9201371fea1e21e59b6986e9/18b04227c42748498c2227e20c66e3b4|2",
             data: JSON.stringify(userCashoutDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -237,6 +246,190 @@
         })
     }
 
+    function takeMedicine(){
+        var takeMedicineDto = {
+            "msklTreatlogId": "2"
+        }
+
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/treat/takeMedicine/122341514514/4f50f64673ea25e5c6cd4e75c2be2b1b/18b04227c42748498c2227e20c66e3b4|2",
+            data: JSON.stringify(takeMedicineDto),
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+    function insertTreatPlan(){
+
+        var treatPlanDto = {
+            "msklMedicineId": "2",
+            "dailyTimes": "3",
+            "dose": "2",
+
+            "morningAlarm": "2016-03-25 09:23:32",
+            "nightAlarm": "2016-03-25 22:23:32",
+            "noonAlarm": "2016-03-25 12:23:32",
+
+            "takenAmount": "2",
+            "packageAmount": "3"
+        }
+
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/treatPlan/insert/122341514514/f6c2b22438ec370d435a84ba0ac20ed7/18b04227c42748498c2227e20c66e3b4|2",
+            data: JSON.stringify(treatPlanDto),
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
+    function selectTreatPlan(){
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/treatPlan/all/18b04227c42748498c2227e20c66e3b4|2",
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
+    function insertBankCard(){
+        var userBankcardDto = {
+            "bankNo": "2",
+            "bankName": "杨旭速度",
+            "isDefault": "2",
+            "bankAddrNo": "2",
+            "cardNo": "2"
+        }
+
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/userBankcard/insert/122341514514/b28cd78249e11c2f73d22f6423ae2bc9/18b04227c42748498c2227e20c66e3b4|2",
+            data: JSON.stringify(userBankcardDto),
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
+    function selectBankCard(){
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/userBankcard/select/18b04227c42748498c2227e20c66e3b4|2",
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
+    function insertTradePassword(){
+        var userTradeDto = {
+            "userTradePwd": "2",
+            "newUserTradePwd": "222",
+            "userTradePwdStrength": "2"
+        }
+
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/userTrade/tradePassword/insert/122341514514/dd0997b2ee086a0352b6fc7b67e26743/18b04227c42748498c2227e20c66e3b4|2",
+            data: JSON.stringify(userTradeDto),
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
+    function updateTradePassword(){
+        var userTradeDto = {
+            "userTradePwd": "2",
+            "newUserTradePwd": "222",
+            "userTradePwdStrength": "2"
+        }
+
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/userTrade/tradePassword/update/122341514514/dd0997b2ee086a0352b6fc7b67e26743/18b04227c42748498c2227e20c66e3b4|2",
+            data: JSON.stringify(userTradeDto),
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
+    function getMsklMedicineByName(){
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/msklmedicine/name/2",
+            data: "",
+            success: function (data) {
+                alert(JSON.stringify(data));
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        });
+    }
+
+    function userInfo(){
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/mskluser/18b04227c42748498c2227e20c66e3b4|2",
+            success: function (data) {
+                alert(JSON.stringify(data));
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        });
+    }
 </script>
 </body>
 </html>

@@ -1,28 +1,21 @@
 package com.mskl.common.dto;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 public class UserBankcardDto implements Serializable{
 
-    private String userId;
-
+    @NotEmpty
     private String bankNo;
-
+    @NotEmpty
     private String bankName;
-
+    @NotEmpty
     private String isDefault;
-
+    @NotEmpty
     private String bankAddrNo;
-
+    @NotEmpty
     private String cardNo;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getBankNo() {
         return bankNo;

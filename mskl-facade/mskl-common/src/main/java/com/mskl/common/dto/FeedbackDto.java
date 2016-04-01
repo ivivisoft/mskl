@@ -38,10 +38,4 @@ public class FeedbackDto implements Serializable {
         this.feedbackMsg = feedbackMsg;
     }
 
-    @Override
-    public String toString() {
-        return "feedbackMsg='" + feedbackMsg + "'&userMobile='" + userMobile + "'&userName='" + userName + "'";
-    }
-
-
 }

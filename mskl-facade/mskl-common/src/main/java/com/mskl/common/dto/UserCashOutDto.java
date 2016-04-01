@@ -1,10 +1,13 @@
 package com.mskl.common.dto;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 public class UserCashoutDto implements Serializable{
 
     /**提现金额*/
+    @NotEmpty
     private String amount;
 
     public String getAmount() {
@@ -15,8 +18,4 @@ public class UserCashoutDto implements Serializable{
         this.amount = amount;
     }
 
-    @Override
-    public String toString() {
-        return "amount='" + amount + "'";
-    }
 }

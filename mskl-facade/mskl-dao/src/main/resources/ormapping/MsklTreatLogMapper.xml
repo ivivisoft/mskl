@@ -8,12 +8,12 @@
     <result column="mskl_medicine_id" property="msklMedicineId" jdbcType="BIGINT" />
     <result column="medical_name" property="medicalName" jdbcType="VARCHAR" />
     <result column="normal_name" property="normalName" jdbcType="VARCHAR" />
-    <result column="set_alarm" property="setAlarm" jdbcType="DATE" />
-    <result column="finish_at" property="finishAt" jdbcType="DATE" />
-    <result column="taken_status" property="takenStatus" jdbcType="DECIMAL" />
-    <result column="taken_mood" property="takenMood" jdbcType="DECIMAL" />
+    <result column="set_alarm" property="setAlarm" jdbcType="TIMESTAMP" />
+    <result column="finish_at" property="finishAt" jdbcType="TIMESTAMP" />
+    <result column="taken_status" property="takenStatus" jdbcType="INTEGER" />
+    <result column="taken_mood" property="takenMood" jdbcType="INTEGER" />
     <result column="taken_words" property="takenWords" jdbcType="VARCHAR" />
-    <result column="dose" property="dose" jdbcType="DECIMAL" />
+    <result column="dose" property="dose" jdbcType="DOUBLE" />
     <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -38,8 +38,8 @@
       update_datetime)
     values (#{msklTreatlogId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userMobile,jdbcType=VARCHAR}, 
       #{msklMedicineId,jdbcType=BIGINT}, #{medicalName,jdbcType=VARCHAR}, #{normalName,jdbcType=VARCHAR}, 
-      #{setAlarm,jdbcType=DATE}, #{finishAt,jdbcType=DATE}, #{takenStatus,jdbcType=DECIMAL}, 
-      #{takenMood,jdbcType=DECIMAL}, #{takenWords,jdbcType=VARCHAR}, #{dose,jdbcType=DECIMAL}, 
+      #{setAlarm,jdbcType=TIMESTAMP}, #{finishAt,jdbcType=TIMESTAMP}, #{takenStatus,jdbcType=INTEGER}, 
+      #{takenMood,jdbcType=INTEGER}, #{takenWords,jdbcType=VARCHAR}, #{dose,jdbcType=DOUBLE}, 
       #{updateDatetime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklTreatLog" >
@@ -105,22 +105,22 @@
         #{normalName,jdbcType=VARCHAR},
       </if>
       <if test="setAlarm != null" >
-        #{setAlarm,jdbcType=DATE},
+        #{setAlarm,jdbcType=TIMESTAMP},
       </if>
       <if test="finishAt != null" >
-        #{finishAt,jdbcType=DATE},
+        #{finishAt,jdbcType=TIMESTAMP},
       </if>
       <if test="takenStatus != null" >
-        #{takenStatus,jdbcType=DECIMAL},
+        #{takenStatus,jdbcType=INTEGER},
       </if>
       <if test="takenMood != null" >
-        #{takenMood,jdbcType=DECIMAL},
+        #{takenMood,jdbcType=INTEGER},
       </if>
       <if test="takenWords != null" >
         #{takenWords,jdbcType=VARCHAR},
       </if>
       <if test="dose != null" >
-        #{dose,jdbcType=DECIMAL},
+        #{dose,jdbcType=DOUBLE},
       </if>
       <if test="updateDatetime != null" >
         #{updateDatetime,jdbcType=TIMESTAMP},
@@ -146,22 +146,22 @@
         normal_name = #{normalName,jdbcType=VARCHAR},
       </if>
       <if test="setAlarm != null" >
-        set_alarm = #{setAlarm,jdbcType=DATE},
+        set_alarm = #{setAlarm,jdbcType=TIMESTAMP},
       </if>
       <if test="finishAt != null" >
-        finish_at = #{finishAt,jdbcType=DATE},
+        finish_at = #{finishAt,jdbcType=TIMESTAMP},
       </if>
       <if test="takenStatus != null" >
-        taken_status = #{takenStatus,jdbcType=DECIMAL},
+        taken_status = #{takenStatus,jdbcType=INTEGER},
       </if>
       <if test="takenMood != null" >
-        taken_mood = #{takenMood,jdbcType=DECIMAL},
+        taken_mood = #{takenMood,jdbcType=INTEGER},
       </if>
       <if test="takenWords != null" >
         taken_words = #{takenWords,jdbcType=VARCHAR},
       </if>
       <if test="dose != null" >
-        dose = #{dose,jdbcType=DECIMAL},
+        dose = #{dose,jdbcType=DOUBLE},
       </if>
       <if test="updateDatetime != null" >
         update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
@@ -176,12 +176,12 @@
       mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT},
       medical_name = #{medicalName,jdbcType=VARCHAR},
       normal_name = #{normalName,jdbcType=VARCHAR},
-      set_alarm = #{setAlarm,jdbcType=DATE},
-      finish_at = #{finishAt,jdbcType=DATE},
-      taken_status = #{takenStatus,jdbcType=DECIMAL},
-      taken_mood = #{takenMood,jdbcType=DECIMAL},
+      set_alarm = #{setAlarm,jdbcType=TIMESTAMP},
+      finish_at = #{finishAt,jdbcType=TIMESTAMP},
+      taken_status = #{takenStatus,jdbcType=INTEGER},
+      taken_mood = #{takenMood,jdbcType=INTEGER},
       taken_words = #{takenWords,jdbcType=VARCHAR},
-      dose = #{dose,jdbcType=DECIMAL},
+      dose = #{dose,jdbcType=DOUBLE},
       update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}
     where mskl_treatlog_id = #{msklTreatlogId,jdbcType=BIGINT}
   </update>

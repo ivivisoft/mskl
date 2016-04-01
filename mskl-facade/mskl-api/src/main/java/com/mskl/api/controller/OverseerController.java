@@ -5,7 +5,6 @@ import com.mskl.common.dto.RestServiceResult;
 import com.mskl.dao.model.MsklOverseer;
 import com.mskl.service.overseer.OverseerService;
 import com.mskl.service.verification.VerificationService;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,22 +29,27 @@ public class OverseerController {
 
     @RequestMapping("/insert/{time}/{md5str}/{token}")
     public RestServiceResult<Boolean> insertOverseer(@RequestBody OverseerDto overseerDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加监督人Controller类",true);
-        if(!verificationService.verification(overseerDto,token,time,md5str,result)){
-            if(logger.isInfoEnabled()){
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加监督人Controller类", true);
+        if (!verificationService.verification(overseerDto, token, time, md5str, result)) {
+            if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }
         }
 
-        return overseerService.insertOverseer(overseerDto,token);
+        return overseerService.insertOverseer(overseerDto, token);
 
     }
 
-    @RequestMapping("/{time}/{md5str}/{token}")
-    public RestServiceResult<List<MsklOverseer>> getOverseersByUserId(@PathVariable Long time, @PathVariable String md5str, @PathVariable String token){
-        RestServiceResult<List<MsklOverseer>> result = new RestServiceResult<List<MsklOverseer>>("进入查询监督人Controller类",true);
+    @RequestMapping("/select/{token}")
+    public RestServiceResult<List<MsklOverseer>> getOverseersByUserId(@PathVariable String token) {
+        RestServiceResult<List<MsklOverseer>> result = new RestServiceResult<List<MsklOverseer>>("进入查询监督人Controller类", true);
+        if (!verificationService.verification(token, result)) {
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
+        }
         return overseerService.getOverseersByUserId(token);
-
     }
 
 }

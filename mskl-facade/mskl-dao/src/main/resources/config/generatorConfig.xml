@@ -37,13 +37,8 @@
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"/>-->
-        <table tableName="mskl_treat_log" domainObjectName="MsklTreatLog"
 
-               enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false">
-        </table>
-        <table tableName="mskl_treat_plan" domainObjectName="MsklTreatPlan"
+        <table tableName="mskl_file" domainObjectName="MsklFile"
 
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"

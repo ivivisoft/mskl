@@ -5,6 +5,7 @@ import com.mskl.dao.model.MsklFeedback;
 import com.mskl.dao.model.MsklPromotionInfo;
 import com.mskl.dao.model.MsklUser;
 import com.mskl.service.promotioninfo.PromotionInfoService;
+import com.mskl.service.verification.VerificationService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,11 +23,14 @@ public class PromotionInfoController {
     @Resource(name = "promotionInfo.promotionInfoService")
     private PromotionInfoService promotionInfoService;
 
+    @Resource(name = "verificationService")
+    private VerificationService verificationService;
+
     @RequestMapping("/all")
     public
     @ResponseBody
     RestServiceResult<List<MsklPromotionInfo>> getPromotionInfos() {
-
+        RestServiceResult<List<MsklPromotionInfo>> result = new RestServiceResult<List<MsklPromotionInfo>>("进入推广活动Controller类",true);
         return promotionInfoService.getPromotionInfos();
     }
 

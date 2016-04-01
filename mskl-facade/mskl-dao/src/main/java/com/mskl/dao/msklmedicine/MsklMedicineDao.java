@@ -5,6 +5,7 @@ import com.mskl.dao.base.Dao;
 import com.mskl.dao.model.MsklMedicine;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface MsklMedicineDao extends Dao<MsklMedicine,Serializable> {
     /**
@@ -19,5 +20,5 @@ public interface MsklMedicineDao extends Dao<MsklMedicine,Serializable> {
      * @param normalName
      * @return
      */
-    MsklMedicine getMsklMedicineByNormalName(String normalName);
+    List<MsklMedicine> getMsklMedicineByNormalName(String normalName);
 }

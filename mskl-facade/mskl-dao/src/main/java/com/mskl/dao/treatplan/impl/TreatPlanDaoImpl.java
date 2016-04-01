@@ -6,6 +6,7 @@ import com.mskl.dao.treatplan.TreatPlanDao;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Repository(value = "treatPlan.treatPlanDao")
 public class TreatPlanDaoImpl extends MsklBaseDao<MsklTreatPlan,Serializable> implements TreatPlanDao {
@@ -16,10 +17,7 @@ public class TreatPlanDaoImpl extends MsklBaseDao<MsklTreatPlan,Serializable> im
     }
 
 
-
-
-
-
-
-
+    public List<MsklTreatPlan> getAllTreatPlanByUserId(Long userId) {
+        return queryForList("getAllTreatPlanByUserId",userId);
+    }
 }

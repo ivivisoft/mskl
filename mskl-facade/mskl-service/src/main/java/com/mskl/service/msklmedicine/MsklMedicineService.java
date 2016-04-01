@@ -6,6 +6,7 @@ import com.mskl.dao.model.MsklMedicine;
 import com.mskl.service.base.BaseService;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface MsklMedicineService extends BaseService<MsklMedicine,Serializable> {
     /**
@@ -20,5 +21,5 @@ public interface MsklMedicineService extends BaseService<MsklMedicine,Serializab
      * @param normalName
      * @return
      */
-    RestServiceResult<MsklMedicine> getMsklMedicineByNormalName(String normalName);
+    RestServiceResult<List<MsklMedicine>> getMsklMedicineByNormalName(String normalName);
 }

@@ -20,9 +20,10 @@ public interface UserBankcardServcie extends BaseService<MsklUserBankcard,Serial
     /**
      * 添加银行卡
      * @param userBankcardDto
+     * @param token
      * @return
      */
-    RestServiceResult<Boolean> insertBankcard(UserBankcardDto userBankcardDto);
+    RestServiceResult<Boolean> insertBankcard(UserBankcardDto userBankcardDto, String token);
 
     /**
      * 根据userId查询银行卡
