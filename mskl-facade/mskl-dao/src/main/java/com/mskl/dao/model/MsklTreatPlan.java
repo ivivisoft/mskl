@@ -1,6 +1,5 @@
 package com.mskl.dao.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class MsklTreatPlan {
@@ -14,13 +13,15 @@ public class MsklTreatPlan {
 
     private String medicineUnit;
 
-    private BigDecimal packageAmount;
+    private Integer packageAmount;
 
-    private BigDecimal takenAmount;
+    private Long userId;
 
-    private BigDecimal dose;
+    private Double takenAmount;
 
-    private Short dailyTimes;
+    private Double dose;
+
+    private Integer dailyTimes;
 
     private Date morningAlarm;
 
@@ -70,35 +71,43 @@ public class MsklTreatPlan {
         this.medicineUnit = medicineUnit == null ? null : medicineUnit.trim();
     }
 
-    public BigDecimal getPackageAmount() {
+    public Integer getPackageAmount() {
         return packageAmount;
     }
 
-    public void setPackageAmount(BigDecimal packageAmount) {
+    public void setPackageAmount(Integer packageAmount) {
         this.packageAmount = packageAmount;
     }
 
-    public BigDecimal getTakenAmount() {
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Double getTakenAmount() {
         return takenAmount;
     }
 
-    public void setTakenAmount(BigDecimal takenAmount) {
+    public void setTakenAmount(Double takenAmount) {
         this.takenAmount = takenAmount;
     }
 
-    public BigDecimal getDose() {
+    public Double getDose() {
         return dose;
     }
 
-    public void setDose(BigDecimal dose) {
+    public void setDose(Double dose) {
         this.dose = dose;
     }
 
-    public Short getDailyTimes() {
+    public Integer getDailyTimes() {
         return dailyTimes;
     }
 
-    public void setDailyTimes(Short dailyTimes) {
+    public void setDailyTimes(Integer dailyTimes) {
         this.dailyTimes = dailyTimes;
     }
 
