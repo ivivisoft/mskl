@@ -12,14 +12,16 @@ public interface UserTradeService extends BaseService<MsklUserTrade,Serializable
     /**
      * 添加交易密码
      * @param userTradeDto
+     * @param token
      * @return
      */
-    RestServiceResult<Boolean> insertTradePassword(UserTradeDto userTradeDto);
+    RestServiceResult<Boolean> insertTradePassword(UserTradeDto userTradeDto, String token);
 
     /**
      * 修改交易密码
      * @param userTradeDto
+     * @param token
      * @return
      */
-    RestServiceResult<Boolean> updateTradePassword(UserTradeDto userTradeDto);
+    RestServiceResult<Boolean> updateTradePassword(UserTradeDto userTradeDto, String token);
 }

@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service(value = "treatPlan.treatPlanService")
 public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Serializable> implements TreatPlanService {
@@ -74,9 +75,9 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         msklMedbox.setMsklMedicineId(msklMedicine.getMsklMedicineId());
         msklMedbox.setMedicalName(msklMedicine.getMedicalName());
         msklMedbox.setNormalName(msklMedicine.getNormalName());
-        msklMedbox.setTotalAmount(new BigDecimal(treatPlanDto.getPackageAmount()));
-        msklMedbox.setDose(new BigDecimal(treatPlanDto.getDose()));
-        msklMedbox.setDailyTimes(Short.parseShort(treatPlanDto.getDailyTimes()));
+        msklMedbox.setTotalAmount(Integer.parseInt(treatPlanDto.getPackageAmount()));
+        msklMedbox.setDose(new Double(treatPlanDto.getDose()));
+        msklMedbox.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
         msklMedbox.setUpdateDatetime(new Date());
 
         try {
@@ -92,10 +93,10 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         if (null != treatPlanDto.getMorningAlarm()) {
             insertTreatLog(treatPlanDto.getMorningAlarm(), userId, treatPlanDto, msklUser, msklMedicine, result);
         }
-        if (null != treatPlanDto.getMorningAlarm()) {
+        if (null != treatPlanDto.getNoonAlarm()) {
             insertTreatLog(treatPlanDto.getNoonAlarm(), userId, treatPlanDto, msklUser, msklMedicine, result);
         }
-        if (null != treatPlanDto.getMorningAlarm()) {
+        if (null != treatPlanDto.getNightAlarm()) {
             insertTreatLog(treatPlanDto.getNightAlarm(), userId, treatPlanDto, msklUser, msklMedicine, result);
         }
 
@@ -105,9 +106,9 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd");
 
-            msklTreatPlan.setDailyTimes(Short.parseShort(treatPlanDto.getDailyTimes()));
-            msklTreatPlan.setDose(new BigDecimal(treatPlanDto.getDose()));
-            msklTreatPlan.setPackageAmount(new BigDecimal(treatPlanDto.getPackageAmount()));
+            msklTreatPlan.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
+            msklTreatPlan.setDose(new Double(treatPlanDto.getDose()));
+            msklTreatPlan.setPackageAmount(Integer.parseInt(treatPlanDto.getPackageAmount()));
             if (null != treatPlanDto.getMorningAlarm()) {
                 msklTreatPlan.setMorningAlarm(sdf.parse(treatPlanDto.getMorningAlarm()));
             }
@@ -117,7 +118,7 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             if (null != treatPlanDto.getNoonAlarm()) {
                 msklTreatPlan.setMorningAlarm(sdf.parse(treatPlanDto.getNoonAlarm()));
             }
-            msklTreatPlan.setTakenAmount(new BigDecimal(treatPlanDto.getTakenAmount()));
+            msklTreatPlan.setTakenAmount(new Double(treatPlanDto.getTakenAmount()));
             msklTreatPlan.setMsklMedicineId(msklMedicine.getMsklMedicineId());
             msklTreatPlan.setUpdateDatetime(new Date());
             msklTreatPlan.setMedicalName(msklMedicine.getMedicalName());
@@ -143,6 +144,25 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         return result;
     }
 
+    public RestServiceResult<List<MsklTreatPlan>> getAllTreatPlan(String token) {
+        RestServiceResult<List<MsklTreatPlan>> result = new RestServiceResult<List<MsklTreatPlan>>("查询用药计划服务",false);
+        Long userId = TokenUtil.getUserIdFromToken(token);
+        List<MsklTreatPlan> msklTreatPlanList = treatPlanDao.getAllTreatPlanByUserId(userId);
+        if (null == msklTreatPlanList){
+            result.setMessage("没有查询到服药计划!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
+            return result;
+        }
+        result.setSuccess(true);
+        result.setData(msklTreatPlanList);
+        result.setMessage("查询服药计划成功!");
+
+        return result;
+    }
+
+
     private void insertTreatLog(String alarm, Long userId, TreatPlanDto treatPlanDto, MsklUser msklUser, MsklMedicine msklMedicine, RestServiceResult<Boolean> result) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd");
@@ -156,9 +176,9 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             msklTreatLog.setMsklMedicineId(msklMedicine.getMsklMedicineId());
             msklTreatLog.setMedicalName(msklMedicine.getMedicalName());
             msklTreatLog.setNormalName(msklMedicine.getNormalName());
-            msklTreatLog.setTakenStatus(new Short("1"));
+            msklTreatLog.setTakenStatus(1);
             msklTreatLog.setSetAlarm(date);
-            msklTreatLog.setDose(new BigDecimal(treatPlanDto.getDose()));
+            msklTreatLog.setDose(new Double(treatPlanDto.getDose()));
 
             treatLogService.saveObject(msklTreatLog);
         } catch (ParseException e1) {
@@ -172,59 +192,5 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
                 logger.error(result.toString());
             }
         }
-    }
-
-
-    public RestServiceResult<Boolean> updateTreatPlan(TreatPlanDto treatPlanDto, String token) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("更新服药计划服务服务", false);
-
-        Long userId = TokenUtil.getUserIdFromToken(token);
-
-        MsklMedicine msklMedicine = msklMedicineService.getObjectById(Long.parseLong(treatPlanDto.getMsklMedicineId()));
-        if (null == msklMedicine) {
-            result.setMessage("没有对应的药品信息!");
-            return result;
-        }
-        try {
-            MsklTreatPlan msklTreatPlan = new MsklTreatPlan();
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd");
-
-            msklTreatPlan.setDailyTimes(Short.parseShort(treatPlanDto.getDailyTimes()));
-            msklTreatPlan.setDose(new BigDecimal(treatPlanDto.getDose()));
-            msklTreatPlan.setPackageAmount(new BigDecimal(treatPlanDto.getPackageAmount()));
-            if (null != treatPlanDto.getMorningAlarm()) {
-                msklTreatPlan.setMorningAlarm(sdf.parse(treatPlanDto.getMorningAlarm()));
-            }
-            if (null != treatPlanDto.getNightAlarm()) {
-                msklTreatPlan.setMorningAlarm(sdf.parse(treatPlanDto.getNightAlarm()));
-            }
-            if (null != treatPlanDto.getNoonAlarm()) {
-                msklTreatPlan.setMorningAlarm(sdf.parse(treatPlanDto.getNoonAlarm()));
-            }
-            msklTreatPlan.setTakenAmount(new BigDecimal(treatPlanDto.getTakenAmount()));
-            msklTreatPlan.setMsklMedicineId(msklMedicine.getMsklMedicineId());
-            msklTreatPlan.setUpdateDatetime(new Date());
-            msklTreatPlan.setMedicalName(msklMedicine.getMedicalName());
-            msklTreatPlan.setNormalName(msklMedicine.getNormalName());
-            msklTreatPlan.setMedicineUnit(msklMedicine.getMedicineUnit());
-            msklTreatPlan.setMsklTreatplanId(Long.parseLong(treatPlanDto.getMsklTreatplanId()));
-
-            updateObject(msklTreatPlan);
-            result.setSuccess(true);
-            result.setData(Boolean.TRUE);
-        } catch (ParseException e1) {
-            result.setMessage("日期解析异常!");
-            if (logger.isErrorEnabled()) {
-                logger.error(result.toString());
-            }
-        } catch (Exception e) {
-            result.setMessage("更新服药计划到数据库失败!");
-            if (logger.isErrorEnabled()) {
-                logger.error(result.toString());
-            }
-        }
-
-        return result;
     }
 }

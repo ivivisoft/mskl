@@ -3,9 +3,12 @@ package com.mskl.service.usertrade.impl;
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.dto.UserTradeDto;
 import com.mskl.common.util.MD5Util;
+import com.mskl.common.util.TokenUtil;
+import com.mskl.dao.model.MsklUser;
 import com.mskl.dao.model.MsklUserTrade;
 import com.mskl.dao.usertrade.UserTradeDao;
 import com.mskl.service.base.impl.BaseServiceImpl;
+import com.mskl.service.mskluser.MsklUserService;
 import com.mskl.service.usertrade.UserTradeService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -20,6 +23,9 @@ public class UserTradeServiceImpl extends BaseServiceImpl<MsklUserTrade, Seriali
 
     private Log logger = LogFactory.getLog(UserTradeServiceImpl.class);
 
+    @Resource(name = "mskluser.msklUserService")
+    private MsklUserService msklUserService;
+
     private UserTradeDao userTradeDao;
 
     @Resource(name = "userTrade.userTradeDao")
@@ -28,13 +34,12 @@ public class UserTradeServiceImpl extends BaseServiceImpl<MsklUserTrade, Seriali
         super.setBaseDaoImpl(userTradeDao);
     }
 
-    public RestServiceResult<Boolean> insertTradePassword(UserTradeDto userTradeDto) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
-        result.setSuccess(false);
-        result.setData(Boolean.FALSE);
+    public RestServiceResult<Boolean> insertTradePassword(UserTradeDto userTradeDto, String token) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加提现密码服务！",false);
 
-        MsklUserTrade userTrade = userTradeDao.getTradeByUserId(Long.parseLong(userTradeDto.getUserId()));
-        if (null == userTrade) {
+        Long userId = TokenUtil.getUserIdFromToken(token);
+        MsklUser msklUser = msklUserService.getObjectById(userId);
+        if (null == msklUser) {
             result.setMessage("用户ID不正确!");
             if (logger.isInfoEnabled()) {
                 logger.info("添加交易密码" + result.toString());
@@ -42,8 +47,10 @@ public class UserTradeServiceImpl extends BaseServiceImpl<MsklUserTrade, Seriali
             return result;
 
         }
+        MsklUserTrade userTrade = new MsklUserTrade();
         userTrade.setUserTradePwd(MD5Util.encode(userTradeDto.getUserTradePwd()));
         userTrade.setUserTradePwdStrength(userTradeDto.getUserTradePwdStrength());
+        userTrade.setUserId(userId);
         if (saveObject(userTrade) > 0) {
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
@@ -54,12 +61,11 @@ public class UserTradeServiceImpl extends BaseServiceImpl<MsklUserTrade, Seriali
         return result;
     }
 
-    public RestServiceResult<Boolean> updateTradePassword(UserTradeDto userTradeDto) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
-        result.setSuccess(false);
-        result.setData(Boolean.FALSE);
+    public RestServiceResult<Boolean> updateTradePassword(UserTradeDto userTradeDto, String token) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入修改提现密码服务",false);
 
-        MsklUserTrade userTrade = userTradeDao.getTradeByUserId(Long.parseLong(userTradeDto.getUserId()));
+        Long userId = TokenUtil.getUserIdFromToken(token);
+        MsklUserTrade userTrade = userTradeDao.getTradeByUserId(userId);
         if (null == userTrade) {
             result.setMessage("用户ID不正确!");
             if (logger.isInfoEnabled()) {
@@ -90,10 +96,10 @@ public class UserTradeServiceImpl extends BaseServiceImpl<MsklUserTrade, Seriali
         if (updateObject(userTrade) > 0) {
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
-            result.setMessage("添加成功！");
+            result.setMessage("修改成功！");
             return result;
         }
-        result.setMessage("添加失败!");
+        result.setMessage("修改失败!");
         return result;
     }
 }

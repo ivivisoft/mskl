@@ -4,7 +4,9 @@ import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.dto.UserBankcardDto;
 import com.mskl.dao.model.MsklUserBankcard;
 import com.mskl.service.userBankcard.UserBankcardServcie;
-import org.apache.commons.lang.StringUtils;
+import com.mskl.service.verification.VerificationService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,34 +19,35 @@ import java.util.List;
 @RequestMapping("/userBankcard")
 public class UserBankcardController {
 
+    private Log logger = LogFactory.getLog(UserBankcardController.class);
+
     @Resource(name = "userBankcard.userBankcardService")
     private UserBankcardServcie userBankcardServcie;
 
-    @RequestMapping("/{userId}")
-    RestServiceResult<List<MsklUserBankcard>> getUserBankcards(@PathVariable String userId){
-        RestServiceResult<List<MsklUserBankcard>> result = new RestServiceResult<List<MsklUserBankcard>>();
-        if (StringUtils.isBlank(userId)){
-            result.setSuccess(false);
-            result.setMessage("userId不能为空！");
+    @Resource(name = "verificationService")
+    private VerificationService verificationService;
+
+    @RequestMapping("/select/{token}")
+    RestServiceResult<List<MsklUserBankcard>> getUserBankcards(@PathVariable String token) {
+        RestServiceResult<List<MsklUserBankcard>> result = new RestServiceResult<List<MsklUserBankcard>>("进入查询银行卡Controller类!", true);
+        if (!verificationService.verification(token, result)) {
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
             return result;
         }
-        return userBankcardServcie.getBankcardByUserId(userId);
+        return userBankcardServcie.getBankcardByUserId(token);
     }
 
-    @RequestMapping("/insert")
-    RestServiceResult<Boolean> insertBankcard(@RequestBody UserBankcardDto userBankcardDto){
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
-        if(checkBankcardParam(userBankcardDto)){
-            result.setSuccess(false);
-            result.setData(Boolean.FALSE);
-            result.setMessage("非法参数!");
+    @RequestMapping("/insert/{time}/{md5str}/{token}")
+    RestServiceResult<Boolean> insertBankcard(@RequestBody UserBankcardDto userBankcardDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加银行卡Controller类", true);
+        if (!verificationService.verification(userBankcardDto, token, time, md5str, result)) {
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
             return result;
         }
-        return userBankcardServcie.insertBankcard(userBankcardDto);
+        return userBankcardServcie.insertBankcard(userBankcardDto,token);
     }
-
-    private boolean checkBankcardParam(UserBankcardDto userBankcardDto) {
-        return null == userBankcardDto || StringUtils.isBlank(userBankcardDto.getUserId()) || StringUtils.isBlank(userBankcardDto.getCardNo());
-    }
-
 }

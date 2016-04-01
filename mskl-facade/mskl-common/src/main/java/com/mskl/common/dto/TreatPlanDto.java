@@ -7,10 +7,6 @@ import java.io.Serializable;
 public class TreatPlanDto implements Serializable {
 
     /**
-     * 服药计划id
-     */
-    private String msklTreatplanId;
-    /**
      * 药品id
      */
     @NotEmpty
@@ -18,10 +14,12 @@ public class TreatPlanDto implements Serializable {
     /**
      * 每天服用次数
      */
+    @NotEmpty
     private String dailyTimes;
     /**
      * 每次服用剂量
      */
+    @NotEmpty
     private String dose;
     /**
      * 上午提醒时间
@@ -38,10 +36,12 @@ public class TreatPlanDto implements Serializable {
     /**
      * 已经服用
      */
+    @NotEmpty
     private String takenAmount;
     /**
      * 单盒药量
      */
+    @NotEmpty
     private String packageAmount;
 
     public String getMsklMedicineId() {
@@ -108,17 +108,4 @@ public class TreatPlanDto implements Serializable {
         this.packageAmount = packageAmount;
     }
 
-    public String getMsklTreatplanId() {
-        return msklTreatplanId;
-    }
-
-    public void setMsklTreatplanId(String msklTreatplanId) {
-        this.msklTreatplanId = msklTreatplanId;
-    }
-
-    @Override
-    public String toString() {
-        return "dailyTimes='" + dailyTimes + "'&dose='" + dose + "'&morningAlarm='" + morningAlarm + "'&msklMedicineId='"
-                + msklMedicineId + "'&msklTreatplanId='" + msklTreatplanId + "'&nightAlarm='" + nightAlarm + "'&noonAlarm='" + noonAlarm + "'&packageAmount='" + packageAmount + "'&takenAmount='" + takenAmount + "'";
-    }
 }

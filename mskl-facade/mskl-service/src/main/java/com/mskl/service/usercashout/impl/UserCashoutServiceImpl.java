@@ -68,7 +68,7 @@ public class UserCashoutServiceImpl extends BaseServiceImpl<MsklUserCashoutAppli
         }
 
         List<MsklUserBankcard> userBankcards = userBankcardServcie.getBankcardsByUserId(userId);
-        if (null == userBankcards) {
+        if (null == userBankcards || userBankcards.size() == 0) {
             result.setMessage("查询银行卡异常!");
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
@@ -77,13 +77,6 @@ public class UserCashoutServiceImpl extends BaseServiceImpl<MsklUserCashoutAppli
         }
 
         MsklUserBankcard userBankcard = userBankcards.get(0);
-        if (null == userBankcard) {
-            result.setMessage("查询银行卡异常!");
-            if (logger.isInfoEnabled()) {
-                logger.info(result.toString());
-            }
-            return result;
-        }
 
         MsklAccountJour accountJour = new MsklAccountJour();
         accountJour.setMsklAccountId(msklAccount.getMsklAccountId());

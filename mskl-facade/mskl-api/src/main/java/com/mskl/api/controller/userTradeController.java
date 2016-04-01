@@ -3,7 +3,11 @@ package com.mskl.api.controller;
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.dto.UserTradeDto;
 import com.mskl.service.usertrade.UserTradeService;
+import com.mskl.service.verification.VerificationService;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,39 +18,38 @@ import javax.annotation.Resource;
 @RequestMapping("/userTrade")
 public class UserTradeController {
 
+    private Log logger = LogFactory.getLog(FeedbackController.class);
+
+    @Resource(name = "verificationService")
+    private VerificationService verificationService;
+
     @Resource(name = "userTrade.userTradeService")
     private UserTradeService userTradeService;
 
 
 
-    @RequestMapping("/tradePassword/insert")
-    public RestServiceResult<Boolean> insertTradePassword(@RequestBody UserTradeDto userTradeDto) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
-        if (checkUserTradeParam(userTradeDto)) {
-            result.setSuccess(false);
-            result.setData(Boolean.FALSE);
-            result.setMessage("参数非法！");
+    @RequestMapping("/tradePassword/insert/{time}/{md5str}/{token}")
+    public RestServiceResult<Boolean> insertTradePassword(@RequestBody UserTradeDto userTradeDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加提现密码Controller类",true);
+        if (!verificationService.verification(userTradeDto, token, time, md5str, result)) {
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
             return result;
         }
-        return userTradeService.insertTradePassword(userTradeDto);
+        return userTradeService.insertTradePassword(userTradeDto,token);
     }
 
-    private boolean checkUserTradeParam(UserTradeDto userTradeDto) {
-        return null == userTradeDto || StringUtils.isBlank(userTradeDto.getUserId()) || StringUtils.isBlank(userTradeDto.getUserTradePwd()) || StringUtils.isBlank(userTradeDto.getUserTradePwdStrength());
-    }
 
-    @RequestMapping("/tradePassword/update")
-    public RestServiceResult<Boolean> updateTradePassword(@RequestBody UserTradeDto userTradeDto){
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
-        if(checkNewUserTradeParam(userTradeDto)){
-            result.setSuccess(false);
-            result.setData(Boolean.FALSE);
-            result.setMessage("参数非法！");
+    @RequestMapping("/tradePassword/update/{time}/{md5str}/{token}")
+    public RestServiceResult<Boolean> updateTradePassword(@RequestBody UserTradeDto userTradeDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入修改提现密码Controller类!",true);
+        if (!verificationService.verification(userTradeDto, token, time, md5str, result)) {
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
             return result;
         }
-        return userTradeService.updateTradePassword(userTradeDto);
-    }
-    private boolean checkNewUserTradeParam(UserTradeDto userTradeDto) {
-        return null == userTradeDto || StringUtils.isBlank(userTradeDto.getUserId()) || StringUtils.isBlank(userTradeDto.getUserTradePwd()) || StringUtils.isBlank(userTradeDto.getUserTradePwdStrength()) ||StringUtils.isBlank(userTradeDto.getNewUserTradePwd());
+        return userTradeService.updateTradePassword(userTradeDto,token);
     }
 }

@@ -1,22 +1,17 @@
 package com.mskl.common.dto;
 
-public class UserTradeDto {
+import org.hibernate.validator.constraints.NotEmpty;
 
-    private String userId;
+import java.io.Serializable;
 
+public class UserTradeDto implements Serializable{
+
+    @NotEmpty
     private String userTradePwd;
-
+    @NotEmpty
     private String newUserTradePwd;
-
+    @NotEmpty
     private String userTradePwdStrength;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getUserTradePwd() {
         return userTradePwd;
