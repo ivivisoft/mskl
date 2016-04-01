@@ -7,9 +7,9 @@
     <result column="normal_name" property="normalName" jdbcType="VARCHAR" />
     <result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
     <result column="medicine_unit" property="medicineUnit" jdbcType="VARCHAR" />
-    <result column="package_amount" property="packageAmount" jdbcType="DECIMAL" />
-    <result column="dose" property="dose" jdbcType="DECIMAL" />
-    <result column="daily_times" property="dailyTimes" jdbcType="DECIMAL" />
+    <result column="package_amount" property="packageAmount" jdbcType="INTEGER" />
+    <result column="dose" property="dose" jdbcType="DOUBLE" />
+    <result column="daily_times" property="dailyTimes" jdbcType="INTEGER" />
     <result column="med_code" property="medCode" jdbcType="VARCHAR" />
     <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
     <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
@@ -34,8 +34,8 @@
       dose, daily_times, med_code, 
       bar_code, update_datetime)
     values (#{msklMedicineId,jdbcType=BIGINT}, #{medicalName,jdbcType=VARCHAR}, #{normalName,jdbcType=VARCHAR}, 
-      #{manufacturer,jdbcType=VARCHAR}, #{medicineUnit,jdbcType=VARCHAR}, #{packageAmount,jdbcType=DECIMAL}, 
-      #{dose,jdbcType=DECIMAL}, #{dailyTimes,jdbcType=DECIMAL}, #{medCode,jdbcType=VARCHAR}, 
+      #{manufacturer,jdbcType=VARCHAR}, #{medicineUnit,jdbcType=VARCHAR}, #{packageAmount,jdbcType=INTEGER}, 
+      #{dose,jdbcType=DOUBLE}, #{dailyTimes,jdbcType=INTEGER}, #{medCode,jdbcType=VARCHAR}, 
       #{barCode,jdbcType=VARCHAR}, #{updateDatetime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklMedicine" >
@@ -92,13 +92,13 @@
         #{medicineUnit,jdbcType=VARCHAR},
       </if>
       <if test="packageAmount != null" >
-        #{packageAmount,jdbcType=DECIMAL},
+        #{packageAmount,jdbcType=INTEGER},
       </if>
       <if test="dose != null" >
-        #{dose,jdbcType=DECIMAL},
+        #{dose,jdbcType=DOUBLE},
       </if>
       <if test="dailyTimes != null" >
-        #{dailyTimes,jdbcType=DECIMAL},
+        #{dailyTimes,jdbcType=INTEGER},
       </if>
       <if test="medCode != null" >
         #{medCode,jdbcType=VARCHAR},
@@ -127,13 +127,13 @@
         medicine_unit = #{medicineUnit,jdbcType=VARCHAR},
       </if>
       <if test="packageAmount != null" >
-        package_amount = #{packageAmount,jdbcType=DECIMAL},
+        package_amount = #{packageAmount,jdbcType=INTEGER},
       </if>
       <if test="dose != null" >
-        dose = #{dose,jdbcType=DECIMAL},
+        dose = #{dose,jdbcType=DOUBLE},
       </if>
       <if test="dailyTimes != null" >
-        daily_times = #{dailyTimes,jdbcType=DECIMAL},
+        daily_times = #{dailyTimes,jdbcType=INTEGER},
       </if>
       <if test="medCode != null" >
         med_code = #{medCode,jdbcType=VARCHAR},
@@ -153,9 +153,9 @@
       normal_name = #{normalName,jdbcType=VARCHAR},
       manufacturer = #{manufacturer,jdbcType=VARCHAR},
       medicine_unit = #{medicineUnit,jdbcType=VARCHAR},
-      package_amount = #{packageAmount,jdbcType=DECIMAL},
-      dose = #{dose,jdbcType=DECIMAL},
-      daily_times = #{dailyTimes,jdbcType=DECIMAL},
+      package_amount = #{packageAmount,jdbcType=INTEGER},
+      dose = #{dose,jdbcType=DOUBLE},
+      daily_times = #{dailyTimes,jdbcType=INTEGER},
       med_code = #{medCode,jdbcType=VARCHAR},
       bar_code = #{barCode,jdbcType=VARCHAR},
       update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}

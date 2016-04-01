@@ -1,6 +1,5 @@
 package com.mskl.dao.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class MsklMedbox {
@@ -18,19 +17,19 @@ public class MsklMedbox {
 
     private String normalName;
 
-    private BigDecimal totalAmount;
+    private Integer totalAmount;
 
-    private BigDecimal takenAmount;
+    private Double takenAmount;
 
-    private BigDecimal remainingAmount;
+    private Double remainingAmount;
 
-    private BigDecimal dose;
+    private Double dose;
 
-    private Short dailyTimes;
+    private Integer dailyTimes;
 
-    private Integer startDay;
+    private Date startDay;
 
-    private Integer finishDay;
+    private Date finishDay;
 
     private Date updateDatetime;
 
@@ -90,59 +89,59 @@ public class MsklMedbox {
         this.normalName = normalName == null ? null : normalName.trim();
     }
 
-    public BigDecimal getTotalAmount() {
+    public Integer getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
+    public void setTotalAmount(Integer totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public BigDecimal getTakenAmount() {
+    public Double getTakenAmount() {
         return takenAmount;
     }
 
-    public void setTakenAmount(BigDecimal takenAmount) {
+    public void setTakenAmount(Double takenAmount) {
         this.takenAmount = takenAmount;
     }
 
-    public BigDecimal getRemainingAmount() {
+    public Double getRemainingAmount() {
         return remainingAmount;
     }
 
-    public void setRemainingAmount(BigDecimal remainingAmount) {
+    public void setRemainingAmount(Double remainingAmount) {
         this.remainingAmount = remainingAmount;
     }
 
-    public BigDecimal getDose() {
+    public Double getDose() {
         return dose;
     }
 
-    public void setDose(BigDecimal dose) {
+    public void setDose(Double dose) {
         this.dose = dose;
     }
 
-    public Short getDailyTimes() {
+    public Integer getDailyTimes() {
         return dailyTimes;
     }
 
-    public void setDailyTimes(Short dailyTimes) {
+    public void setDailyTimes(Integer dailyTimes) {
         this.dailyTimes = dailyTimes;
     }
 
-    public Integer getStartDay() {
+    public Date getStartDay() {
         return startDay;
     }
 
-    public void setStartDay(Integer startDay) {
+    public void setStartDay(Date startDay) {
         this.startDay = startDay;
     }
 
-    public Integer getFinishDay() {
+    public Date getFinishDay() {
         return finishDay;
     }
 
-    public void setFinishDay(Integer finishDay) {
+    public void setFinishDay(Date finishDay) {
         this.finishDay = finishDay;
     }
 

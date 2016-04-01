@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service(value = "msklmedicine.msklMedicineService")
 public class MsklMedicineServiceImpl extends BaseServiceImpl<MsklMedicine, String> implements MsklMedicineService {
@@ -36,15 +37,15 @@ public class MsklMedicineServiceImpl extends BaseServiceImpl<MsklMedicine, Strin
         return result;
     }
 
-    public RestServiceResult<MsklMedicine> getMsklMedicineByNormalName(String normalName) {
-        RestServiceResult<MsklMedicine> result = new RestServiceResult<MsklMedicine>("根据药品通用名获取药品信息服务", false);
-        MsklMedicine msklMedicine = msklMedicineDao.getMsklMedicineByNormalName(normalName);
-        if (null == msklMedicine) {
+    public RestServiceResult<List<MsklMedicine>> getMsklMedicineByNormalName(String normalName) {
+        RestServiceResult<List<MsklMedicine>> result = new RestServiceResult<List<MsklMedicine>>("根据药品通用名获取药品信息服务", false);
+        List<MsklMedicine> msklMedicines = msklMedicineDao.getMsklMedicineByNormalName(normalName);
+        if (null == msklMedicines) {
             result.setMessage("没有对应的药品信息!");
             return result;
         }
         result.setSuccess(true);
-        result.setData(msklMedicine);
+        result.setData(msklMedicines);
         return result;
     }
 }

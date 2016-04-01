@@ -1,6 +1,5 @@
 package com.mskl.dao.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class MsklMedicine {
@@ -14,11 +13,11 @@ public class MsklMedicine {
 
     private String medicineUnit;
 
-    private BigDecimal packageAmount;
+    private Integer packageAmount;
 
-    private BigDecimal dose;
+    private Double dose;
 
-    private Short dailyTimes;
+    private Integer dailyTimes;
 
     private String medCode;
 
@@ -66,27 +65,27 @@ public class MsklMedicine {
         this.medicineUnit = medicineUnit == null ? null : medicineUnit.trim();
     }
 
-    public BigDecimal getPackageAmount() {
+    public Integer getPackageAmount() {
         return packageAmount;
     }
 
-    public void setPackageAmount(BigDecimal packageAmount) {
+    public void setPackageAmount(Integer packageAmount) {
         this.packageAmount = packageAmount;
     }
 
-    public BigDecimal getDose() {
+    public Double getDose() {
         return dose;
     }
 
-    public void setDose(BigDecimal dose) {
+    public void setDose(Double dose) {
         this.dose = dose;
     }
 
-    public Short getDailyTimes() {
+    public Integer getDailyTimes() {
         return dailyTimes;
     }
 
-    public void setDailyTimes(Short dailyTimes) {
+    public void setDailyTimes(Integer dailyTimes) {
         this.dailyTimes = dailyTimes;
     }
 

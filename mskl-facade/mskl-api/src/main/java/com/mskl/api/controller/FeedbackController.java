@@ -4,7 +4,6 @@ import com.mskl.common.dto.FeedbackDto;
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.service.feedback.FeedbackService;
 import com.mskl.service.verification.VerificationService;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.PathVariable;

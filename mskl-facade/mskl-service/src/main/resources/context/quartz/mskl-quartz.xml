@@ -14,15 +14,15 @@
           http://www.springframework.org/schema/aop    
           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd" >
 
-    <!--&lt;!&ndash;同步APP客户信息数据到CRM客户信息表&ndash;&gt;-->
-    <!--<bean id="customerInfoSynchronizationJob" class="com.fl.customer.quartz.CustomerInfoSynchronizationJob" />-->
+
+    <bean id="pushTreatMsgJob" class="com.mskl.service.quartz.PushTreatMsgJob" />
 
 
-    <!--&lt;!&ndash; job的配置开始 &ndash;&gt;-->
+    <!-- job的配置开始 -->
     <!--<bean id="customerInfoSynchronizationJobDetail"-->
         <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
         <!--<property name="targetObject">-->
-            <!--<ref bean="customerInfoSynchronizationJob" />-->
+            <!--<ref bean="pushTreatMsgJob" />-->
         <!--</property>-->
     <!--</bean>-->
 

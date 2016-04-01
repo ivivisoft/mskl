@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/msklmedicine")
@@ -39,8 +40,8 @@ public class MsklMedicineController {
     }
 
     @RequestMapping("/name/{normalName}")
-    public RestServiceResult<MsklMedicine> getMsklMedicineByNormalName(@PathVariable String normalName){
-        RestServiceResult<MsklMedicine> result = new RestServiceResult<MsklMedicine>("进入根据药品通用名获取药品信息controller类", false);
+    public RestServiceResult<List<MsklMedicine>> getMsklMedicineByNormalName(@PathVariable String normalName){
+        RestServiceResult<List<MsklMedicine>> result = new RestServiceResult<List<MsklMedicine>>("进入根据药品通用名获取药品信息controller类", false);
         if (!verificationService.verification(normalName, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
