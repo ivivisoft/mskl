@@ -7,7 +7,9 @@ import com.mskl.dao.msklmedicine.MsklMedicineDao;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository(value = "msklmedicine.msklMedicineDao")
 public class MsklMedicineDaoImpl extends MsklBaseDao<MsklMedicine, Serializable> implements MsklMedicineDao {
@@ -20,7 +22,9 @@ public class MsklMedicineDaoImpl extends MsklBaseDao<MsklMedicine, Serializable>
         return (MsklMedicine) selectOneObject("getMsklMedicineByBarCode", barCode);
     }
 
-    public List<MsklMedicine> getMsklMedicineByNormalName(String normalName) {
-        return  queryForList("getMsklMedicineByNormalName",normalName);
+    public List<MsklMedicine> getMsklMedicineByNormalName(String medicalName) {
+        Map param = new HashMap();
+        param.put("medicalName", medicalName);
+        return queryForList("getMsklMedicineByNormalName", param);
     }
 }

@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 @RequestMapping("/userTrade")
 public class UserTradeController {
 
-    private Log logger = LogFactory.getLog(FeedbackController.class);
+    private Log logger = LogFactory.getLog(UserTradeController.class);
 
     @Resource(name = "verificationService")
     private VerificationService verificationService;

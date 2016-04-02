@@ -1,0 +1,34 @@
+1.根据二维码查询药品信息
+api/msklmedicine/{barCode}
+返回单条记录MsklMedicine
+    private Long msklMedicineId;//药品ID
+    private String medicalName;//药品名称
+    private String normalName;//药品通用名
+    private String manufacturer;//工厂
+    private String medicineUnit;//单位
+    private BigDecimal packageAmount;//一包数量
+    private BigDecimal dose;//单位
+    private Short dailyTimes;//每天服用次数
+    private String medCode;//二维码前7位
+    private String barCode;//二维码
+    private Date updateDatetime;//更新时间
+
+2.根据药品名称查询药品信息
+api/msklmedicine/name/{normalName}
+返回多条记录
+List<MsklMedicine>
+
+3.添加用药计划
+api/treatPlan/insertOrUpdate/{token}
+传入参数：
+    private String msklTreatplanId;//服药计划id
+    @NotEmpty
+    private String msklMedicineId;//药品id
+    private String dailyTimes;//每天服用次数
+    private String dose;每次服用剂量
+    private String morningAlarm;//上午提醒时间
+    private String nightAlarm;//晚上提醒时间
+    private String noonAlarm;//中午提醒时间
+    private String takenAmount;//已经服用
+    private String packageAmount;//单盒药量
+返回成功与失败

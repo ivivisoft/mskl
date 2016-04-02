@@ -58,7 +58,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/msklmedicine/12345678",
+            url: "api/msklmedicine/1234567890",
             data: "",
             success: function (data) {
                 alert(JSON.stringify(data));
@@ -74,7 +74,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/verificationCode/getLoginPsw/15024480545/349358c613254a0aa62108a8fccf43e2|10006",
+            url: "api/verificationCode/getLoginPsw/15024480545/18b04227c42748498c2227e20c66e3b4|999999",
             data: "",
             success: function (data) {
                 alert(JSON.stringify(data));
@@ -96,7 +96,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/mskluser/getLoginPassword/454c4c1033bc46608df4838479b9c1c2|10006",
+            url: "api/mskluser/getLoginPassword/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(findLoginPswDto),
             success: function (data) {
                 alert(JSON.stringify(data));
@@ -171,7 +171,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/feedback/insert/122341514514/f9d8a2c3db7e3a5db324bfea29df5efe/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/feedback/insert/122341514514/f9d8a2c3db7e3a5db324bfea29df5efe/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(feedbackDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -194,7 +194,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/overseer/insert/122341514514/f9d8a2c3db7e3a5db324bfea29df5efe/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/overseer/insert/122341514514/f9d8a2c3db7e3a5db324bfea29df5efe/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(overseerDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -213,7 +213,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/overseer/select/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/overseer/select/18b04227c42748498c2227e20c66e3b4|999999",
             success: function (data) {
                 var data = JSON.stringify(data);
                 alert(data)
@@ -234,7 +234,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/userCashout/apply/122341514514/0f7d375f9201371fea1e21e59b6986e9/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/userCashout/apply/122341514514/0f7d375f9201371fea1e21e59b6986e9/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(userCashoutDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -255,7 +255,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/treat/takeMedicine/122341514514/4f50f64673ea25e5c6cd4e75c2be2b1b/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/treat/takeMedicine/122341514514/4f50f64673ea25e5c6cd4e75c2be2b1b/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(takeMedicineDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -285,7 +285,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/treatPlan/insert/122341514514/f6c2b22438ec370d435a84ba0ac20ed7/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/treatPlan/insert/122341514514/f6c2b22438ec370d435a84ba0ac20ed7/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(treatPlanDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -302,7 +302,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/treatPlan/all/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/treatPlan/all/18b04227c42748498c2227e20c66e3b4|999999",
             success: function (data) {
                 var data = JSON.stringify(data);
                 alert(data)
@@ -326,7 +326,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/userBankcard/insert/122341514514/b28cd78249e11c2f73d22f6423ae2bc9/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/userBankcard/insert/122341514514/b28cd78249e11c2f73d22f6423ae2bc9/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(userBankcardDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -343,7 +343,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/userBankcard/select/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/userBankcard/select/18b04227c42748498c2227e20c66e3b4|999999",
             success: function (data) {
                 var data = JSON.stringify(data);
                 alert(data)
@@ -365,7 +365,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/userTrade/tradePassword/insert/122341514514/dd0997b2ee086a0352b6fc7b67e26743/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/userTrade/tradePassword/insert/122341514514/dd0997b2ee086a0352b6fc7b67e26743/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(userTradeDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -388,7 +388,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/userTrade/tradePassword/update/122341514514/dd0997b2ee086a0352b6fc7b67e26743/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/userTrade/tradePassword/update/122341514514/dd0997b2ee086a0352b6fc7b67e26743/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(userTradeDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -405,7 +405,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/msklmedicine/name/2",
+            url: "api/msklmedicine/name/qinliugan",
             data: "",
             success: function (data) {
                 alert(JSON.stringify(data));
@@ -421,7 +421,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/mskluser/18b04227c42748498c2227e20c66e3b4|2",
+            url: "api/mskluser/18b04227c42748498c2227e20c66e3b4|999999",
             success: function (data) {
                 alert(JSON.stringify(data));
             },
