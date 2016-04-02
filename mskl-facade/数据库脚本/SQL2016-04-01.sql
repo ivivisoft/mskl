@@ -160,20 +160,6 @@ CREATE TABLE mskl_file
   type INT
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE mskl_user_cashout_application
-(
-  id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  user_id BIGINT NOT NULL,
-  bank_no VARCHAR(6),
-  bank_name VARCHAR(100),
-  amount BIGINT,
-  bank_addr_no VARCHAR(4),
-  application_datetime DATETIME,
-  review_status CHAR(1),
-  pay_datetime DATETIME
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX cashout_idx ON mskl_user_cashout_application (user_id);
-
 
 CREATE TABLE mskl_user_bankcard
 (
@@ -378,19 +364,6 @@ CREATE TABLE mskl_privilege
   pri_name VARCHAR(32)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE mskl_promotion_info
-(
-  id BIGINT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  promotion_name VARCHAR(64) NOT NULL,
-  info_channel VARCHAR(10),
-  info_title VARCHAR(64) NOT NULL,
-  info_content LONGTEXT,
-  banner_url VARCHAR(256) NOT NULL,
-  content_url VARCHAR(256),
-  sort DECIMAL(2),
-  create_datetime DATETIME
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX info_idx ON mskl_promotion_info (info_channel, create_datetime);
 
 CREATE TABLE mskl_promotion_signup
 (
