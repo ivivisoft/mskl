@@ -406,7 +406,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/msklmedicine/name/禽流感",
+            url: "api/msklmedicine/name/qinliugan",
             data: "",
             success: function (data) {
                 alert(JSON.stringify(data));
