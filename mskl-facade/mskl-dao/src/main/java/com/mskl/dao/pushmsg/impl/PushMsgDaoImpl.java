@@ -6,6 +6,8 @@ import com.mskl.dao.pushmsg.PushMsgDao;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 @Repository(value = "pushMsg.pushMsgDao")
 public class PushMsgDaoImpl extends MsklBaseDao<MsklPushMsg,Serializable> implements PushMsgDao{
@@ -13,5 +15,14 @@ public class PushMsgDaoImpl extends MsklBaseDao<MsklPushMsg,Serializable> implem
     @Override
     public String getIbatisSqlMapNamespace() {
         return ".MsklPushMsgMapper";
+    }
+
+    public MsklPushMsg getMsgsByTreatLogId(Long msklTreatlogId) {
+
+        return (MsklPushMsg) selectOneObject("getMsgsByTreatLogId",msklTreatlogId);
+    }
+
+    public List<MsklPushMsg> getPushMsgByDateAndUserId(Map param) {
+        return queryForList("getPushMsgByDateAndUserId",param);
     }
 }

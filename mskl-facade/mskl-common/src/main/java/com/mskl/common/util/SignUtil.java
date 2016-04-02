@@ -11,6 +11,7 @@ public final class SignUtil {
     private final static String signKey = "U5rRI65jvGBFNG23aZHZGxOUQnmIEPyV";
 
     public static <T> String signMethod(T i, Long time) {
+        String s = MD5Util.encode(getBeanSign(i,time));
         return MD5Util.encode(getBeanSign(i,time));
     }
 

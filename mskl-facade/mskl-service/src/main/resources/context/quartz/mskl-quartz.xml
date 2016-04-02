@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"  
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
-    xmlns:aop="http://www.springframework.org/schema/aop"  
-    xmlns:tx="http://www.springframework.org/schema/tx"  
-    xmlns:context="http://www.springframework.org/schema/context"  
-    xsi:schemaLocation="    
-          http://www.springframework.org/schema/beans    
-          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd    
-          http://www.springframework.org/schema/tx    
-          http://www.springframework.org/schema/tx/spring-tx-3.0.xsd   
-          http://www.springframework.org/schema/context    
-          http://www.springframework.org/schema/context/spring-context-3.0.xsd    
-          http://www.springframework.org/schema/aop    
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+          http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context-3.0.xsd
+          http://www.springframework.org/schema/aop
           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd" >
-
 
     <bean id="pushTreatMsgJob" class="com.mskl.service.quartz.PushTreatMsgJob" />
 
 
-    <!-- job的配置开始 -->
-    <!--<bean id="customerInfoSynchronizationJobDetail"-->
-        <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
-        <!--<property name="targetObject">-->
-            <!--<ref bean="pushTreatMsgJob" />-->
-        <!--</property>-->
-    <!--</bean>-->
+     <!--job的配置开始-->
+    <bean id="pushTreatMsgJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="pushTreatMsgJob" />
+        </property>
+        <property name="targetMethod">
+            <value>pushTreatMsgJob</value>
+        </property>
+        <property name="concurrent">
+            <value>false</value>
+        </property>
+    </bean>
 
-    <!--&lt;!&ndash; job的配置结束 &ndash;&gt;-->
+    <!-- job的配置结束 -->
 
-    <!--&lt;!&ndash; 调度的配置开始 &ndash;&gt;-->
-    <!--&lt;!&ndash;配置执行时间为每天凌晨1点&ndash;&gt;-->
-    <!--<bean id="customerInfoSynchronizationJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
-        <!--<property name="jobDetail">-->
-            <!--<ref bean="customerInfoSynchronizationJobDetail" />-->
-        <!--</property>-->
-        <!--<property name="cronExpression">-->
-            <!--&lt;!&ndash;<value>*/30 * * * * ?</value>&ndash;&gt;-->
-            <!--<value>0 0 1 * * ?</value>-->
-        <!--</property>-->
-    <!--</bean>-->
-    <!--&lt;!&ndash; 调度的配置结束 &ndash;&gt;-->
+    <!-- 调度的配置开始 -->
+    <!--配置执行时间为每天凌晨1点-->
+    <bean id="pushTreatMsgJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="pushTreatMsgJobDetail" />
+        <property name="cronExpression" value="*/59 * * * * ?" />
+    </bean>
+    <!-- 调度的配置结束 -->
+    <!-- 启动触发器的配置开始 -->
+    <bean name="startQuertz" lazy-init="false" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="pushTreatMsgJobTrigger" />
+            </list>
+        </property>
+    </bean>
+    <!-- 启动触发器的配置结束 -->
 
-    <!--&lt;!&ndash; 启动触发器的配置开始 &ndash;&gt;-->
-    <!--<bean name="startQuertz" lazy-init="false" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">-->
-        <!--<property name="triggers">-->
-            <!--<list>-->
-                <!--<ref bean="customerInfoSynchronizationJobTrigger" />-->
-            <!--</list>-->
-        <!--</property>-->
-    <!--</bean>-->
-    <!--&lt;!&ndash; 启动触发器的配置结束 &ndash;&gt;-->
 </beans>  
