@@ -105,8 +105,10 @@ CREATE TABLE mskl_push_msg
   html_url VARCHAR(255),
   create_datetime DATETIME,
   is_read CHAR(1),
-  business_type CHAR(2)
+  business_type CHAR(2),
+  treat_log_id BIGINT NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX mskl_push_msg_treat_log_id_uindex ON mskl_push_msg (treat_log_id);
 CREATE INDEX push_msg_idx ON mskl_push_msg (recv_user_id, push_type);
 
 -- DROP TABLE mskl_feedback;

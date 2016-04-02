@@ -70,7 +70,6 @@ public class Tools {
 			try {
 				return sdf.parse(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return new Date();
