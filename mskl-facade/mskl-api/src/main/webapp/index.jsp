@@ -34,7 +34,8 @@
 <input type="button" onclick="updateTradePassword()" name="button" id="updateTradePassword" value="修改提现密码">
 <input type="button" onclick="getMsklMedicineByName()" name="button" id="getMsklMedicineByName" value="根据药品通用名查询药品">
 <input type="button" onclick="userInfo()" name="button" id="userInfo" value="获取用户信息">
-
+<input type="button" onclick="selectTreatLog()" name="button" id="selectTreatLog" value="查询服药记录">
+<input type="button" onclick="selectPushMsg()" name="button" id="selectPushMsg" value="查询推送消息">
 
 <script type="text/javascript">
     function getVerificationCode() {
@@ -429,6 +430,49 @@
                 alert(jqXHR + " : " + textStatus + " : " + errorThrown);
             }
         });
+    }
+
+    function selectTreatLog(){
+        var treatLogDto = {
+            "msklMedicineId": "2",
+            "date": "2016-04-02"
+        }
+
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/treatLog/select/122341514514/9dc462162b323bd5146c549828e5f467/18b04227c42748498c2227e20c66e3b4|999999",
+            data: JSON.stringify(treatLogDto),
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
+    function selectPushMsg(){
+        var treatLogDto = {
+            "date": "2016-04-02"
+        }
+
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/pushMsg/select/122341514514/a19533ad0d33b664993007b0f450fe9d/18b04227c42748498c2227e20c66e3b4|999999",
+            data: JSON.stringify(treatLogDto),
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
     }
 </script>
 </body>

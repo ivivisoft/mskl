@@ -1,0 +1,19 @@
+CREATE TABLE mskl_push_msg
+(
+    push_msg_id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    push_model CHAR(1),
+    push_type VARCHAR(10),
+    push_msg_kind CHAR(1),
+    push_msg_title VARCHAR(100),
+    push_msg_digest VARCHAR(500),
+    push_extend VARCHAR(500),
+    msg_from BIGINT,
+    recv_user_id VARCHAR(32),
+    html_url VARCHAR(255),
+    create_datetime DATETIME,
+    is_read CHAR(1),
+    business_type CHAR(2),
+    treat_log_id BIGINT NOT NULL
+);
+CREATE UNIQUE INDEX mskl_push_msg_treat_log_id_uindex ON mskl_push_msg (treat_log_id);
+CREATE INDEX push_msg_idx ON mskl_push_msg (recv_user_id, push_type);
