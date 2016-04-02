@@ -58,7 +58,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/msklmedicine/12345678",
+            url: "api/msklmedicine/1234567890",
             data: "",
             success: function (data) {
                 alert(JSON.stringify(data));
@@ -405,7 +405,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/msklmedicine/name/2",
+            url: "api/msklmedicine/name/禽流感",
             data: "",
             success: function (data) {
                 alert(JSON.stringify(data));
