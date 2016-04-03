@@ -21,4 +21,6 @@ public interface MsklMedicineDao extends Dao<MsklMedicine,Serializable> {
      * @return
      */
     List<MsklMedicine> getMsklMedicineByNormalName(String normalName);
+
+    List<MsklMedicine> getAllMedicine();
 }

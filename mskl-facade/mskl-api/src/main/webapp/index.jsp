@@ -36,6 +36,7 @@
 <input type="button" onclick="userInfo()" name="button" id="userInfo" value="获取用户信息">
 <input type="button" onclick="selectTreatLog()" name="button" id="selectTreatLog" value="查询服药记录">
 <input type="button" onclick="selectPushMsg()" name="button" id="selectPushMsg" value="查询推送消息">
+<input type="button" onclick="selectAllMedicine()" name="button" id="selectAllMedicine" value="查询所有药品信息">
 
 <script type="text/javascript">
     function getVerificationCode() {
@@ -474,6 +475,23 @@
             }
         })
     }
+
+    function selectAllMedicine(){
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/msklmedicine/all",
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
 </script>
 </body>
 </html>

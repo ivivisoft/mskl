@@ -50,4 +50,13 @@ public class MsklMedicineController {
         }
         return msklMedicineService.getMsklMedicineByNormalName(normalName);
     }
+
+    @RequestMapping("/all")
+    public RestServiceResult<List<MsklMedicine>> getAllMedicine(){
+        RestServiceResult<List<MsklMedicine>> result = new RestServiceResult<List<MsklMedicine>>("进入查询所有药品信息controller类", false);
+        return msklMedicineService.getAllMedicine();
+
+    }
+
+
 }
