@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class TreatPlanDto implements Serializable {
 
+    private String treatPlanId;
     /**
      * 药品id
      */
@@ -43,6 +44,14 @@ public class TreatPlanDto implements Serializable {
      */
     @NotEmpty
     private String packageAmount;
+
+    public String getTreatPlanId() {
+        return treatPlanId;
+    }
+
+    public void setTreatPlanId(String treatPlanId) {
+        this.treatPlanId = treatPlanId;
+    }
 
     public String getMsklMedicineId() {
         return msklMedicineId;

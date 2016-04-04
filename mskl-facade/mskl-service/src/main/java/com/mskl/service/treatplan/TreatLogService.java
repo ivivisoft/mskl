@@ -34,4 +34,11 @@ public interface TreatLogService extends BaseService<MsklTreatLog,Serializable> 
      * @return
      */
     List<MsklTreatLog> getTreatLogsByDate(Map paramToday);
+
+    /**
+     * 根据计划id和时间查询用药记录
+     * @param yestodayParam
+     * @return
+     */
+    List<MsklTreatLog> getTreatLogsByDateAndPlanId(Map yestodayParam);
 }

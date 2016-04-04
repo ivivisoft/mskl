@@ -8,7 +8,7 @@ public class TreatLogDto implements Serializable{
 
     @NotEmpty
     private String msklMedicineId;
-    @NotEmpty
+
     private String date;
 
     public String getDate() {

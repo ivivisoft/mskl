@@ -24,4 +24,14 @@ public interface TreatPlanService extends BaseService<MsklTreatPlan,Serializable
      * @param token
      */
     RestServiceResult<List<MsklTreatPlan>> getAllTreatPlan(String token);
+
+    /**
+     * 获取所有的用药计划
+     * @return
+     */
+    List<MsklTreatPlan> getAllTreatPlan();
+
+    void generatorPlanLog(MsklTreatPlan treatPlan);
+
+    RestServiceResult<Boolean> updateTreatPlan(TreatPlanDto treatPlanDto, String token);
 }

@@ -20,4 +20,7 @@ public class TreatPlanDaoImpl extends MsklBaseDao<MsklTreatPlan,Serializable> im
     public List<MsklTreatPlan> getAllTreatPlanByUserId(Long userId) {
         return queryForList("getAllTreatPlanByUserId",userId);
     }
+    public List<MsklTreatPlan> getAllTreatPlan() {
+        return queryForList("getAllTreatPlan",null);
+    }
 }

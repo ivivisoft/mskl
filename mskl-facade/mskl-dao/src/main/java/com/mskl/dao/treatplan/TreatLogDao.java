@@ -11,4 +11,6 @@ public interface TreatLogDao extends Dao<MsklTreatLog,Serializable>{
     List<MsklTreatLog> getTreatLogByUserIdAndDate(Map param);
 
     List<MsklTreatLog> getTreatLogsByDate(Map paramToday);
+
+    List<MsklTreatLog> getTreatLogsByDateAndPlanId(Map yestodayParam);
 }
