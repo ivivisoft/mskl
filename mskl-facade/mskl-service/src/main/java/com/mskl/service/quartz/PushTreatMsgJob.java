@@ -1,11 +1,13 @@
 package com.mskl.service.quartz;
 
 import com.mskl.common.util.DateUtil;
-import com.mskl.dao.model.MsklPushMsg;
+import com.mskl.dao.model.MsklMedbox;
 import com.mskl.dao.model.MsklTreatLog;
-import com.mskl.service.pushmsg.PushMsgService;
+import com.mskl.dao.model.MsklTreatPlan;
+import com.mskl.service.medicinebox.MedicineBoxService;
+import com.mskl.service.treatinfo.TreatInfoService;
 import com.mskl.service.treatplan.TreatLogService;
-import org.apache.commons.lang.StringUtils;
+import com.mskl.service.treatplan.TreatPlanService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -20,55 +22,44 @@ public class PushTreatMsgJob {
 
     private Log logger = LogFactory.getLog(PushTreatMsgJob.class);
 
-    @Resource(name = "pushMsg.pushMsgService")
-    private PushMsgService pushMsgService;
-
     @Resource(name = "treatLog.treatLogService")
     private TreatLogService treatLogService;
 
+    @Resource(name = "treatPlan.treatPlanService")
+    private TreatPlanService treatPlanService;
+
+    @Resource(name = "treatInfo.treatInfoService")
+    private TreatInfoService treatInfoService;
+
+    @Resource(name = "medicineBox.medicineBoxService")
+    private MedicineBoxService medicineBoxService;
+
     public void pushTreatMsgJob() {
 
+        List<MsklTreatPlan> msklTreatPlanList = treatPlanService.getAllTreatPlan();
 
-        Map todayParam = buildParam(DateUtil.getCurrDate("yyyy-MM-dd"));
         Map yestodayParam = buildParam(DateUtil.dateToString(DateUtil.addDate(new Date(), -1), "yyyy-MM-dd"));
 
-        List<MsklTreatLog> todayTreatLog = treatLogService.getTreatLogsByDate(todayParam);
-        List<MsklTreatLog> yestodayTreatLog = treatLogService.getTreatLogsByDate(yestodayParam);
-
-        insertMsklPushMsg(todayTreatLog);
-        updateMsklPushMsg(yestodayTreatLog);
-
-    }
-
-    private void updateMsklPushMsg(List<MsklTreatLog> yestodayTreatLog) {
-
-        for (MsklTreatLog treatLog : yestodayTreatLog) {
-
-            MsklPushMsg msklPushMsg = pushMsgService.getMsgsByTreatLogId(treatLog.getMsklTreatlogId());
-            if (StringUtils.equals("1",treatLog.getTakenStatus()+"")){
-                msklPushMsg.setPushMsgDigest("3");
-                pushMsgService.updateObject(msklPushMsg);
-
+        for (MsklTreatPlan treatPlan : msklTreatPlanList) {
+            //1.处理漏服情况
+            yestodayParam.put("treatPlanId", treatPlan.getMsklTreatplanId());
+            List<MsklTreatLog> yestodayTreatLog = treatLogService.getTreatLogsByDateAndPlanId(yestodayParam);
+            for (MsklTreatLog treatLog : yestodayTreatLog) {
                 treatLog.setTakenStatus(3);
                 treatLogService.updateObject(treatLog);
             }
-        }
-    }
-
-    private void insertMsklPushMsg(List<MsklTreatLog> todayTreatLog) {
-        for (MsklTreatLog treatLog : todayTreatLog) {
-
-            MsklPushMsg pushMsg = new MsklPushMsg();
-            pushMsg.setPushModel("0");
-            pushMsg.setPushType("01");
-            pushMsg.setPushMsgKind("0");
-            pushMsg.setPushMsgTitle("服药记录");
-            pushMsg.setPushMsgDigest(treatLog.getTakenStatus() + "");
-            pushMsg.setMsgFrom(0L);
-            pushMsg.setRecvUserId(treatLog.getUserId() + "");
-            pushMsg.setCreateDatetime(new Date());
-            pushMsg.setTreatLogId(treatLog.getMsklTreatlogId());
-            pushMsgService.saveObject(pushMsg);
+            //2.更新药箱预计结束时间
+            if (yestodayTreatLog.size() > 0) {
+                MsklMedbox msklMedbox = new MsklMedbox();
+                msklMedbox.setUserId(treatPlan.getUserId());
+                msklMedbox.setMsklMedicineId(treatPlan.getMsklMedicineId());
+                //medicineBoxService.getBoxByMedicineIdAndUserId(map);
+                medicineBoxService.updateBoxFinishDayByMedicineIdAndUserId(msklMedbox);
+            }
+            //3.生成服药记录
+            treatPlanService.generatorPlanLog(treatPlan);
+            //4.生成统计信息
+            treatInfoService.generatorCurrentInfo(treatPlan);
         }
     }
 

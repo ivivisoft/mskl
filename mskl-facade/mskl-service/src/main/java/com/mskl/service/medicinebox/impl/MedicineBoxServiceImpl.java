@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.Map;
 
 @Service(value = "medicineBox.medicineBoxService")
 public class MedicineBoxServiceImpl extends BaseServiceImpl<MsklMedbox,Serializable> implements MedicineBoxService{
@@ -22,5 +23,13 @@ public class MedicineBoxServiceImpl extends BaseServiceImpl<MsklMedbox,Serializa
 
     public MsklMedbox getBoxByMedicine(Long msklMedicineId) {
         return medicineBoxDao.getBoxByMedicine(msklMedicineId);
+    }
+
+    public MsklMedbox getBoxByMedicineIdAndUserId(Map map) {
+        return medicineBoxDao.getBoxByMedicineIdAndUserId(map);
+    }
+
+    public int updateBoxFinishDayByMedicineIdAndUserId(MsklMedbox msklMedbox) {
+        return medicineBoxDao.updateBoxFinishDayByMedicineIdAndUserId(msklMedbox);
     }
 }

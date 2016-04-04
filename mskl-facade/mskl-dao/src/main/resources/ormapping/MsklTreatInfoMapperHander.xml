@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace=".MsklTreatInfoMapper">
+    <resultMap id="TreatInfoVo" type="com.mskl.common.vo.TreatInfoVo">
+        <result column="treat_date" property="treatDate" jdbcType="VARCHAR"/>
+        <result column="is_Lost" property="isLost" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="getTreatInfoByDate" resultMap="BaseResultMap" parameterType="Date">
+        select
+        <include refid="Base_Column_List"/>
+        from mskl_treat_info
+        where treat_date = #{treatDate,jdbcType=DATE}
+    </select>
+
+    <update id="updateTakeAmountByUserIDAndMedicineID">
+        update mskl_treat_info
+        <set>
+            taken_times =taken_times+1
+        </set>
+        where user_id = #{userId,jdbcType=BIGINT} and medicine_id = #{medicineId,jdbcType=BIGINT}
+    </update>
+
+    <select id="getAllTreatInfo" resultMap="TreatInfoVo" parameterType="Map">
+        select treat_date ,
+        (case daily_times-taken_times when 0 then true ELSE false end) as is_Lost from
+        mskl_treat_info
+        where user_id=#{userId}
+        and medicine_id=#{medicineId}
+        and treat_date BETWEEN #{beginDate} AND #{endDate};
+    </select>
+</mapper>
