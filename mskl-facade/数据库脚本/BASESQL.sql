@@ -1,3 +1,5 @@
+#初始化建表语句
+
 -- DROP TABLE mskl_treat_plan;
 CREATE TABLE mskl_treat_plan
 (
@@ -528,4 +530,15 @@ CREATE TABLE mskl_user_login_log
   login_ip VARCHAR(64),
   is_success CHAR(1)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE mskl_treat_info (
+  id bigint(20) NOT NULL auto_increment,
+  user_id bigint(20) NOT NULL,
+  medicine_id bigint(20) default NULL,
+  treat_date date default NULL,
+  daily_times int(11) default NULL,
+  taken_times int(11) default NULL,
+  PRIMARY KEY  (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 

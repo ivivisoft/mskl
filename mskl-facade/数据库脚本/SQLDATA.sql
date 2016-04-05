@@ -1,3 +1,6 @@
+#初始化数据文件
+
+
 INSERT INTO mskl.mskl_account (user_id, user_real_name, currency_type, avalaible_amount, freeze_amount, account_status, md5_code, remark, create_datetime, update_datetime, version, hash, account_status_reason) VALUES (999999, '1', '1', 1111, 1, '1', '1', '1', '2016-03-30 23:33:20', '2016-03-30 23:33:31', 1, '1', '1');
 INSERT INTO mskl.mskl_feedback (user_id, user_name, user_mobile, feedback_msg, update_datetime) VALUES (999999, 'yangxu', '13545454567', '吃药', '2016-04-01 23:25:19');
 INSERT INTO mskl.mskl_medbox (user_id, user_mobile, user_real_name, mskl_medicine_id, medical_name, normal_name, total_amount, taken_amount, remaining_amount, dose, daily_times, start_day, finish_day, update_datetime) VALUES (999999, '18514208469', null, 2, '2', '2', 3, 2, 22, 2, 3, null, null, '2016-04-02 00:32:10');
@@ -14,4 +17,4 @@ INSERT INTO mskl.mskl_user_cashout_application (user_id, bank_no, bank_name, amo
 
 
 
-redis LOGIN999999 "18b04227c42748498c2227e20c66e3b4|999999"
+# !注意 redis LOGIN999999 "18b04227c42748498c2227e20c66e3b4|999999"

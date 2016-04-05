@@ -58,4 +58,12 @@
           ]]>
         </if>
     </select>
+
+
+    <delete id="deleteCurrentTreatLogByPlanId" parameterType="Map">
+        DELETE  from mskl_treat_log
+        where treat_plan_id =#{treatPlanId}
+        and set_alarm > #{alarm}
+        and taken_status = 1
+    </delete>
 </mapper>

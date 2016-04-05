@@ -28,4 +28,8 @@ public class TreatLogDaoImpl extends MsklBaseDao<MsklTreatLog,Serializable> impl
     public List<MsklTreatLog> getTreatLogsByDateAndPlanId(Map yestodayParam) {
         return queryForList("getTreatLogsByDateAndPlanId",yestodayParam);
     }
+
+    public void deleteCurrentTreatLogByPlanId(Map param) {
+        super.deleteByStatementName("deleteCurrentTreatLogByPlanId",param);
+    }
 }

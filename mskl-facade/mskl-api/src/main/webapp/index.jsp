@@ -500,15 +500,14 @@
     function selectTreatInfo(){
         var treatInfoDto = {
             "beginDate": "2016-04-04",
-            "endDate":"2016-04-06",
-            "medicineId":"2"
+            "endDate":"2016-04-06"
+          //  "medicineId":"2"
         }
-
         $.ajax({
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/treatInfo/select/122341514514/76440dfa5be7b3878ce2a87fb14e3486/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/treatInfo/select/122341514514/607ca1c1cc2643562de351392c9d1907/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(treatInfoDto),
             success: function (data) {
                 var data = JSON.stringify(data);

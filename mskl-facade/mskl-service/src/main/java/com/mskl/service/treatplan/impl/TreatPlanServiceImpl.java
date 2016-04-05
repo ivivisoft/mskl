@@ -207,9 +207,12 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         }
 
         //处理服药记录
-
-
-
+        //1.删除当天待服药的日志
+        Map param = new HashMap();
+        param.put("treatPlanId",msklTreatPlan.getMsklTreatplanId());
+        param.put("alarm",new Date());
+        treatLogService.deleteCurrentTreatLogByPlanId(param);
+        //2.生产新的服药记录
         if (isLateByCurrentDate(treatPlanDto.getMorningAlarm())) {
             generatorPlanLog(msklTreatPlan);
         }

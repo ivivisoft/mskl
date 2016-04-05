@@ -20,12 +20,21 @@
         where user_id = #{userId,jdbcType=BIGINT} and medicine_id = #{medicineId,jdbcType=BIGINT}
     </update>
 
-    <select id="getAllTreatInfo" resultMap="TreatInfoVo" parameterType="Map">
+    <select id="getAllTreatInfo1" resultMap="TreatInfoVo" parameterType="Map">
         select treat_date ,
         (case daily_times-taken_times when 0 then true ELSE false end) as is_Lost from
         mskl_treat_info
         where user_id=#{userId}
         and medicine_id=#{medicineId}
         and treat_date BETWEEN #{beginDate} AND #{endDate};
+    </select>
+
+
+    <select id="getAllTreatInfo" resultMap="TreatInfoVo" parameterType="Map">
+       select treat_date,
+       sum((case daily_times-taken_times when 0 then false ELSE true end)) as is_lost
+         from mskl_treat_info where   user_id =#{userId}
+          and treat_date BETWEEN #{beginDate} AND #{endDate}
+         group by treat_date
     </select>
 </mapper>

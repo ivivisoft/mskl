@@ -164,4 +164,8 @@ public class TreatLogServiceImpl extends BaseServiceImpl<MsklTreatLog, Serializa
 
         return treatLogDao.getTreatLogsByDateAndPlanId(yestodayParam);
     }
+
+    public void deleteCurrentTreatLogByPlanId(Map param) {
+         treatLogDao.deleteCurrentTreatLogByPlanId(param);
+    }
 }

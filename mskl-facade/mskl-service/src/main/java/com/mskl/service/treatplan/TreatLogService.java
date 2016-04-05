@@ -41,4 +41,10 @@ public interface TreatLogService extends BaseService<MsklTreatLog,Serializable> 
      * @return
      */
     List<MsklTreatLog> getTreatLogsByDateAndPlanId(Map yestodayParam);
+
+    /**
+     * 根据计划ID删除当前待服药记录
+     * @param param
+     */
+    void deleteCurrentTreatLogByPlanId(Map param);
 }

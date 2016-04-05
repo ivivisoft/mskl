@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 public class TreatInfoDto implements Serializable {
 
-    @NotEmpty
     private String medicineId;
 
     @NotEmpty

@@ -25,7 +25,7 @@ public class TreatInfoDaoImpl extends MsklBaseDao<MsklTreatInfo,Serializable> im
         map.put("userId",userId);
         map.put("beginDate",treatInfoDto.getBeginDate());
         map.put("endDate",treatInfoDto.getEndDate());
-        map.put("medicineId",treatInfoDto.getMedicineId());
+        //map.put("medicineId",treatInfoDto.getMedicineId());
         return super.getSqlSession().selectList("getAllTreatInfo", map);
     }
 }
