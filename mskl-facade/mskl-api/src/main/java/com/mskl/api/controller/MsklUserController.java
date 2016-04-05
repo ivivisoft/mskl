@@ -3,7 +3,6 @@ package com.mskl.api.controller;
 
 import com.mskl.common.dto.*;
 import com.mskl.common.vo.UserInfoVo;
-import com.mskl.dao.model.MsklUser;
 import com.mskl.service.mskluser.MsklUserService;
 import com.mskl.service.verification.VerificationService;
 import org.apache.commons.logging.Log;

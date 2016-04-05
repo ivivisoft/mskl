@@ -3,7 +3,6 @@ package com.mskl.api.controller;
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.dto.TreatInfoDto;
 import com.mskl.common.vo.TreatInfoVo;
-import com.mskl.dao.model.MsklTreatInfo;
 import com.mskl.service.treatinfo.TreatInfoService;
 import com.mskl.service.verification.VerificationService;
 import org.apache.commons.logging.Log;

@@ -53,11 +53,19 @@ public class PushTreatMsgJob {
                 MsklMedbox msklMedbox = new MsklMedbox();
                 msklMedbox.setUserId(treatPlan.getUserId());
                 msklMedbox.setMsklMedicineId(treatPlan.getMsklMedicineId());
-                //medicineBoxService.getBoxByMedicineIdAndUserId(map);
                 medicineBoxService.updateBoxFinishDayByMedicineIdAndUserId(msklMedbox);
             }
             //3.生成服药记录
-            treatPlanService.generatorPlanLog(treatPlan);
+            Map param = new HashMap();
+            param.put("medicineId", treatPlan.getUserId());
+            param.put("medicineId", treatPlan.getMsklMedicineId());
+            MsklMedbox msklMedbox = medicineBoxService.getBoxByMedicineIdAndUserId(param);
+            if (null != msklMedbox) {
+                Date date = msklMedbox.getFinishDay();
+                if (date.after(new Date())) {
+                    treatPlanService.generatorPlanLog(treatPlan);
+                }
+            }
             //4.生成统计信息
             treatInfoService.generatorCurrentInfo(treatPlan);
         }

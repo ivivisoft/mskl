@@ -6,7 +6,9 @@ import com.mskl.dao.treatplan.TreatPlanDao;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository(value = "treatPlan.treatPlanDao")
 public class TreatPlanDaoImpl extends MsklBaseDao<MsklTreatPlan,Serializable> implements TreatPlanDao {
@@ -22,5 +24,12 @@ public class TreatPlanDaoImpl extends MsklBaseDao<MsklTreatPlan,Serializable> im
     }
     public List<MsklTreatPlan> getAllTreatPlan() {
         return queryForList("getAllTreatPlan",null);
+    }
+
+    public boolean checkMedicineInPlan(String msklMedicineId, Long userId) {
+        Map param = new HashMap();
+        param.put("userId",userId);
+        param.put("msklMedicineId",msklMedicineId);
+        return getCount("checkMedicineInPlan",param)>0;
     }
 }

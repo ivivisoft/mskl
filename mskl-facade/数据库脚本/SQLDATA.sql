@@ -17,4 +17,8 @@ INSERT INTO mskl.mskl_user_cashout_application (user_id, bank_no, bank_name, amo
 
 
 
-# !注意 redis LOGIN999999 "18b04227c42748498c2227e20c66e3b4|999999"
+# !注意 redis LOGIN999999 "18b04227c42748498c2227e20c66e3b4|999999
+
+show variables like '%char%';
+
+SET character_set_database=utf8;

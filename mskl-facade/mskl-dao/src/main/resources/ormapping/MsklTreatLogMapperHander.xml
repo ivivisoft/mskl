@@ -62,7 +62,7 @@
 
     <delete id="deleteCurrentTreatLogByPlanId" parameterType="Map">
         DELETE  from mskl_treat_log
-        where treat_plan_id =#{treatPlanId}
+        where mskl_medicine_id =#{msklMedicineId}
         and set_alarm > #{alarm}
         and taken_status = 1
     </delete>

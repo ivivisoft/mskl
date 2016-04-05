@@ -10,4 +10,6 @@ public interface TreatPlanDao extends Dao<MsklTreatPlan,Serializable>{
     List<MsklTreatPlan> getAllTreatPlanByUserId(Long userId);
 
     List<MsklTreatPlan> getAllTreatPlan();
+
+    boolean checkMedicineInPlan(String msklMedicineId, Long userId);
 }

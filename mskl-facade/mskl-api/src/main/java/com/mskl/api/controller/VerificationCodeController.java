@@ -20,9 +20,6 @@ public class VerificationCodeController {
     @Resource(name = "smscheckcode.msklSmsCheckcodeService")
     private MsklSmsCheckcodeService msklSmsCheckcodeService;
 
-    @Resource(name = "tokenService")
-    private TokenService tokenService;
-
     @Resource(name = "verificationService")
     private VerificationService verificationService;
 

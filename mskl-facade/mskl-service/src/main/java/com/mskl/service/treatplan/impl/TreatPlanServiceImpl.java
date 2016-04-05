@@ -59,9 +59,8 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
     public RestServiceResult<Boolean> insertTreatPlan(TreatPlanDto treatPlanDto, String token) {
 
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("添加服药计划服务服务", false);
-
+        //参数业务检查
         Long userId = TokenUtil.getUserIdFromToken(token);
-
         MsklMedicine msklMedicine = msklMedicineService.getObjectById(Long.parseLong(treatPlanDto.getMsklMedicineId()));
         if (null == msklMedicine) {
             result.setMessage("没有对应的药品信息!");
@@ -73,34 +72,55 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             result.setMessage("没有用户信息!");
             return result;
         }
-        //个人药箱
-        MsklMedbox msklMedbox = new MsklMedbox();
-
-        msklMedbox.setUserId(userId);
-        msklMedbox.setUserMobile(msklUser.getMobile());
-        msklMedbox.setUserRealName(msklUser.getUserRealName());
-        msklMedbox.setMsklMedicineId(msklMedicine.getMsklMedicineId());
-        msklMedbox.setMedicalName(msklMedicine.getMedicalName());
-        msklMedbox.setNormalName(msklMedicine.getNormalName());
-        msklMedbox.setTotalAmount(Integer.parseInt(treatPlanDto.getPackageAmount()));
-        msklMedbox.setDose(Double.parseDouble(treatPlanDto.getDose()));
-        msklMedbox.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
-        msklMedbox.setUpdateDatetime(new Date());
-        msklMedbox.setRemainingAmount(Double.parseDouble(msklMedbox.getTotalAmount() + ""));
-        int addDate = (int) Math.ceil(msklMedbox.getRemainingAmount() / (msklMedbox.getDose() * msklMedbox.getDailyTimes()));
-        msklMedbox.setFinishDay(DateUtil.addDate(new Date(), addDate));
-
-        try {
-            medicineBoxService.saveObject(msklMedbox);
-        } catch (Exception e) {
-            result.setMessage("增加个人药箱到数据库失败!");
-            if (logger.isErrorEnabled()) {
-                logger.error(result.toString());
+        if (checkMedicineInPlan(treatPlanDto, userId, result)) {
+            MsklTreatPlan msklTreatPlan = getObjectById(treatPlanDto.getTreatPlanId());
+            if (null == msklTreatPlan) {
+                result.setMessage("没有对应的服药计划信息!");
+                return result;
             }
+
+            //个人药箱
+            Map map = new HashMap();
+            map.put("userId", userId);
+            map.put("medicineId", treatPlanDto.getMsklMedicineId());
+            MsklMedbox msklMedbox = medicineBoxService.getBoxByMedicineIdAndUserId(map);
+            if (null == msklMedbox) {
+                result.setMessage("个人药箱中无对应的药品信息!");
+                return result;
+            }
+
+            //1.更新服药计划
+            updateTreatPlan(treatPlanDto, result, msklTreatPlan);
+
+            //2.更新药箱
+            updateMedbox(treatPlanDto, result, msklMedbox);
+
+            //3.处理服药记录
+            dealTreatLog(treatPlanDto, result, msklTreatPlan);
+            result.setSuccess(true);
+            result.setData(Boolean.TRUE);
+            return result;
+        } else {
+
+
+            //1.保存服药计划
+            saveTreatPlan(treatPlanDto, result, msklMedicine, msklUser);
+
+            //2.个人药箱
+            savaMedbox(treatPlanDto, result, userId, msklMedicine, msklUser);
+
+            //3.服药记录
+            saveTreatLog(treatPlanDto, result, userId, msklMedicine, msklUser);
+            //4.服药信息
+            saveTreatInfo(treatPlanDto, result, userId);
+
+            result.setSuccess(true);
+            result.setData(Boolean.TRUE);
+            return result;
         }
+    }
 
-
-        //服药记录
+    private void saveTreatLog(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId, MsklMedicine msklMedicine, MsklUser msklUser) {
         if (isLateByCurrentDate(treatPlanDto.getMorningAlarm())) {
             insertTreatLog(treatPlanDto.getMorningAlarm(), userId, treatPlanDto, msklUser, msklMedicine, result);
         }
@@ -110,20 +130,83 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         if (isLateByCurrentDate(treatPlanDto.getNightAlarm())) {
             insertTreatLog(treatPlanDto.getNightAlarm(), userId, treatPlanDto, msklUser, msklMedicine, result);
         }
-        //服药信息
-        MsklTreatInfo msklTreatInfo = new MsklTreatInfo();
-        msklTreatInfo.setUserId(userId);
-        msklTreatInfo.setMedicineId(Long.parseLong(treatPlanDto.getMsklMedicineId()));
-        msklTreatInfo.setTakenTimes(0);
-        msklTreatInfo.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
-        msklTreatInfo.setTreatDate(DateUtil.getCurrDateOfDate("yyyy-MM-dd"));
+    }
 
-        treatInfoService.saveObject(msklTreatInfo);
-
+    private void saveTreatInfo(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId) {
         try {
-            //服药计划
-            MsklTreatPlan msklTreatPlan = new MsklTreatPlan();
+            MsklTreatInfo msklTreatInfo = new MsklTreatInfo();
+            msklTreatInfo.setUserId(userId);
+            msklTreatInfo.setMedicineId(Long.parseLong(treatPlanDto.getMsklMedicineId()));
+            msklTreatInfo.setTakenTimes(0);
+            msklTreatInfo.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
+            msklTreatInfo.setTreatDate(DateUtil.getCurrDateOfDate("yyyy-MM-dd"));
+            treatInfoService.saveObject(msklTreatInfo);
+        } catch (Exception e) {
+            result.setMessage("增加服药信息到数据库失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
+            return;
+        }
+    }
 
+    private void savaMedbox(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId, MsklMedicine msklMedicine, MsklUser msklUser) {
+
+        //个人药箱
+        Map map = new HashMap();
+        map.put("userId", userId);
+        map.put("medicineId", treatPlanDto.getMsklMedicineId());
+        MsklMedbox msklMedbox = medicineBoxService.getBoxByMedicineIdAndUserId(map);
+        if (null == msklMedbox) {
+
+            msklMedbox = new MsklMedbox();
+            msklMedbox.setUserId(userId);
+            msklMedbox.setUserMobile(msklUser.getMobile());
+            msklMedbox.setUserRealName(msklUser.getUserRealName());
+            msklMedbox.setMsklMedicineId(msklMedicine.getMsklMedicineId());
+            msklMedbox.setMedicalName(msklMedicine.getMedicalName());
+            msklMedbox.setNormalName(msklMedicine.getNormalName());
+            msklMedbox.setTotalAmount(Integer.parseInt(treatPlanDto.getPackageAmount()));
+            msklMedbox.setDose(Double.parseDouble(treatPlanDto.getDose()));
+            msklMedbox.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
+            msklMedbox.setUpdateDatetime(new Date());
+            msklMedbox.setTakenAmount(Double.parseDouble(treatPlanDto.getTakenAmount()));
+            msklMedbox.setRemainingAmount(Double.parseDouble(msklMedbox.getTotalAmount() + "") - msklMedbox.getTakenAmount());
+            int addDate = (int) Math.ceil(msklMedbox.getRemainingAmount() / (msklMedbox.getDose() * msklMedbox.getDailyTimes()));
+            msklMedbox.setFinishDay(DateUtil.addDate(new Date(), addDate));
+            try {
+                medicineBoxService.saveObject(msklMedbox);
+            } catch (Exception e) {
+                result.setMessage("增加个人药箱到数据库失败!");
+                if (logger.isErrorEnabled()) {
+                    logger.error(result.toString());
+                }
+                return;
+            }
+        } else {
+            msklMedbox.setTotalAmount(msklMedbox.getTotalAmount() + Integer.parseInt(treatPlanDto.getPackageAmount()));
+            msklMedbox.setDose(Double.parseDouble(treatPlanDto.getDose()));
+            msklMedbox.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
+            msklMedbox.setUpdateDatetime(new Date());
+            msklMedbox.setTakenAmount(msklMedbox.getTakenAmount() + Double.parseDouble(treatPlanDto.getTakenAmount()));
+            msklMedbox.setRemainingAmount(Double.parseDouble(msklMedbox.getTotalAmount() + "") - msklMedbox.getTakenAmount());
+            int addDate = (int) Math.ceil(msklMedbox.getRemainingAmount() / (msklMedbox.getDose() * msklMedbox.getDailyTimes()));
+            msklMedbox.setFinishDay(DateUtil.addDate(new Date(), addDate));
+            try {
+                medicineBoxService.updateObject(msklMedbox);
+            } catch (Exception e) {
+                result.setMessage("修改个人药箱到数据库失败!");
+                if (logger.isErrorEnabled()) {
+                    logger.error(result.toString());
+                }
+                return;
+            }
+        }
+    }
+
+    private void saveTreatPlan(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklMedicine msklMedicine, MsklUser msklUser) {
+        try {
+            MsklTreatPlan msklTreatPlan = new MsklTreatPlan();
             msklTreatPlan.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
             msklTreatPlan.setDose(new Double(treatPlanDto.getDose()));
             msklTreatPlan.setPackageAmount(Integer.parseInt(treatPlanDto.getPackageAmount()));
@@ -141,19 +224,29 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             msklTreatPlan.setUpdateDatetime(new Date());
             msklTreatPlan.setMedicalName(msklMedicine.getMedicalName());
             msklTreatPlan.setNormalName(msklMedicine.getNormalName());
-            msklTreatPlan.setMedicineUnit(msklMedicine.getMedicineUnit());
-
+            msklTreatPlan.setMedicineUnit(treatPlanDto.getMedicineUnit());
+            msklTreatPlan.setUserId(msklUser.getUserId());
             saveObject(msklTreatPlan);
-            result.setSuccess(true);
-            result.setData(Boolean.TRUE);
+
         } catch (Exception e) {
             result.setMessage("增加服药计划到数据库失败!");
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
+            return;
         }
+    }
 
-        return result;
+    private boolean checkMedicineInPlan(TreatPlanDto treatPlanDto, Long userId, RestServiceResult<Boolean> result) {
+        try {
+            return treatPlanDao.checkMedicineInPlan(treatPlanDto.getMsklMedicineId(), userId);
+        } catch (Exception e) {
+            result.setMessage("检查是否添加药品失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
+            return false;
+        }
     }
 
     public RestServiceResult<Boolean> updateTreatPlan(TreatPlanDto treatPlanDto, String token) {
@@ -172,32 +265,57 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         map.put("medicineId", treatPlanDto.getMsklMedicineId());
         MsklMedbox msklMedbox = medicineBoxService.getBoxByMedicineIdAndUserId(map);
         if (null == msklMedbox) {
-            result.setMessage("个人药箱中对应的药品信息!");
+            result.setMessage("个人药箱中无对应的药品信息!");
             return result;
         }
 
-        //更新服药计划
-        msklTreatPlan.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
-        msklTreatPlan.setDose(new Double(treatPlanDto.getDose()));
-        msklTreatPlan.setPackageAmount(Integer.parseInt(treatPlanDto.getPackageAmount()));
-        if (StringUtils.isNotBlank(treatPlanDto.getMorningAlarm())) {
-            msklTreatPlan.setMorningAlarm(treatPlanDto.getMorningAlarm());
-        }
-        if (StringUtils.isNotBlank(treatPlanDto.getNoonAlarm())) {
-            msklTreatPlan.setNoonAlarm(treatPlanDto.getNoonAlarm());
-        }
-        if (StringUtils.isNotBlank(treatPlanDto.getNightAlarm())) {
-            msklTreatPlan.setNightAlarm(treatPlanDto.getNightAlarm());
-        }
-        updateObject(msklTreatPlan);
+        //1.更新服药计划
+        updateTreatPlan(treatPlanDto, result, msklTreatPlan);
 
-        //更新药箱
-        msklMedbox.setDose(Double.parseDouble(treatPlanDto.getDose()));
-        msklMedbox.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
-        msklMedbox.setUpdateDatetime(new Date());
-        int addDate = (int) Math.ceil(msklMedbox.getRemainingAmount() / (msklMedbox.getDose() * msklMedbox.getDailyTimes()));
-        msklMedbox.setFinishDay(DateUtil.addDate(new Date(), addDate));
+        //2.更新药箱
+        updateMedbox(treatPlanDto, result, msklMedbox);
+
+        //3.处理服药记录
+        dealTreatLog(treatPlanDto, result, msklTreatPlan);
+        result.setSuccess(true);
+        result.setData(Boolean.TRUE);
+        return result;
+    }
+
+    private void dealTreatLog(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklTreatPlan msklTreatPlan) {
         try {
+            //1.删除当天待服药的日志
+            Map param = new HashMap();
+            param.put("msklMedicineId", msklTreatPlan.getMsklMedicineId());
+            param.put("alarm", new Date());
+            treatLogService.deleteCurrentTreatLogByPlanId(param);
+            //2.生产新的服药记录
+            if (isLateByCurrentDate(treatPlanDto.getMorningAlarm())) {
+                generatorPlanLog(msklTreatPlan);
+            }
+            if (isLateByCurrentDate(treatPlanDto.getNoonAlarm())) {
+                generatorPlanLog(msklTreatPlan);
+            }
+            if (isLateByCurrentDate(treatPlanDto.getNightAlarm())) {
+                generatorPlanLog(msklTreatPlan);
+            }
+        } catch (Exception e) {
+            result.setMessage("增加服药计划到数据库失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
+            return;
+        }
+    }
+
+    private void updateMedbox(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklMedbox msklMedbox) {
+        try {
+            msklMedbox.setDose(Double.parseDouble(treatPlanDto.getDose()));
+            msklMedbox.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
+            msklMedbox.setUpdateDatetime(new Date());
+            int addDate = (int) Math.ceil(msklMedbox.getRemainingAmount() / (msklMedbox.getDose() * msklMedbox.getDailyTimes()));
+            msklMedbox.setFinishDay(DateUtil.addDate(new Date(), addDate));
+
             medicineBoxService.updateObject(msklMedbox);
         } catch (Exception e) {
             result.setMessage("增加个人药箱到数据库失败!");
@@ -205,35 +323,30 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
                 logger.error(result.toString());
             }
         }
+    }
 
-        //处理服药记录
-        //1.删除当天待服药的日志
-        Map param = new HashMap();
-        param.put("treatPlanId",msklTreatPlan.getMsklTreatplanId());
-        param.put("alarm",new Date());
-        treatLogService.deleteCurrentTreatLogByPlanId(param);
-        //2.生产新的服药记录
-        if (isLateByCurrentDate(treatPlanDto.getMorningAlarm())) {
-            generatorPlanLog(msklTreatPlan);
-        }
-        if (isLateByCurrentDate(treatPlanDto.getNoonAlarm())) {
-            generatorPlanLog(msklTreatPlan);
-        }
-        if (isLateByCurrentDate(treatPlanDto.getNightAlarm())) {
-            generatorPlanLog(msklTreatPlan);
-        }
+    private void updateTreatPlan(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklTreatPlan msklTreatPlan) {
         try {
-
-            result.setSuccess(true);
-            result.setData(Boolean.TRUE);
+            msklTreatPlan.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
+            msklTreatPlan.setDose(new Double(treatPlanDto.getDose()));
+            msklTreatPlan.setPackageAmount(Integer.parseInt(treatPlanDto.getPackageAmount()));
+            if (StringUtils.isNotBlank(treatPlanDto.getMorningAlarm())) {
+                msklTreatPlan.setMorningAlarm(treatPlanDto.getMorningAlarm());
+            }
+            if (StringUtils.isNotBlank(treatPlanDto.getNoonAlarm())) {
+                msklTreatPlan.setNoonAlarm(treatPlanDto.getNoonAlarm());
+            }
+            if (StringUtils.isNotBlank(treatPlanDto.getNightAlarm())) {
+                msklTreatPlan.setNightAlarm(treatPlanDto.getNightAlarm());
+            }
+            updateObject(msklTreatPlan);
         } catch (Exception e) {
-            result.setMessage("增加服药计划到数据库失败!");
+            result.setMessage("更新用药计划信息失败!");
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
+            return;
         }
-
-        return result;
     }
 
     private boolean isLateByCurrentDate(String date) {
@@ -322,6 +435,7 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
+            return;
         }
     }
 }

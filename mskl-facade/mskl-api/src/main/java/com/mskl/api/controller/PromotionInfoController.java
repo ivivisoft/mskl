@@ -1,14 +1,9 @@
 package com.mskl.api.controller;
 
 import com.mskl.common.dto.RestServiceResult;
-import com.mskl.dao.model.MsklFeedback;
 import com.mskl.dao.model.MsklPromotionInfo;
-import com.mskl.dao.model.MsklUser;
 import com.mskl.service.promotioninfo.PromotionInfoService;
 import com.mskl.service.verification.VerificationService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;

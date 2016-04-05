@@ -15,14 +15,14 @@ public interface BaseService<E,PK extends Serializable> {
 	 * @return
 	 * @throws DataAccessException
 	 */
-	public E getObjectById(PK id) throws DataAccessException;
+	 E getObjectById(PK id) throws DataAccessException;
 	
 	/**
 	 * 根据某个非主键查询单条记录
 	 * @return
 	 * @throws DataAccessException
 	 */
-	public E getUniqueByParam(String statementName, Serializable param) throws DataAccessException;
+	 E getUniqueByParam(String statementName, Serializable param) throws DataAccessException;
 	
 	
 	/**
@@ -30,7 +30,7 @@ public interface BaseService<E,PK extends Serializable> {
 	 * 查询总数
 	 * @return
 	 */
-	public Long getCount(Object param);
+	 Long getCount(Object param);
 	
 	/**
 	 * 查询总数
@@ -38,7 +38,7 @@ public interface BaseService<E,PK extends Serializable> {
 	 * @param param
 	 * @return
 	 */
-	public Long getCount(String statementName, Object param);
+	 Long getCount(String statementName, Object param);
 	
 	/**
 	 * 根据主键删除
@@ -46,14 +46,14 @@ public interface BaseService<E,PK extends Serializable> {
 	 * @return
 	 * @throws DataAccessException
 	 */
-	public int deleteObjectById(PK id) throws DataAccessException;
+	 int deleteObjectById(PK id) throws DataAccessException;
 	
 	/**
 	 * 根据对象删除
 	 * @return
 	 * @throws DataAccessException
 	 */
-	public int deleteObjectByObj(E entity) throws DataAccessException;
+	 int deleteObjectByObj(E entity) throws DataAccessException;
 	
 	/**
 	 * 插入数据
@@ -61,7 +61,7 @@ public interface BaseService<E,PK extends Serializable> {
 	 * @return
 	 * @throws DataAccessException
 	 */
-	public int saveObject(E entity) throws DataAccessException;
+	 int saveObject(E entity) throws DataAccessException;
 	
 	/**
 	 * 更新数据
@@ -69,7 +69,7 @@ public interface BaseService<E,PK extends Serializable> {
 	 * @return
 	 * @throws DataAccessException
 	 */
-	public int updateObject(String statementName, E entity) throws DataAccessException;
+	 int updateObject(String statementName, E entity) throws DataAccessException;
 	
 	/**
 	 * 根据sqlId更新数据
@@ -77,7 +77,7 @@ public interface BaseService<E,PK extends Serializable> {
 	 * @return
 	 * @throws DataAccessException
 	 */
-	public int updateObject(E entity) throws DataAccessException;
+	 int updateObject(E entity) throws DataAccessException;
 
 
 	/**
@@ -85,7 +85,7 @@ public interface BaseService<E,PK extends Serializable> {
 	 * @param param
 	 * @return
 	 */
-	public List<E> queryForList(Object param);
+	 List<E> queryForList(Object param);
 	
 	/**
 	 * 查询,指定statementName
@@ -93,7 +93,7 @@ public interface BaseService<E,PK extends Serializable> {
 	 * @param param
 	 * @return
 	 */
-	public List<E> queryForList(String statementName, Object param);
+	 List<E> queryForList(String statementName, Object param);
 	
 	/**
 	 * 分页查询
@@ -101,7 +101,7 @@ public interface BaseService<E,PK extends Serializable> {
 	 * @param param
 	 * @return
 	 */
-	public QueryResult<E> queryForPage(Page<E> page, Map param);
+	 QueryResult<E> queryForPage(Page<E> page, Map param);
 	
 	/**
 	 * 分页查询
@@ -111,5 +111,5 @@ public interface BaseService<E,PK extends Serializable> {
 	 * @param param
 	 * @return
 	 */
-	public QueryResult<E> queryForPage(String statementName, Page<E> page, Map param);
+	 QueryResult<E> queryForPage(String statementName, Page<E> page, Map param);
 }
