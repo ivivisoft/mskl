@@ -19,17 +19,21 @@ api/msklmedicine/name/{normalName}
 List<MsklMedicine>
 
 3.添加用药计划
-api/treatPlan/insertOrUpdate/{token}
+api/treatPlan/insertOrUpdate/{time}/{md5str}/{token}
 传入参数：
-    private String msklTreatplanId;//服药计划id
+
     @NotEmpty
-    private String msklMedicineId;//药品id
+    private String msklMedicineId; //药品id
+    @NotEmpty
     private String dailyTimes;//每天服用次数
-    private String dose;每次服用剂量
+    @NotEmpty
+    private String dose;//每次服用剂量
     private String morningAlarm;//上午提醒时间
     private String nightAlarm;//晚上提醒时间
     private String noonAlarm;//中午提醒时间
+    @NotEmpty
     private String takenAmount;//已经服用
+    @NotEmpty
     private String packageAmount;//单盒药量
 返回成功与失败
 

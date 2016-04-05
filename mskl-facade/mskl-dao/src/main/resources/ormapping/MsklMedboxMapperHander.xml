@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace=".MsklMedboxMapper" >
-  <select id="getBoxByMedicine" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from mskl_medbox
+<mapper namespace=".MsklMedboxMapper">
+    <select id="getBoxByMedicine" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from mskl_medbox
+        where mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT}
+    </select>
+    <select id="getBoxByMedicineIdAndUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mskl_medbox
+        where mskl_medicine_id = #{medicineId,jdbcType=BIGINT}
+        AND user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    <update id="updateBoxFinishDayByMedicineIdAndUserId">
+    update mskl_medbox t set t.finish_day =DATE_ADD(t.finish_day,INTERVAL 1 DAY)
     where mskl_medicine_id = #{msklMedicineId,jdbcType=BIGINT}
-  </select>
+    AND user_id = #{userId,jdbcType=BIGINT}
+  </update>
 
 </mapper>

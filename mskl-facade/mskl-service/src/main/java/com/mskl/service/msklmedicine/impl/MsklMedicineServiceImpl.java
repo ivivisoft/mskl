@@ -48,4 +48,21 @@ public class MsklMedicineServiceImpl extends BaseServiceImpl<MsklMedicine, Strin
         result.setData(msklMedicines);
         return result;
     }
+
+    public RestServiceResult<List<MsklMedicine>> getAllMedicine() {
+        RestServiceResult<List<MsklMedicine>> result = new RestServiceResult<List<MsklMedicine>>("查询所有药品信息服务", false);
+        try {
+            List<MsklMedicine> lists = msklMedicineDao.getAllMedicine();
+            result.setSuccess(true);
+            result.setData(lists);
+            result.setMessage("查询成功");
+        }catch (Exception e){
+            if (logger.isInfoEnabled()){
+                logger.error("查询所有药品信息失败！",e);
+            }
+            result.setMessage("查询失败！");
+        }
+
+        return result;
+    }
 }

@@ -29,6 +29,8 @@ public class MsklTreatLog {
 
     private Date updateDatetime;
 
+    private Long treatPlanId;
+
     public Long getMsklTreatlogId() {
         return msklTreatlogId;
     }
@@ -131,5 +133,13 @@ public class MsklTreatLog {
 
     public void setUpdateDatetime(Date updateDatetime) {
         this.updateDatetime = updateDatetime;
+    }
+
+    public Long getTreatPlanId() {
+        return treatPlanId;
+    }
+
+    public void setTreatPlanId(Long treatPlanId) {
+        this.treatPlanId = treatPlanId;
     }
 }

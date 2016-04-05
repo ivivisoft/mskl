@@ -37,7 +37,7 @@
     <!--配置执行时间为每天凌晨1点-->
     <bean id="pushTreatMsgJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="pushTreatMsgJobDetail" />
-        <property name="cronExpression" value="*/59 * * * * ?" />
+        <property name="cronExpression" value="* * */2 * * ?" />
     </bean>
     <!-- 调度的配置结束 -->
     <!-- 启动触发器的配置开始 -->

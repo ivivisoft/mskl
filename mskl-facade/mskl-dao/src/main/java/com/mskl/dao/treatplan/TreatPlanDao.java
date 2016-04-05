@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface TreatPlanDao extends Dao<MsklTreatPlan,Serializable>{
     List<MsklTreatPlan> getAllTreatPlanByUserId(Long userId);
+
+    List<MsklTreatPlan> getAllTreatPlan();
 }

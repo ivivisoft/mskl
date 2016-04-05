@@ -24,4 +24,8 @@ public class TreatLogDaoImpl extends MsklBaseDao<MsklTreatLog,Serializable> impl
     public List<MsklTreatLog> getTreatLogsByDate(Map paramToday) {
         return queryForList("getTreatLogsByDate",paramToday);
     }
+
+    public List<MsklTreatLog> getTreatLogsByDateAndPlanId(Map yestodayParam) {
+        return queryForList("getTreatLogsByDateAndPlanId",yestodayParam);
+    }
 }

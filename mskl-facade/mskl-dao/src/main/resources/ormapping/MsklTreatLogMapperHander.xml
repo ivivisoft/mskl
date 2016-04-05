@@ -21,6 +21,7 @@
           ]]>
         </if>
     </select>
+
     <select id="getTreatLogsByDate" resultMap="BaseResultMap" parameterType="Map">
         select
         <include refid="Base_Column_List"/>
@@ -38,5 +39,23 @@
         </if>
         ORDER BY set_alarm
     </select>
-
+    <select id="getTreatLogsByDateAndPlanId" resultMap="BaseResultMap" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from mskl_treat_log
+        where taken_status = 1
+        <if test="treatPlanId != null and treatPlanId!=''">
+            AND treat_plan_id = #{treatPlanId,jdbcType=BIGINT}
+        </if>
+        <if test="beginTime != null">
+            <![CDATA[
+            and DATE_FORMAT(set_alarm, '%Y-%m-%d %T') >= DATE_FORMAT(#{beginTime}, '%Y-%m-%d %T')
+            ]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[
+            and DATE_FORMAT(set_alarm, '%Y-%m-%d %T') <=  DATE_FORMAT(#{endTime}, '%Y-%m-%d %T')
+          ]]>
+        </if>
+    </select>
 </mapper>

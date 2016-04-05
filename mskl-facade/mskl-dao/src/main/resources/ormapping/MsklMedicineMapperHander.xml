@@ -14,5 +14,9 @@
         from mskl_medicine
         where medical_name like  '%${medicalName}%'
     </select>
-
+    <select id="getAllMedicine" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mskl_medicine
+    </select>
 </mapper>

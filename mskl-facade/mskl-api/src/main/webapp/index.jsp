@@ -36,6 +36,9 @@
 <input type="button" onclick="userInfo()" name="button" id="userInfo" value="获取用户信息">
 <input type="button" onclick="selectTreatLog()" name="button" id="selectTreatLog" value="查询服药记录">
 <input type="button" onclick="selectPushMsg()" name="button" id="selectPushMsg" value="查询推送消息">
+<input type="button" onclick="selectAllMedicine()" name="button" id="selectAllMedicine" value="查询所有药品信息">
+<input type="button" onclick="selectTreatInfo()" name="button" id="selectTreatInfo" value="查询统计信息">
+
 
 <script type="text/javascript">
     function getVerificationCode() {
@@ -249,14 +252,17 @@
 
     function takeMedicine(){
         var takeMedicineDto = {
-            "msklTreatlogId": "2"
+            "msklTreatlogId": "2",
+            "takenMood":"1",
+            "takenWords":"2222"
+
         }
 
         $.ajax({
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/treat/takeMedicine/122341514514/4f50f64673ea25e5c6cd4e75c2be2b1b/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/treat/takeMedicine/122341514514/c1a1b8eabc85f35765954ebd4890dff6/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(takeMedicineDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -274,9 +280,9 @@
             "dailyTimes": "3",
             "dose": "2",
 
-            "morningAlarm": "2016-03-25 09:23:32",
-            "nightAlarm": "2016-03-25 22:23:32",
-            "noonAlarm": "2016-03-25 12:23:32",
+            "morningAlarm": "09:23:32",
+            "nightAlarm": "22:23:32",
+            "noonAlarm": "12:23:32",
 
             "takenAmount": "2",
             "packageAmount": "3"
@@ -286,7 +292,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/treatPlan/insert/122341514514/f6c2b22438ec370d435a84ba0ac20ed7/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/treatPlan/insertOrUpdate/122341514514/1ce13538d0c6268835fcda9cbfcca129/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(treatPlanDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -465,6 +471,45 @@
             dataType: "json",
             url: "api/pushMsg/select/122341514514/a19533ad0d33b664993007b0f450fe9d/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(treatLogDto),
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
+    function selectAllMedicine(){
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/msklmedicine/all",
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
+    function selectTreatInfo(){
+        var treatInfoDto = {
+            "beginDate": "2016-04-04",
+            "endDate":"2016-04-06",
+            "medicineId":"2"
+        }
+
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/treatInfo/select/122341514514/76440dfa5be7b3878ce2a87fb14e3486/18b04227c42748498c2227e20c66e3b4|999999",
+            data: JSON.stringify(treatInfoDto),
             success: function (data) {
                 var data = JSON.stringify(data);
                 alert(data)

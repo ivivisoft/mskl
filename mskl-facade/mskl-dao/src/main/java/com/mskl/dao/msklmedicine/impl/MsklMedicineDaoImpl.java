@@ -27,4 +27,9 @@ public class MsklMedicineDaoImpl extends MsklBaseDao<MsklMedicine, Serializable>
         param.put("medicalName", medicalName);
         return queryForList("getMsklMedicineByNormalName", param);
     }
+
+    public List<MsklMedicine> getAllMedicine() {
+
+        return queryForList("getAllMedicine",null);
+    }
 }
