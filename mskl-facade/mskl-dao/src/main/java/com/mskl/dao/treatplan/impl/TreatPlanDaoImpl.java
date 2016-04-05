@@ -26,10 +26,10 @@ public class TreatPlanDaoImpl extends MsklBaseDao<MsklTreatPlan,Serializable> im
         return queryForList("getAllTreatPlan",null);
     }
 
-    public boolean checkMedicineInPlan(String msklMedicineId, Long userId) {
+    public MsklTreatPlan getMedicineInPlan(String msklMedicineId, Long userId) {
         Map param = new HashMap();
         param.put("userId",userId);
         param.put("msklMedicineId",msklMedicineId);
-        return getCount("checkMedicineInPlan",param)>0;
+        return (MsklTreatPlan) selectOneObject("getMedicineInPlan",param);
     }
 }

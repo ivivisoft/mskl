@@ -276,7 +276,8 @@
     function insertTreatPlan(){
 
         var treatPlanDto = {
-            "msklMedicineId": "2",
+            "treatPlanId":"",
+            "msklMedicineId": "1",
             "dailyTimes": "3",
             "dose": "2",
 
@@ -285,14 +286,15 @@
             "noonAlarm": "12:23:32",
 
             "takenAmount": "2",
-            "packageAmount": "3"
+            "packageAmount": "3",
+            "medicineUnit":"片"
         }
 
         $.ajax({
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/treatPlan/insertOrUpdate/122341514514/1ce13538d0c6268835fcda9cbfcca129/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/treatPlan/insertOrUpdate/122341514514/c8a893462e37beac3f30e47786cb5a7a/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(treatPlanDto),
             success: function (data) {
                 var data = JSON.stringify(data);

@@ -72,13 +72,8 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             result.setMessage("没有用户信息!");
             return result;
         }
-        if (checkMedicineInPlan(treatPlanDto, userId, result)) {
-            MsklTreatPlan msklTreatPlan = getObjectById(treatPlanDto.getTreatPlanId());
-            if (null == msklTreatPlan) {
-                result.setMessage("没有对应的服药计划信息!");
-                return result;
-            }
-
+        MsklTreatPlan msklTreatPlan = getMedicineInPlan(treatPlanDto, userId, result);
+        if (null != msklTreatPlan) {
             //个人药箱
             Map map = new HashMap();
             map.put("userId", userId);
@@ -96,7 +91,8 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             updateMedbox(treatPlanDto, result, msklMedbox);
 
             //3.处理服药记录
-            dealTreatLog(treatPlanDto, result, msklTreatPlan);
+            dealTreatLog(treatPlanDto, result, msklTreatPlan, userId);
+
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
             return result;
@@ -237,18 +233,19 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         }
     }
 
-    private boolean checkMedicineInPlan(TreatPlanDto treatPlanDto, Long userId, RestServiceResult<Boolean> result) {
+    private MsklTreatPlan getMedicineInPlan(TreatPlanDto treatPlanDto, Long userId, RestServiceResult<Boolean> result) {
         try {
-            return treatPlanDao.checkMedicineInPlan(treatPlanDto.getMsklMedicineId(), userId);
+            return treatPlanDao.getMedicineInPlan(treatPlanDto.getMsklMedicineId(), userId);
         } catch (Exception e) {
-            result.setMessage("检查是否添加药品失败!");
+            result.setMessage("获取服药计划失败!");
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
-            return false;
+            return null;
         }
     }
 
+    @Transactional
     public RestServiceResult<Boolean> updateTreatPlan(TreatPlanDto treatPlanDto, String token) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("更新服药计划服务服务", false);
 
@@ -276,28 +273,29 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         updateMedbox(treatPlanDto, result, msklMedbox);
 
         //3.处理服药记录
-        dealTreatLog(treatPlanDto, result, msklTreatPlan);
+        dealTreatLog(treatPlanDto, result, msklTreatPlan, userId);
         result.setSuccess(true);
         result.setData(Boolean.TRUE);
         return result;
     }
 
-    private void dealTreatLog(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklTreatPlan msklTreatPlan) {
+    private void dealTreatLog(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklTreatPlan msklTreatPlan, Long userId) {
         try {
             //1.删除当天待服药的日志
             Map param = new HashMap();
             param.put("msklMedicineId", msklTreatPlan.getMsklMedicineId());
             param.put("alarm", new Date());
+            param.put("userId", userId);
             treatLogService.deleteCurrentTreatLogByPlanId(param);
             //2.生产新的服药记录
             if (isLateByCurrentDate(treatPlanDto.getMorningAlarm())) {
-                generatorPlanLog(msklTreatPlan);
+                insertTreatLog(msklTreatPlan, 1);
             }
             if (isLateByCurrentDate(treatPlanDto.getNoonAlarm())) {
-                generatorPlanLog(msklTreatPlan);
+                insertTreatLog(msklTreatPlan, 2);
             }
             if (isLateByCurrentDate(treatPlanDto.getNightAlarm())) {
-                generatorPlanLog(msklTreatPlan);
+                insertTreatLog(msklTreatPlan, 3);
             }
         } catch (Exception e) {
             result.setMessage("增加服药计划到数据库失败!");
@@ -312,6 +310,9 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         try {
             msklMedbox.setDose(Double.parseDouble(treatPlanDto.getDose()));
             msklMedbox.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
+            msklMedbox.setTotalAmount(msklMedbox.getTotalAmount() + Integer.parseInt(treatPlanDto.getPackageAmount()));
+            msklMedbox.setTakenAmount(msklMedbox.getTakenAmount() + Double.parseDouble(treatPlanDto.getTakenAmount()));
+            msklMedbox.setRemainingAmount(msklMedbox.getTotalAmount() - msklMedbox.getTakenAmount());
             msklMedbox.setUpdateDatetime(new Date());
             int addDate = (int) Math.ceil(msklMedbox.getRemainingAmount() / (msklMedbox.getDose() * msklMedbox.getDailyTimes()));
             msklMedbox.setFinishDay(DateUtil.addDate(new Date(), addDate));
@@ -384,22 +385,30 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
 
     public void generatorPlanLog(MsklTreatPlan treatPlan) {
         //服药记录
-        insertTreatLog(treatPlan);
+        if (isLateByCurrentDate(treatPlan.getMorningAlarm())) {
+            insertTreatLog(treatPlan, 1);
+        }
+        if (isLateByCurrentDate(treatPlan.getNoonAlarm())) {
+            insertTreatLog(treatPlan, 2);
+        }
+        if (isLateByCurrentDate(treatPlan.getNightAlarm())) {
+            insertTreatLog(treatPlan, 3);
+        }
     }
 
 
-    private void insertTreatLog(MsklTreatPlan treatPlan) {
-
-        if (StringUtils.isNotBlank(treatPlan.getMorningAlarm())) {
-            insertTreatLogByDate(treatPlan, treatPlan.getMorningAlarm());
+    private void insertTreatLog(MsklTreatPlan treatPlan, int type) {
+        switch (type) {
+            case 1:
+                insertTreatLogByDate(treatPlan, treatPlan.getMorningAlarm());
+                break;
+            case 2:
+                insertTreatLogByDate(treatPlan, treatPlan.getNoonAlarm());
+                break;
+            case 3:
+                insertTreatLogByDate(treatPlan, treatPlan.getNightAlarm());
+                break;
         }
-        if (StringUtils.isNotBlank(treatPlan.getNoonAlarm())) {
-            insertTreatLogByDate(treatPlan, treatPlan.getNoonAlarm());
-        }
-        if (StringUtils.isNotBlank(treatPlan.getNightAlarm())) {
-            insertTreatLogByDate(treatPlan, treatPlan.getNightAlarm());
-        }
-
     }
 
     private void insertTreatLogByDate(MsklTreatPlan treatPlan, String alarm) {

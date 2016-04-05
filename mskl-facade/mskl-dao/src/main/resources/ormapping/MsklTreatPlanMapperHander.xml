@@ -13,9 +13,9 @@
     from mskl_treat_plan
   </select>
 
-  <select id="checkMedicineInPlan" parameterType="Map" resultType="Long">
+  <select id="getMedicineInPlan" parameterType="Map" resultMap="BaseResultMap">
     select
-       count(1)
+    <include refid="Base_Column_List" />
      from mskl_treat_plan where mskl_medicine_id=#{msklMedicineId} and user_id=#{userId}
   </select>
 </mapper>
