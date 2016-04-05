@@ -51,6 +51,10 @@ public class PushMsgServiceImpl extends BaseServiceImpl<MsklPushMsg, Serializabl
         return result;
     }
 
+    public int generatorPushMsg(MsklPushMsg msklPushMsg) {
+        return pushMsgDao.saveObject(msklPushMsg);
+    }
+
     private Map buildDateparam(PushMsgDto pushMsgDto, Long userId, RestServiceResult<List<MsklPushMsg>> result) {
 
         String beginTimeStr = pushMsgDto.getDate() + " 00:00:00";

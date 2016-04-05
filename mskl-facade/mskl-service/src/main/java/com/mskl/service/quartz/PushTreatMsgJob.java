@@ -2,9 +2,11 @@ package com.mskl.service.quartz;
 
 import com.mskl.common.util.DateUtil;
 import com.mskl.dao.model.MsklMedbox;
+import com.mskl.dao.model.MsklPushMsg;
 import com.mskl.dao.model.MsklTreatLog;
 import com.mskl.dao.model.MsklTreatPlan;
 import com.mskl.service.medicinebox.MedicineBoxService;
+import com.mskl.service.pushmsg.PushMsgService;
 import com.mskl.service.treatinfo.TreatInfoService;
 import com.mskl.service.treatplan.TreatLogService;
 import com.mskl.service.treatplan.TreatPlanService;
@@ -33,6 +35,9 @@ public class PushTreatMsgJob {
 
     @Resource(name = "medicineBox.medicineBoxService")
     private MedicineBoxService medicineBoxService;
+
+    @Resource(name = "pushMsg.pushMsgService")
+    private PushMsgService pushMsgService;
 
     public void pushTreatMsgJob() {
 
@@ -65,10 +70,29 @@ public class PushTreatMsgJob {
                 if (date.after(new Date())) {
                     treatPlanService.generatorPlanLog(treatPlan);
                 }
+                //生成消息
+                if(date.before(DateUtil.addDate(new Date(),3))){
+                    generatorPushMsg(treatPlan);
+                }
             }
             //4.生成统计信息
             treatInfoService.generatorCurrentInfo(treatPlan);
         }
+    }
+
+    private void generatorPushMsg(MsklTreatPlan treatPlan) {
+
+        MsklPushMsg msklPushMsg = new MsklPushMsg();
+        msklPushMsg.setCreateDatetime(new Date());
+        msklPushMsg.setRecvUserId(treatPlan.getUserId()+"");
+        msklPushMsg.setPushModel("0");
+        msklPushMsg.setPushType("01");
+        msklPushMsg.setPushMsgKind("00");
+        msklPushMsg.setPushMsgTitle("预计完成时间到期提醒!");
+        msklPushMsg.setPushMsgDigest("摘要");
+        msklPushMsg.setMsgFrom(0L);
+
+        pushMsgService.generatorPushMsg(msklPushMsg);
     }
 
     private Map buildParam(String date) {

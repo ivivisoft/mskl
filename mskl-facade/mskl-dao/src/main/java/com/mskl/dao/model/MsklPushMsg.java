@@ -29,8 +29,6 @@ public class MsklPushMsg {
 
     private String businessType;
 
-    private Long treatLogId;
-
     public Long getPushMsgId() {
         return pushMsgId;
     }
@@ -133,13 +131,5 @@ public class MsklPushMsg {
 
     public void setBusinessType(String businessType) {
         this.businessType = businessType == null ? null : businessType.trim();
-    }
-
-    public Long getTreatLogId() {
-        return treatLogId;
-    }
-
-    public void setTreatLogId(Long treatLogId) {
-        this.treatLogId = treatLogId;
     }
 }
