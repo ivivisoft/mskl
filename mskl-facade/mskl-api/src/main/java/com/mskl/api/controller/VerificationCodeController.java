@@ -2,7 +2,6 @@ package com.mskl.api.controller;
 
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.service.smscheckcode.MsklSmsCheckcodeService;
-import com.mskl.service.token.TokenService;
 import com.mskl.service.verification.VerificationService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
