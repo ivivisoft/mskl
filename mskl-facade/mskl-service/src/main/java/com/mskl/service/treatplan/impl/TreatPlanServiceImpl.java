@@ -85,13 +85,19 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             }
 
             //1.更新服药计划
-            updateTreatPlan(treatPlanDto, result, msklTreatPlan);
+            if (!updateTreatPlan(treatPlanDto, result, msklTreatPlan)) {
+                return result;
+            }
 
             //2.更新药箱
-            updateMedbox(treatPlanDto, result, msklMedbox);
+            if (!updateMedbox(treatPlanDto, result, msklMedbox)) {
+                return result;
+            }
 
             //3.处理服药记录
-            dealTreatLog(treatPlanDto, result, msklTreatPlan, userId);
+            if (!dealTreatLog(treatPlanDto, result, msklTreatPlan, userId)) {
+                return result;
+            }
 
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
@@ -100,15 +106,23 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
 
 
             //1.保存服药计划
-            saveTreatPlan(treatPlanDto, result, msklMedicine, msklUser);
+            if (!saveTreatPlan(treatPlanDto, result, msklMedicine, msklUser)) {
+                return result;
+            }
 
             //2.个人药箱
-            savaMedbox(treatPlanDto, result, userId, msklMedicine, msklUser);
+            if (!savaMedbox(treatPlanDto, result, userId, msklMedicine, msklUser)) {
+                return result;
+            }
 
             //3.服药记录
-            saveTreatLog(treatPlanDto, result, userId, msklMedicine, msklUser);
+            if (!saveTreatLog(treatPlanDto, result, userId, msklMedicine, msklUser)) {
+                return result;
+            }
             //4.服药信息
-            saveTreatInfo(treatPlanDto, result, userId);
+            if (!saveTreatInfo(treatPlanDto, result, userId)) {
+                return result;
+            }
 
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
@@ -116,7 +130,7 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         }
     }
 
-    private void saveTreatLog(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId, MsklMedicine msklMedicine, MsklUser msklUser) {
+    private boolean saveTreatLog(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId, MsklMedicine msklMedicine, MsklUser msklUser) {
         if (isLateByCurrentDate(treatPlanDto.getMorningAlarm())) {
             insertTreatLog(treatPlanDto.getMorningAlarm(), userId, treatPlanDto, msklUser, msklMedicine, result);
         }
@@ -126,9 +140,10 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         if (isLateByCurrentDate(treatPlanDto.getNightAlarm())) {
             insertTreatLog(treatPlanDto.getNightAlarm(), userId, treatPlanDto, msklUser, msklMedicine, result);
         }
+        return true;
     }
 
-    private void saveTreatInfo(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId) {
+    private boolean saveTreatInfo(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId) {
         try {
             MsklTreatInfo msklTreatInfo = new MsklTreatInfo();
             msklTreatInfo.setUserId(userId);
@@ -142,11 +157,12 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
-            return;
+            return false;
         }
+        return true;
     }
 
-    private void savaMedbox(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId, MsklMedicine msklMedicine, MsklUser msklUser) {
+    private boolean savaMedbox(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId, MsklMedicine msklMedicine, MsklUser msklUser) {
 
         //个人药箱
         Map map = new HashMap();
@@ -177,7 +193,7 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
                 if (logger.isErrorEnabled()) {
                     logger.error(result.toString());
                 }
-                return;
+                return false;
             }
         } else {
             msklMedbox.setTotalAmount(msklMedbox.getTotalAmount() + Integer.parseInt(treatPlanDto.getPackageAmount()));
@@ -195,12 +211,13 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
                 if (logger.isErrorEnabled()) {
                     logger.error(result.toString());
                 }
-                return;
+                return false;
             }
         }
+        return true;
     }
 
-    private void saveTreatPlan(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklMedicine msklMedicine, MsklUser msklUser) {
+    private boolean saveTreatPlan(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklMedicine msklMedicine, MsklUser msklUser) {
         try {
             MsklTreatPlan msklTreatPlan = new MsklTreatPlan();
             msklTreatPlan.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
@@ -229,8 +246,9 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
-            return;
+            return false;
         }
+        return true;
     }
 
     private MsklTreatPlan getMedicineInPlan(TreatPlanDto treatPlanDto, Long userId, RestServiceResult<Boolean> result) {
@@ -267,19 +285,25 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         }
 
         //1.更新服药计划
-        updateTreatPlan(treatPlanDto, result, msklTreatPlan);
+        if (!updateTreatPlan(treatPlanDto, result, msklTreatPlan)) {
+            return result;
+        }
 
         //2.更新药箱
-        updateMedbox(treatPlanDto, result, msklMedbox);
+        if (!updateMedbox(treatPlanDto, result, msklMedbox)) {
+            return result;
+        }
 
         //3.处理服药记录
-        dealTreatLog(treatPlanDto, result, msklTreatPlan, userId);
+        if (!dealTreatLog(treatPlanDto, result, msklTreatPlan, userId)) {
+            return result;
+        }
         result.setSuccess(true);
         result.setData(Boolean.TRUE);
         return result;
     }
 
-    private void dealTreatLog(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklTreatPlan msklTreatPlan, Long userId) {
+    private boolean dealTreatLog(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklTreatPlan msklTreatPlan, Long userId) {
         try {
             //1.删除当天待服药的日志
             Map param = new HashMap();
@@ -302,11 +326,12 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
-            return;
+            return false;
         }
+        return true;
     }
 
-    private void updateMedbox(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklMedbox msklMedbox) {
+    private boolean updateMedbox(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklMedbox msklMedbox) {
         try {
             msklMedbox.setDose(Double.parseDouble(treatPlanDto.getDose()));
             msklMedbox.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
@@ -323,10 +348,12 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
+            return false;
         }
+        return true;
     }
 
-    private void updateTreatPlan(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklTreatPlan msklTreatPlan) {
+    private boolean updateTreatPlan(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklTreatPlan msklTreatPlan) {
         try {
             msklTreatPlan.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
             msklTreatPlan.setDose(new Double(treatPlanDto.getDose()));
@@ -346,8 +373,9 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
-            return;
+            return false;
         }
+        return true;
     }
 
     private boolean isLateByCurrentDate(String date) {
@@ -425,7 +453,7 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
     }
 
 
-    private void insertTreatLog(String alarm, Long userId, TreatPlanDto treatPlanDto, MsklUser msklUser, MsklMedicine msklMedicine, RestServiceResult<Boolean> result) {
+    private boolean insertTreatLog(String alarm, Long userId, TreatPlanDto treatPlanDto, MsklUser msklUser, MsklMedicine msklMedicine, RestServiceResult<Boolean> result) {
 
         try {
             Date alarmTime = DateUtil.stringToDate(DateUtil.getCurrDate("yyyy-MM-dd") + " " + alarm, "yyyy-MM-dd HH:mm:ss");
@@ -444,7 +472,8 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
-            return;
+            return false;
         }
+        return true;
     }
 }
