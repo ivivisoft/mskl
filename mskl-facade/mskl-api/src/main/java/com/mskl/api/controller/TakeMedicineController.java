@@ -25,10 +25,10 @@ public class TakeMedicineController {
     @Resource(name = "treatLog.treatLogService")
     private TreatLogService treatLogService;
 
-    @RequestMapping("takeMedicine/{time}/{md5str}/{token}")
-    public RestServiceResult<Boolean> takeMedicine(@RequestBody TakeMedicineDto takeMedicineDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+    @RequestMapping("takeMedicine/{token}")
+    public RestServiceResult<Boolean> takeMedicine(@RequestBody TakeMedicineDto takeMedicineDto,@PathVariable String token) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入服药信息的controller类", false);
-        if (!verificationService.verification(takeMedicineDto, token, time, md5str, result)) {
+        if (!verificationService.verification(takeMedicineDto, token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }

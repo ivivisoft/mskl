@@ -45,8 +45,6 @@ public class TreatPlanDto implements Serializable {
     @NotEmpty
     private String packageAmount;
 
-    @NotEmpty
-    private String medicineUnit;
 
     public String getTreatPlanId() {
         return treatPlanId;
@@ -120,11 +118,4 @@ public class TreatPlanDto implements Serializable {
         this.packageAmount = packageAmount;
     }
 
-    public String getMedicineUnit() {
-        return medicineUnit;
-    }
-
-    public void setMedicineUnit(String medicineUnit) {
-        this.medicineUnit = medicineUnit;
-    }
 }

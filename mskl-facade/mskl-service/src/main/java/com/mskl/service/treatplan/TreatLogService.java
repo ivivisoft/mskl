@@ -47,4 +47,11 @@ public interface TreatLogService extends BaseService<MsklTreatLog,Serializable> 
      * @param param
      */
     void deleteCurrentTreatLogByPlanId(Map param);
+
+    /**
+     * 查询服药记录详情
+     * @param treatLogId
+     * @return
+     */
+    RestServiceResult<MsklTreatLog> getTreatLog(String treatLogId);
 }

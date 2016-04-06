@@ -16,11 +16,12 @@
     <result column="dose" jdbcType="DOUBLE" property="dose" />
     <result column="update_datetime" jdbcType="TIMESTAMP" property="updateDatetime" />
     <result column="treat_plan_id" jdbcType="BIGINT" property="treatPlanId" />
+    <result column="medicine_unit" property="medicineUnit" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List">
     mskl_treatlog_id, user_id, user_mobile, mskl_medicine_id, medical_name, normal_name, 
     set_alarm, finish_at, taken_status, taken_mood, taken_words, dose, update_datetime, 
-    treat_plan_id
+    treat_plan_id,medicine_unit
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -37,12 +38,12 @@
       mskl_medicine_id, medical_name, normal_name, 
       set_alarm, finish_at, taken_status, 
       taken_mood, taken_words, dose, 
-      update_datetime, treat_plan_id)
+      update_datetime, treat_plan_id,medicine_unit)
     values (#{msklTreatlogId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userMobile,jdbcType=VARCHAR}, 
       #{msklMedicineId,jdbcType=BIGINT}, #{medicalName,jdbcType=VARCHAR}, #{normalName,jdbcType=VARCHAR}, 
       #{setAlarm,jdbcType=TIMESTAMP}, #{finishAt,jdbcType=TIMESTAMP}, #{takenStatus,jdbcType=INTEGER}, 
       #{takenMood,jdbcType=INTEGER}, #{takenWords,jdbcType=VARCHAR}, #{dose,jdbcType=DOUBLE}, 
-      #{updateDatetime,jdbcType=TIMESTAMP}, #{treatPlanId,jdbcType=BIGINT})
+      #{updateDatetime,jdbcType=TIMESTAMP}, #{treatPlanId,jdbcType=BIGINT}, #{medicineUnit,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklTreatLog">
     insert into mskl_treat_log
@@ -89,6 +90,9 @@
       <if test="treatPlanId != null">
         treat_plan_id,
       </if>
+      <if test="medicineUnit != null">
+        medicine_unit,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="msklTreatlogId != null">
@@ -132,6 +136,9 @@
       </if>
       <if test="treatPlanId != null">
         #{treatPlanId,jdbcType=BIGINT},
+      </if>
+      <if test="medicineUnit != null">
+        #{medicineUnit,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -177,6 +184,9 @@
       <if test="treatPlanId != null">
         treat_plan_id = #{treatPlanId,jdbcType=BIGINT},
       </if>
+      <if test="medicineUnit != null">
+        medicine_unit = #{medicineUnit,jdbcType=BIGINT},
+      </if>
     </set>
     where mskl_treatlog_id = #{msklTreatlogId,jdbcType=BIGINT}
   </update>
@@ -194,7 +204,8 @@
       taken_words = #{takenWords,jdbcType=VARCHAR},
       dose = #{dose,jdbcType=DOUBLE},
       update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
-      treat_plan_id = #{treatPlanId,jdbcType=BIGINT}
+      treat_plan_id = #{treatPlanId,jdbcType=BIGINT},
+      medicine_unit = #{medicineUnit,jdbcType=BIGINT}
     where mskl_treatlog_id = #{msklTreatlogId,jdbcType=BIGINT}
   </update>
 </mapper>

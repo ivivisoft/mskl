@@ -8,7 +8,7 @@ public class TakeMedicineDto implements Serializable {
 
     @NotEmpty
     private String msklTreatlogId;
-
+    @NotEmpty
     private String takenMood;
 
     private String takenWords;

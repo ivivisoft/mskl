@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
@@ -49,6 +50,7 @@ public class TreatLogServiceImpl extends BaseServiceImpl<MsklTreatLog, Serializa
     @Resource(name = "msklmedicine.msklMedicineService")
     private MsklMedicineService msklMedicineService;
 
+    @Transactional
     public RestServiceResult<Boolean> updateTreatLog(TakeMedicineDto takeMedicineDto, String token) {
 
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("服药服务", false);
@@ -76,27 +78,28 @@ public class TreatLogServiceImpl extends BaseServiceImpl<MsklTreatLog, Serializa
             }
             return result;
         }
-        //更新新药箱
-        if (msklMedbox.getStartDay() == null) {
-            msklMedbox.setStartDay(new Date());
-        }
-        msklMedbox.setTakenAmount(msklMedbox.getTakenAmount() + msklMedbox.getDose());
-        msklMedbox.setRemainingAmount(msklMedbox.getTotalAmount() - msklMedbox.getTakenAmount());
-        int addDate = (int) Math.ceil(msklMedbox.getRemainingAmount() / (msklMedbox.getDose() * msklMedbox.getDailyTimes()));
-        msklMedbox.setFinishDay(DateUtil.addDate(new Date(), addDate));
-        msklMedbox.setUpdateDatetime(new Date());
-        medicineBoxService.updateObject(msklMedbox);
-
-        //更新统计
-        treatInfoService.updateTakeAmountByUserIDAndMedicineID(msklMedbox.getUserId(), msklMedbox.getMsklMedicineId());
-
-
-        msklTreatLog.setTakenStatus(2);
-        msklTreatLog.setFinishAt(new Date());
-        msklTreatLog.setUpdateDatetime(new Date());
-        msklTreatLog.setTakenMood(Integer.parseInt(takeMedicineDto.getTakenMood()));
-        msklTreatLog.setTakenWords(takeMedicineDto.getTakenWords());
         try {
+            //更新新药箱
+            if (msklMedbox.getStartDay() == null) {
+                msklMedbox.setStartDay(new Date());
+            }
+            msklMedbox.setTakenAmount(msklMedbox.getTakenAmount() + msklMedbox.getDose());
+            msklMedbox.setRemainingAmount(msklMedbox.getTotalAmount() - msklMedbox.getTakenAmount());
+            int addDate = (int) Math.ceil(msklMedbox.getRemainingAmount() / (msklMedbox.getDose() * msklMedbox.getDailyTimes()));
+            msklMedbox.setFinishDay(DateUtil.addDate(new Date(), addDate));
+            msklMedbox.setUpdateDatetime(new Date());
+            medicineBoxService.updateObject(msklMedbox);
+
+            //更新统计
+            treatInfoService.updateTakeAmountByUserIDAndMedicineID(msklMedbox.getUserId(), msklMedbox.getMsklMedicineId());
+
+
+            msklTreatLog.setTakenStatus(2);
+            msklTreatLog.setFinishAt(new Date());
+            msklTreatLog.setUpdateDatetime(new Date());
+            msklTreatLog.setTakenMood(Integer.parseInt(takeMedicineDto.getTakenMood()));
+            msklTreatLog.setTakenWords(takeMedicineDto.getTakenWords());
+
             updateObject(msklTreatLog);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
@@ -115,7 +118,7 @@ public class TreatLogServiceImpl extends BaseServiceImpl<MsklTreatLog, Serializa
 
         Long userId = TokenUtil.getUserIdFromToken(token);
         Map param = new HashMap();
-        if (StringUtils.isNotBlank(treatLogDto.getDate())){
+        if (StringUtils.isNotBlank(treatLogDto.getDate())) {
             String beginTimeStr = treatLogDto.getDate() + " 00:00:00";
             String endTimeStr = treatLogDto.getDate() + " 23:59:59";
             Date beginTime;
@@ -166,6 +169,21 @@ public class TreatLogServiceImpl extends BaseServiceImpl<MsklTreatLog, Serializa
     }
 
     public void deleteCurrentTreatLogByPlanId(Map param) {
-         treatLogDao.deleteCurrentTreatLogByPlanId(param);
+        treatLogDao.deleteCurrentTreatLogByPlanId(param);
+    }
+
+    public RestServiceResult<MsklTreatLog> getTreatLog(String msklTreatlogId) {
+        RestServiceResult<MsklTreatLog> result = new RestServiceResult<MsklTreatLog>("查询服药详情服务", false);
+        try {
+            MsklTreatLog msklTreatLog = treatLogDao.getObjectById(Long.parseLong(msklTreatlogId));
+            result.setSuccess(true);
+            result.setData(msklTreatLog);
+        } catch (Exception e) {
+            result.setMessage("查询数据库失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
+        }
+        return result;
     }
 }

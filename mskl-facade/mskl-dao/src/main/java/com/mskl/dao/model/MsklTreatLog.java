@@ -31,6 +31,8 @@ public class MsklTreatLog {
 
     private Long treatPlanId;
 
+    private String medicineUnit;
+
     public Long getMsklTreatlogId() {
         return msklTreatlogId;
     }
@@ -141,5 +143,13 @@ public class MsklTreatLog {
 
     public void setTreatPlanId(Long treatPlanId) {
         this.treatPlanId = treatPlanId;
+    }
+
+    public String getMedicineUnit() {
+        return medicineUnit;
+    }
+
+    public void setMedicineUnit(String medicineUnit) {
+        this.medicineUnit = medicineUnit;
     }
 }

@@ -14,7 +14,8 @@
 <input type="button" onclick="getVerificationCode()" name="button" id="button" value="获取注册码">
 <input type="button" onclick="register()" name="button" id="register" value="注册">
 <input type="button" onclick="login()" name="button" id="login" value="登录">
-<input type="button" onclick="getLoginPswVerificationCode()" name="button" id="getLoginPswVerificationCode" value="获取找回密码注册码">
+<input type="button" onclick="getLoginPswVerificationCode()" name="button" id="getLoginPswVerificationCode"
+       value="获取找回密码注册码">
 <input type="button" onclick="getLoginPassword()" name="button" id="getLoginPassword" value="找回密码">
 
 
@@ -22,7 +23,8 @@
 <input type="button" onclick="insertFeedback()" name="button" id="feedback" value="添加反馈意见">
 <input type="button" onclick="insertOverseer()" name="button" id="saveOverseer" value="添加监督人">
 <input type="button" onclick="selectOverseer()" name="button" id="selectOverseer" value="查询监督人">
-<input type="button" onclick="getMsklMedicineByBarCode()" name="button" id="getMsklMedicineByBarCode" value="根据药品二维码获取药品信息">
+<input type="button" onclick="getMsklMedicineByBarCode()" name="button" id="getMsklMedicineByBarCode"
+       value="根据药品二维码获取药品信息">
 
 <input type="button" onclick="apllyAmount()" name="button" id="apllyAmount" value="用户提现申请">
 <input type="button" onclick="takeMedicine()" name="button" id="takeMedicine" value="服药">
@@ -38,6 +40,7 @@
 <input type="button" onclick="selectPushMsg()" name="button" id="selectPushMsg" value="查询推送消息">
 <input type="button" onclick="selectAllMedicine()" name="button" id="selectAllMedicine" value="查询所有药品信息">
 <input type="button" onclick="selectTreatInfo()" name="button" id="selectTreatInfo" value="查询统计信息">
+<input type="button" onclick="getTreatLogDetial()" name="button" id="getTreatLogDetial" value="获取服药详情">
 
 
 <script type="text/javascript">
@@ -229,7 +232,7 @@
 
     }
 
-    function apllyAmount(){
+    function apllyAmount() {
         var userCashoutDto = {
             "amount": "100"
         }
@@ -250,11 +253,11 @@
         })
     }
 
-    function takeMedicine(){
+    function takeMedicine() {
         var takeMedicineDto = {
             "msklTreatlogId": "2",
-            "takenMood":"1",
-            "takenWords":"2222"
+            "takenMood": "1",
+            "takenWords": "2222"
 
         }
 
@@ -273,10 +276,10 @@
             }
         })
     }
-    function insertTreatPlan(){
+    function insertTreatPlan() {
 
         var treatPlanDto = {
-            "treatPlanId":"",
+            "treatPlanId": "",
             "msklMedicineId": "1",
             "dailyTimes": "3",
             "dose": "2",
@@ -287,7 +290,7 @@
 
             "takenAmount": "2",
             "packageAmount": "3",
-            "medicineUnit":"片"
+            "medicineUnit": "片"
         }
 
         $.ajax({
@@ -306,7 +309,7 @@
         })
     }
 
-    function selectTreatPlan(){
+    function selectTreatPlan() {
         $.ajax({
             type: "post",
             contentType: "application/json",
@@ -322,7 +325,7 @@
         })
     }
 
-    function insertBankCard(){
+    function insertBankCard() {
         var userBankcardDto = {
             "bankNo": "2",
             "bankName": "杨旭速度",
@@ -347,7 +350,7 @@
         })
     }
 
-    function selectBankCard(){
+    function selectBankCard() {
         $.ajax({
             type: "post",
             contentType: "application/json",
@@ -363,7 +366,7 @@
         })
     }
 
-    function insertTradePassword(){
+    function insertTradePassword() {
         var userTradeDto = {
             "userTradePwd": "2",
             "newUserTradePwd": "222",
@@ -386,7 +389,7 @@
         })
     }
 
-    function updateTradePassword(){
+    function updateTradePassword() {
         var userTradeDto = {
             "userTradePwd": "2",
             "newUserTradePwd": "222",
@@ -409,7 +412,7 @@
         })
     }
 
-    function getMsklMedicineByName(){
+    function getMsklMedicineByName() {
         $.ajax({
             type: "POST",
             contentType: "application/json",
@@ -425,7 +428,7 @@
         });
     }
 
-    function userInfo(){
+    function userInfo() {
         $.ajax({
             type: "POST",
             contentType: "application/json",
@@ -440,7 +443,7 @@
         });
     }
 
-    function selectTreatLog(){
+    function selectTreatLog() {
         var treatLogDto = {
             "msklMedicineId": "2",
             "date": "2016-04-02"
@@ -462,7 +465,7 @@
         })
     }
 
-    function selectPushMsg(){
+    function selectPushMsg() {
         var treatLogDto = {
             "date": "2016-04-02"
         }
@@ -483,7 +486,7 @@
         })
     }
 
-    function selectAllMedicine(){
+    function selectAllMedicine() {
         $.ajax({
             type: "post",
             contentType: "application/json",
@@ -499,11 +502,11 @@
         })
     }
 
-    function selectTreatInfo(){
+    function selectTreatInfo() {
         var treatInfoDto = {
             "beginDate": "2016-04-04",
-            "endDate":"2016-04-06"
-          //  "medicineId":"2"
+            "endDate": "2016-04-06"
+            //  "medicineId":"2"
         }
         $.ajax({
             type: "post",
@@ -511,6 +514,24 @@
             dataType: "json",
             url: "api/treatInfo/select/122341514514/607ca1c1cc2643562de351392c9d1907/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(treatInfoDto),
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
+
+    function getTreatLogDetial() {
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/treatLog/1/18b04227c42748498c2227e20c66e3b4|999999",
+            data: "",
             success: function (data) {
                 var data = JSON.stringify(data);
                 alert(data)

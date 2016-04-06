@@ -237,7 +237,7 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             msklTreatPlan.setUpdateDatetime(new Date());
             msklTreatPlan.setMedicalName(msklMedicine.getMedicalName());
             msklTreatPlan.setNormalName(msklMedicine.getNormalName());
-            msklTreatPlan.setMedicineUnit(treatPlanDto.getMedicineUnit());
+            msklTreatPlan.setMedicineUnit(msklMedicine.getMedicineUnit());
             msklTreatPlan.setUserId(msklUser.getUserId());
             saveObject(msklTreatPlan);
 
@@ -448,6 +448,7 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         msklTreatLog.setNormalName(treatPlan.getNormalName());
         msklTreatLog.setTakenStatus(1);
         msklTreatLog.setSetAlarm(alarmTime);
+        msklTreatLog.setMedicineUnit(treatPlan.getMedicineUnit());
         msklTreatLog.setDose(treatPlan.getDose());
         treatLogService.saveObject(msklTreatLog);
     }
@@ -465,6 +466,7 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             msklTreatLog.setNormalName(msklMedicine.getNormalName());
             msklTreatLog.setTakenStatus(1);
             msklTreatLog.setSetAlarm(alarmTime);
+            msklTreatLog.setMedicineUnit(msklMedicine.getMedicineUnit());
             msklTreatLog.setDose(new Double(treatPlanDto.getDose()));
             treatLogService.saveObject(msklTreatLog);
         } catch (Exception e) {
