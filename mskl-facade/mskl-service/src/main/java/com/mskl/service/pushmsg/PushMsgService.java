@@ -23,4 +23,11 @@ public interface PushMsgService extends BaseService<MsklPushMsg,Serializable>{
      * @return
      */
     RestServiceResult<List<MsklPushMsg>> getPushMsgByDateAndUserId(PushMsgDto pushMsgDto, String token);
+
+    /**
+     * 生成推送消息
+     * @param msklPushMsg
+     * @return
+     */
+    int generatorPushMsg(MsklPushMsg msklPushMsg);
 }

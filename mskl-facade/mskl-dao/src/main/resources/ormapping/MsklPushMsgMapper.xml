@@ -15,12 +15,10 @@
     <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
     <result column="is_read" property="isRead" jdbcType="CHAR" />
     <result column="business_type" property="businessType" jdbcType="CHAR" />
-    <result column="treat_log_id" property="treatLogId" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Base_Column_List" >
     push_msg_id, push_model, push_type, push_msg_kind, push_msg_title, push_msg_digest, 
-    push_extend, msg_from, recv_user_id, html_url, create_datetime, is_read, business_type, 
-    treat_log_id
+    push_extend, msg_from, recv_user_id, html_url, create_datetime, is_read, business_type
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -37,12 +35,12 @@
       push_msg_kind, push_msg_title, push_msg_digest, 
       push_extend, msg_from, recv_user_id, 
       html_url, create_datetime, is_read, 
-      business_type, treat_log_id)
+      business_type)
     values (#{pushMsgId,jdbcType=BIGINT}, #{pushModel,jdbcType=CHAR}, #{pushType,jdbcType=VARCHAR}, 
       #{pushMsgKind,jdbcType=CHAR}, #{pushMsgTitle,jdbcType=VARCHAR}, #{pushMsgDigest,jdbcType=VARCHAR}, 
       #{pushExtend,jdbcType=VARCHAR}, #{msgFrom,jdbcType=BIGINT}, #{recvUserId,jdbcType=VARCHAR}, 
       #{htmlUrl,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, #{isRead,jdbcType=CHAR}, 
-      #{businessType,jdbcType=CHAR}, #{treatLogId,jdbcType=BIGINT})
+      #{businessType,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.mskl.dao.model.MsklPushMsg" >
     insert into mskl_push_msg
@@ -86,9 +84,6 @@
       <if test="businessType != null" >
         business_type,
       </if>
-      <if test="treatLogId != null" >
-        treat_log_id,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="pushMsgId != null" >
@@ -129,9 +124,6 @@
       </if>
       <if test="businessType != null" >
         #{businessType,jdbcType=CHAR},
-      </if>
-      <if test="treatLogId != null" >
-        #{treatLogId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -174,9 +166,6 @@
       <if test="businessType != null" >
         business_type = #{businessType,jdbcType=CHAR},
       </if>
-      <if test="treatLogId != null" >
-        treat_log_id = #{treatLogId,jdbcType=BIGINT},
-      </if>
     </set>
     where push_msg_id = #{pushMsgId,jdbcType=BIGINT}
   </update>
@@ -193,8 +182,7 @@
       html_url = #{htmlUrl,jdbcType=VARCHAR},
       create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
       is_read = #{isRead,jdbcType=CHAR},
-      business_type = #{businessType,jdbcType=CHAR},
-      treat_log_id = #{treatLogId,jdbcType=BIGINT}
+      business_type = #{businessType,jdbcType=CHAR}
     where push_msg_id = #{pushMsgId,jdbcType=BIGINT}
   </update>
 </mapper>
