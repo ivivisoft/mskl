@@ -13,32 +13,31 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service(value = "promotionInfo.promotionInfoService")
-public class PromotionInfoServiceImpl extends BaseServiceImpl<MsklPromotionInfo,String> implements PromotionInfoService {
+public class PromotionInfoServiceImpl extends BaseServiceImpl<MsklPromotionInfo, String> implements PromotionInfoService {
 
     private Log logger = LogFactory.getLog(PromotionInfoServiceImpl.class);
 
     private PromotionInfoDao promotionInfoDao;
-    @Resource(name="promotionInfo.promotionInfoDao")
+
+    @Resource(name = "promotionInfo.promotionInfoDao")
     public void setPromotionInfoDao(PromotionInfoDao promotionInfoDao) {
         this.promotionInfoDao = promotionInfoDao;
         super.setBaseDaoImpl(promotionInfoDao);
     }
 
     public RestServiceResult<List<MsklPromotionInfo>> getPromotionInfos() {
-
-        RestServiceResult<List<MsklPromotionInfo>> result = new RestServiceResult<List<MsklPromotionInfo>>();
-        result.setSuccess(false);
-
-        List<MsklPromotionInfo> promotionInfos = promotionInfoDao.getPromotionInfos();
-        if (null == promotionInfos) {
-            result.setMessage("推广活动异常!");
-            if (logger.isInfoEnabled()){
-                logger.info("推广活动"+result.toString());
+        RestServiceResult<List<MsklPromotionInfo>> result = new RestServiceResult<List<MsklPromotionInfo>>("推广活动", false);
+        try {
+            List<MsklPromotionInfo> promotionInfos = promotionInfoDao.getPromotionInfos();
+            result.setSuccess(true);
+            result.setData(promotionInfos);
+            return result;
+        } catch (Exception e) {
+            result.setMessage("获取推广活动异常!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
             }
             return result;
         }
-        result.setSuccess(true);
-        result.setData(promotionInfos);
-        return result;
     }
 }
