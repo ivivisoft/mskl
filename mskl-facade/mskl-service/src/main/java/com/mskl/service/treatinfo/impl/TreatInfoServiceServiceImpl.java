@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service(value = "treatInfo.treatInfoService")
 public class TreatInfoServiceServiceImpl extends BaseServiceImpl<MsklTreatInfo, Serializable> implements TreatInfoService {
@@ -61,18 +62,18 @@ public class TreatInfoServiceServiceImpl extends BaseServiceImpl<MsklTreatInfo, 
         Long userId = TokenUtil.getUserIdFromToken(token);
         try {
             List<TreatInfoVo> lists = treatInfoDao.getAllTreatInfo(treatInfoDto, userId);
-
             result.setData(lists);
-            result.setMessage("查询成功!");
             result.setSuccess(true);
         } catch (Exception e) {
-
+            result.setMessage("查询数据库失败!");
             if (logger.isInfoEnabled()) {
                 logger.error(result.toString());
             }
-            result.setMessage("查询数据库失败!");
         }
-
         return result;
+    }
+
+    public void deleteTreatInfoByUserIdDateAndMedicineId(Map param) {
+        treatInfoDao.deleteTreatInfoByUserIdDateAndMedicineId(param);
     }
 }

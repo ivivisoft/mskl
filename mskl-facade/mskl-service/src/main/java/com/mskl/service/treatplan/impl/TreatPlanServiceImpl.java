@@ -99,6 +99,11 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
                 return result;
             }
 
+            //4.服药信息
+            if (!dealTreatInfo(treatPlanDto, result, userId)) {
+                return result;
+            }
+
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
             return result;
@@ -106,17 +111,18 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
 
 
             //1.保存服药计划
-            if (!saveTreatPlan(treatPlanDto, result, msklMedicine, msklUser)) {
+            Long planId = saveTreatPlan(treatPlanDto, result, msklMedicine, msklUser);
+            if (0L == planId) {
                 return result;
             }
 
             //2.个人药箱
-            if (!savaMedbox(treatPlanDto, result, userId, msklMedicine, msklUser)) {
+            if (!savaMedbox(treatPlanDto, result, msklMedicine, msklUser)) {
                 return result;
             }
 
             //3.服药记录
-            if (!saveTreatLog(treatPlanDto, result, userId, msklMedicine, msklUser)) {
+            if (!saveTreatLog(treatPlanDto, result, msklMedicine, msklUser, planId)) {
                 return result;
             }
             //4.服药信息
@@ -130,15 +136,36 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         }
     }
 
-    private boolean saveTreatLog(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId, MsklMedicine msklMedicine, MsklUser msklUser) {
+    private boolean dealTreatInfo(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId) {
+        try {
+            //1.删除当天待服药的日志
+            Map param = new HashMap();
+            param.put("medicineId", treatPlanDto.getMsklMedicineId());
+            param.put("treatDate", DateUtil.getCurrDateOfDate("yyyy-MM-dd"));
+            param.put("userId", userId);
+            treatInfoService.deleteTreatInfoByUserIdDateAndMedicineId(param);
+            //2.生产新的服药信息
+            saveTreatInfo(treatPlanDto, result, userId);
+        } catch (Exception e) {
+            result.setMessage("增加服药计划到数据库失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean saveTreatLog(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklMedicine msklMedicine, MsklUser msklUser, Long planId) {
         if (isLateByCurrentDate(treatPlanDto.getMorningAlarm())) {
-            insertTreatLog(treatPlanDto.getMorningAlarm(), userId, treatPlanDto, msklUser, msklMedicine, result);
+            insertTreatLog(treatPlanDto.getMorningAlarm(), treatPlanDto, msklUser, msklMedicine, result, planId);
         }
         if (isLateByCurrentDate(treatPlanDto.getNoonAlarm())) {
-            insertTreatLog(treatPlanDto.getNoonAlarm(), userId, treatPlanDto, msklUser, msklMedicine, result);
+            insertTreatLog(treatPlanDto.getNoonAlarm(), treatPlanDto, msklUser, msklMedicine, result, planId);
         }
         if (isLateByCurrentDate(treatPlanDto.getNightAlarm())) {
-            insertTreatLog(treatPlanDto.getNightAlarm(), userId, treatPlanDto, msklUser, msklMedicine, result);
+            insertTreatLog(treatPlanDto.getNightAlarm(), treatPlanDto, msklUser, msklMedicine, result, planId);
         }
         return true;
     }
@@ -149,7 +176,16 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             msklTreatInfo.setUserId(userId);
             msklTreatInfo.setMedicineId(Long.parseLong(treatPlanDto.getMsklMedicineId()));
             msklTreatInfo.setTakenTimes(0);
-            msklTreatInfo.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
+            msklTreatInfo.setDailyTimes(0);
+            if (isLateByCurrentDate(treatPlanDto.getMorningAlarm())) {
+                msklTreatInfo.setDailyTimes(msklTreatInfo.getDailyTimes() + 1);
+            }
+            if (isLateByCurrentDate(treatPlanDto.getNoonAlarm())) {
+                msklTreatInfo.setDailyTimes(msklTreatInfo.getDailyTimes() + 1);
+            }
+            if (isLateByCurrentDate(treatPlanDto.getNightAlarm())) {
+                msklTreatInfo.setDailyTimes(msklTreatInfo.getDailyTimes() + 1);
+            }
             msklTreatInfo.setTreatDate(DateUtil.getCurrDateOfDate("yyyy-MM-dd"));
             treatInfoService.saveObject(msklTreatInfo);
         } catch (Exception e) {
@@ -162,17 +198,17 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         return true;
     }
 
-    private boolean savaMedbox(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, Long userId, MsklMedicine msklMedicine, MsklUser msklUser) {
+    private boolean savaMedbox(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklMedicine msklMedicine, MsklUser msklUser) {
 
         //个人药箱
         Map map = new HashMap();
-        map.put("userId", userId);
+        map.put("userId", msklUser.getUserId());
         map.put("medicineId", treatPlanDto.getMsklMedicineId());
         MsklMedbox msklMedbox = medicineBoxService.getBoxByMedicineIdAndUserId(map);
         if (null == msklMedbox) {
 
             msklMedbox = new MsklMedbox();
-            msklMedbox.setUserId(userId);
+            msklMedbox.setUserId(msklUser.getUserId());
             msklMedbox.setUserMobile(msklUser.getMobile());
             msklMedbox.setUserRealName(msklUser.getUserRealName());
             msklMedbox.setMsklMedicineId(msklMedicine.getMsklMedicineId());
@@ -217,7 +253,7 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         return true;
     }
 
-    private boolean saveTreatPlan(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklMedicine msklMedicine, MsklUser msklUser) {
+    private Long saveTreatPlan(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklMedicine msklMedicine, MsklUser msklUser) {
         try {
             MsklTreatPlan msklTreatPlan = new MsklTreatPlan();
             msklTreatPlan.setDailyTimes(Integer.parseInt(treatPlanDto.getDailyTimes()));
@@ -239,16 +275,15 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             msklTreatPlan.setNormalName(msklMedicine.getNormalName());
             msklTreatPlan.setMedicineUnit(msklMedicine.getMedicineUnit());
             msklTreatPlan.setUserId(msklUser.getUserId());
-            saveObject(msklTreatPlan);
-
+            treatPlanDao.insertSelectiveBackId(msklTreatPlan);
+            return msklTreatPlan.getMsklTreatplanId();
         } catch (Exception e) {
             result.setMessage("增加服药计划到数据库失败!");
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
-            return false;
+            return 0L;
         }
-        return true;
     }
 
     private MsklTreatPlan getMedicineInPlan(TreatPlanDto treatPlanDto, Long userId, RestServiceResult<Boolean> result) {
@@ -296,6 +331,10 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
 
         //3.处理服药记录
         if (!dealTreatLog(treatPlanDto, result, msklTreatPlan, userId)) {
+            return result;
+        }
+        //4.服药信息
+        if (!dealTreatInfo(treatPlanDto, result, userId)) {
             return result;
         }
         result.setSuccess(true);
@@ -367,6 +406,7 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             if (StringUtils.isNotBlank(treatPlanDto.getNightAlarm())) {
                 msklTreatPlan.setNightAlarm(treatPlanDto.getNightAlarm());
             }
+            msklTreatPlan.setUpdateDatetime(new Date());
             updateObject(msklTreatPlan);
         } catch (Exception e) {
             result.setMessage("更新用药计划信息失败!");
@@ -450,16 +490,18 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         msklTreatLog.setSetAlarm(alarmTime);
         msklTreatLog.setMedicineUnit(treatPlan.getMedicineUnit());
         msklTreatLog.setDose(treatPlan.getDose());
+        msklTreatLog.setTreatPlanId(treatPlan.getMsklTreatplanId());
+        msklTreatLog.setUpdateDatetime(new Date());
         treatLogService.saveObject(msklTreatLog);
     }
 
 
-    private boolean insertTreatLog(String alarm, Long userId, TreatPlanDto treatPlanDto, MsklUser msklUser, MsklMedicine msklMedicine, RestServiceResult<Boolean> result) {
+    private boolean insertTreatLog(String alarm, TreatPlanDto treatPlanDto, MsklUser msklUser, MsklMedicine msklMedicine, RestServiceResult<Boolean> result, Long planId) {
 
         try {
             Date alarmTime = DateUtil.stringToDate(DateUtil.getCurrDate("yyyy-MM-dd") + " " + alarm, "yyyy-MM-dd HH:mm:ss");
             MsklTreatLog msklTreatLog = new MsklTreatLog();
-            msklTreatLog.setUserId(userId);
+            msklTreatLog.setUserId(msklUser.getUserId());
             msklTreatLog.setUserMobile(msklUser.getMobile());
             msklTreatLog.setMsklMedicineId(msklMedicine.getMsklMedicineId());
             msklTreatLog.setMedicalName(msklMedicine.getMedicalName());
@@ -468,6 +510,8 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
             msklTreatLog.setSetAlarm(alarmTime);
             msklTreatLog.setMedicineUnit(msklMedicine.getMedicineUnit());
             msklTreatLog.setDose(new Double(treatPlanDto.getDose()));
+            msklTreatLog.setTreatPlanId(planId);
+            msklTreatLog.setUpdateDatetime(new Date());
             treatLogService.saveObject(msklTreatLog);
         } catch (Exception e) {
             result.setMessage("增加服药记录到数据库失败!");

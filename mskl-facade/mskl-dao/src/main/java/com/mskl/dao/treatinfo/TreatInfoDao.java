@@ -7,8 +7,11 @@ import com.mskl.dao.model.MsklTreatInfo;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public interface TreatInfoDao extends Dao<MsklTreatInfo,Serializable>{
 
     List<TreatInfoVo> getAllTreatInfo(TreatInfoDto treatInfoDto, Long userId);
+
+    void deleteTreatInfoByUserIdDateAndMedicineId(Map param);
 }

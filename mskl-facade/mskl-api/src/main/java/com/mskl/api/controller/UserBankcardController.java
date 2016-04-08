@@ -30,7 +30,7 @@ public class UserBankcardController {
     @RequestMapping("/select/{token}")
     RestServiceResult<List<MsklUserBankcard>> getUserBankcards(@PathVariable String token) {
         RestServiceResult<List<MsklUserBankcard>> result = new RestServiceResult<List<MsklUserBankcard>>("进入查询银行卡Controller类!", true);
-        if (!verificationService.verification(token, result)) {
+        if (!verificationService.verificationToken(token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }
@@ -39,10 +39,10 @@ public class UserBankcardController {
         return userBankcardServcie.getBankcardByUserId(token);
     }
 
-    @RequestMapping("/insert/{time}/{md5str}/{token}")
-    RestServiceResult<Boolean> insertBankcard(@RequestBody UserBankcardDto userBankcardDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+    @RequestMapping("/insert/{token}")
+    RestServiceResult<Boolean> insertBankcard(@RequestBody UserBankcardDto userBankcardDto, @PathVariable String token) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加银行卡Controller类", true);
-        if (!verificationService.verification(userBankcardDto, token, time, md5str, result)) {
+        if (!verificationService.verification(userBankcardDto, token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }

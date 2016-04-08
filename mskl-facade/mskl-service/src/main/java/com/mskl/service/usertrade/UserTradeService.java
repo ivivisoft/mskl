@@ -1,5 +1,6 @@
 package com.mskl.service.usertrade;
 
+import com.mskl.common.dto.ModifyTradeDto;
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.dto.UserTradeDto;
 import com.mskl.dao.model.MsklUserTrade;
@@ -19,9 +20,9 @@ public interface UserTradeService extends BaseService<MsklUserTrade,Serializable
 
     /**
      * 修改交易密码
-     * @param userTradeDto
+     * @param modifyTradeDto
      * @param token
      * @return
      */
-    RestServiceResult<Boolean> updateTradePassword(UserTradeDto userTradeDto, String token);
+    RestServiceResult<Boolean> updateTradePassword(ModifyTradeDto modifyTradeDto, String token);
 }

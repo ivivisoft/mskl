@@ -25,8 +25,8 @@ public class MsklUserController {
 
     @RequestMapping("/{token}")
     public RestServiceResult<UserInfoVo> getUserInfo(@PathVariable String token) {
-        RestServiceResult<UserInfoVo> result = new RestServiceResult<UserInfoVo>("进入获取用户信息controller类", false);
-        if (!verificationService.verification(token, result)) {
+        RestServiceResult<UserInfoVo> result = new RestServiceResult<UserInfoVo>("进入获取用户信息controller类", true);
+        if (!verificationService.verificationToken(token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }
@@ -39,7 +39,7 @@ public class MsklUserController {
 
     @RequestMapping("/register")
     public RestServiceResult<Boolean> register(@RequestBody RegisterDto registerDto) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入注册服务controller类", false);
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入注册服务controller类", true);
         if (!verificationService.verification(registerDto, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
@@ -75,10 +75,10 @@ public class MsklUserController {
     }
 
 
-    @RequestMapping("/modifyPassword")
-    public RestServiceResult<Boolean> modifyPassword(@RequestBody ModifyPasswordDto modifyPasswordDto) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>();
-        if (!verificationService.verification(modifyPasswordDto, result)) {
+    @RequestMapping("/modifyPassword/{token}")
+    public RestServiceResult<Boolean> modifyPassword(@RequestBody ModifyPasswordDto modifyPasswordDto, @PathVariable String token) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入修改用户密码服务",true);
+        if (!verificationService.verification(modifyPasswordDto, token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }
@@ -87,8 +87,8 @@ public class MsklUserController {
         return msklUserService.modifyPassword(modifyPasswordDto);
     }
 
-    @RequestMapping("/addUserExtInfo/{token}")
-    public RestServiceResult<Boolean> addUserExtInfo(@RequestBody UserExtDto userExtDto,@PathVariable String token){
+    @RequestMapping("/addOrUpdateUserExtInfo/{token}")
+    public RestServiceResult<Boolean> addUserExtInfo(@RequestBody UserExtDto userExtDto, @PathVariable String token) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加用户信息服务controller类", true);
         if (!verificationService.verification(userExtDto, token, result)) {
             if (logger.isInfoEnabled()) {
@@ -96,6 +96,6 @@ public class MsklUserController {
             }
             return result;
         }
-        return msklUserService.addUserExtInfo(userExtDto,token);
+        return msklUserService.addUserExtInfo(userExtDto, token);
     }
 }

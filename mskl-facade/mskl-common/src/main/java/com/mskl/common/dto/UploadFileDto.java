@@ -10,8 +10,6 @@ public class UploadFileDto implements Serializable{
     private String mobile;
     @NotEmpty
     private String file;
-    @NotEmpty
-    private String type;
 
     public String getMobile() {
         return mobile;
@@ -27,13 +25,5 @@ public class UploadFileDto implements Serializable{
 
     public void setFile(String file) {
         this.file = file;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

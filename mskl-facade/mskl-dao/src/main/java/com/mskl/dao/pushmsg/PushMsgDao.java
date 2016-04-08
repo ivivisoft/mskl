@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface PushMsgDao extends Dao<MsklPushMsg,Serializable>{
-    MsklPushMsg getMsgsByTreatLogId(Long msklTreatlogId);
 
     List<MsklPushMsg> getPushMsgByDateAndUserId(Map param);
 }

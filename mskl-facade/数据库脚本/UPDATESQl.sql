@@ -13,3 +13,8 @@ ALTER TABLE `mskl`.`mskl_treat_log`
 
 ALTER TABLE `mskl`.`mskl_treat_log`
   ADD COLUMN `medicine_unit` VARCHAR(8) NULL ;
+
+
+ALTER TABLE `mskl`.`mskl_push_msg`
+  DROP COLUMN `treat_log_id`,
+  DROP INDEX `mskl_push_msg_treat_log_id_uindex` ;

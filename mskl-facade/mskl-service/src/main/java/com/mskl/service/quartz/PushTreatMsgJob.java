@@ -62,21 +62,21 @@ public class PushTreatMsgJob {
             }
             //3.生成服药记录
             Map param = new HashMap();
-            param.put("medicineId", treatPlan.getUserId());
+            param.put("userId", treatPlan.getUserId());
             param.put("medicineId", treatPlan.getMsklMedicineId());
             MsklMedbox msklMedbox = medicineBoxService.getBoxByMedicineIdAndUserId(param);
             if (null != msklMedbox) {
                 Date date = msklMedbox.getFinishDay();
                 if (date.after(new Date())) {
                     treatPlanService.generatorPlanLog(treatPlan);
+                    //4.生成统计信息
+                    treatInfoService.generatorCurrentInfo(treatPlan);
                 }
                 //生成消息
                 if(date.before(DateUtil.addDate(new Date(),3))){
                     generatorPushMsg(treatPlan);
                 }
             }
-            //4.生成统计信息
-            treatInfoService.generatorCurrentInfo(treatPlan);
         }
     }
 

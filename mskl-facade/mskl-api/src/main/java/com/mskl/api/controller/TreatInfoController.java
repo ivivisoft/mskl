@@ -27,10 +27,10 @@ public class TreatInfoController {
     @Resource(name = "treatInfo.treatInfoService")
     private TreatInfoService treatInfoService;
 
-    @RequestMapping("/select/{time}/{md5str}/{token}")
-    public RestServiceResult<List<TreatInfoVo>> getAllTreatInfo(@RequestBody TreatInfoDto treatInfoDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token){
+    @RequestMapping("/select/{token}")
+    public RestServiceResult<List<TreatInfoVo>> getAllTreatInfo(@RequestBody TreatInfoDto treatInfoDto, @PathVariable String token){
         RestServiceResult<List<TreatInfoVo>> result = new RestServiceResult<List<TreatInfoVo>>("进入统计信息Controller类", true);
-        if (!verificationService.verification(treatInfoDto, token, time, md5str, result)) {
+        if (!verificationService.verification(treatInfoDto, token,result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }

@@ -1,11 +1,14 @@
 package com.mskl.common.dto;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class OverseerDto {
 
+    @NotEmpty
     private String overseer;
-
+    @NotEmpty
     private String overseerMobile;
-
+    @NotEmpty
     private String userMobile;
 
 
@@ -33,8 +36,4 @@ public class OverseerDto {
         this.overseerMobile = overseerMobile;
     }
 
-    @Override
-    public String toString() {
-        return "overseer='" + overseer + "'&overseerMobile='" + overseerMobile + "'&userMobile='" + userMobile + "'";
-    }
 }

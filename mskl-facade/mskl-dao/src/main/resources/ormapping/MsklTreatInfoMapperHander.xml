@@ -37,4 +37,8 @@
           and treat_date BETWEEN #{beginDate} AND #{endDate}
          group by treat_date
     </select>
+
+    <delete id="deleteTreatInfoByUserIdDateAndMedicineId" parameterType="Map">
+      DELETE  from mskl_treat_info where user_id =#{userId} and treat_date=#{treatDate} and  medicine_id =#{medicineId}
+    </delete>
 </mapper>

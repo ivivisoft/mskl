@@ -18,4 +18,98 @@
     <include refid="Base_Column_List" />
      from mskl_treat_plan where mskl_medicine_id=#{msklMedicineId} and user_id=#{userId}
   </select>
+
+
+
+  <insert id="insertSelectiveBackId" useGeneratedKeys="true" keyProperty="msklTreatplanId" parameterType="com.mskl.dao.model.MsklTreatPlan" >
+    insert into mskl_treat_plan
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="msklTreatplanId != null" >
+        mskl_treatplan_id,
+      </if>
+      <if test="msklMedicineId != null" >
+        mskl_medicine_id,
+      </if>
+      <if test="medicalName != null" >
+        medical_name,
+      </if>
+      <if test="normalName != null" >
+        normal_name,
+      </if>
+      <if test="medicineUnit != null" >
+        medicine_unit,
+      </if>
+      <if test="packageAmount != null" >
+        package_amount,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="takenAmount != null" >
+        taken_amount,
+      </if>
+      <if test="dose != null" >
+        dose,
+      </if>
+      <if test="dailyTimes != null" >
+        daily_times,
+      </if>
+      <if test="morningAlarm != null" >
+        morning_alarm,
+      </if>
+      <if test="noonAlarm != null" >
+        noon_alarm,
+      </if>
+      <if test="nightAlarm != null" >
+        night_alarm,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="msklTreatplanId != null" >
+        #{msklTreatplanId,jdbcType=BIGINT},
+      </if>
+      <if test="msklMedicineId != null" >
+        #{msklMedicineId,jdbcType=BIGINT},
+      </if>
+      <if test="medicalName != null" >
+        #{medicalName,jdbcType=VARCHAR},
+      </if>
+      <if test="normalName != null" >
+        #{normalName,jdbcType=VARCHAR},
+      </if>
+      <if test="medicineUnit != null" >
+        #{medicineUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="packageAmount != null" >
+        #{packageAmount,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="takenAmount != null" >
+        #{takenAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="dose != null" >
+        #{dose,jdbcType=DOUBLE},
+      </if>
+      <if test="dailyTimes != null" >
+        #{dailyTimes,jdbcType=INTEGER},
+      </if>
+      <if test="morningAlarm != null" >
+        #{morningAlarm,jdbcType=VARCHAR},
+      </if>
+      <if test="noonAlarm != null" >
+        #{noonAlarm,jdbcType=VARCHAR},
+      </if>
+      <if test="nightAlarm != null" >
+        #{nightAlarm,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
 </mapper>

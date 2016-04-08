@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Service(value = "userBankcard.userBankcardService")
-public class UserBankcardServcieImpl extends BaseServiceImpl<MsklUserBankcard,Serializable> implements UserBankcardServcie{
+public class UserBankcardServcieImpl extends BaseServiceImpl<MsklUserBankcard, Serializable> implements UserBankcardServcie {
 
     private Log logger = LogFactory.getLog(UserBankcardServcieImpl.class);
 
@@ -29,14 +29,13 @@ public class UserBankcardServcieImpl extends BaseServiceImpl<MsklUserBankcard,Se
     }
 
     public RestServiceResult<List<MsklUserBankcard>> getBankcardByUserId(String token) {
-        RestServiceResult<List<MsklUserBankcard>> result = new RestServiceResult<List<MsklUserBankcard>>("进入添加银行卡服务",false);
-
+        RestServiceResult<List<MsklUserBankcard>> result = new RestServiceResult<List<MsklUserBankcard>>("进入添加银行卡服务", false);
         Long userId = TokenUtil.getUserIdFromToken(token);
         List<MsklUserBankcard> lists = userBankcardDao.getBankcardByUserId(userId);
         if (null == lists) {
             result.setMessage("查询银行卡信息异常！");
             if (logger.isInfoEnabled()) {
-                logger.info("查询银行卡" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }
@@ -49,30 +48,27 @@ public class UserBankcardServcieImpl extends BaseServiceImpl<MsklUserBankcard,Se
 
 
     public RestServiceResult<Boolean> insertBankcard(UserBankcardDto userBankcardDto, String token) {
-
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加银行卡服务",false);
-
-        Long userId = TokenUtil.getUserIdFromToken(token);
-        MsklUserBankcard userBankcard = new MsklUserBankcard();
-
-        userBankcard.setIsDefault(userBankcardDto.getIsDefault());
-        userBankcard.setBankAddrNo(userBankcardDto.getBankAddrNo());
-        userBankcard.setBankName(userBankcardDto.getBankName());
-        userBankcard.setBankNo(userBankcardDto.getBankNo());
-        userBankcard.setCardNo(userBankcardDto.getCardNo());
-        userBankcard.setUserId(userId);
-
-        if (saveObject(userBankcard)>0){
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加银行卡服务", false);
+        try {
+            Long userId = TokenUtil.getUserIdFromToken(token);
+            MsklUserBankcard userBankcard = new MsklUserBankcard();
+            userBankcard.setIsDefault(userBankcardDto.getIsDefault());
+            userBankcard.setBankAddrNo(userBankcardDto.getBankAddrNo());
+            userBankcard.setBankName(userBankcardDto.getBankName());
+            userBankcard.setBankNo(userBankcardDto.getBankNo());
+            userBankcard.setCardNo(userBankcardDto.getCardNo());
+            userBankcard.setUserId(userId);
+            saveObject(userBankcard);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
-            result.setMessage("添加银行卡成功！");
-            if (logger.isInfoEnabled()) {
-                logger.info("添加银行卡" + result.toString());
+            return result;
+        } catch (Exception e) {
+            result.setMessage("添加银行卡失败！");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
             }
             return result;
         }
-        result.setMessage("添加银行卡失败");
-        return result;
     }
 
     public List<MsklUserBankcard> getBankcardsByUserId(Long userId) {

@@ -1,5 +1,6 @@
 package com.mskl.api.controller;
 
+import com.mskl.common.dto.ModifyTradeDto;
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.dto.UserTradeDto;
 import com.mskl.service.usertrade.UserTradeService;
@@ -27,10 +28,10 @@ public class UserTradeController {
 
 
 
-    @RequestMapping("/tradePassword/insert/{time}/{md5str}/{token}")
-    public RestServiceResult<Boolean> insertTradePassword(@RequestBody UserTradeDto userTradeDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+    @RequestMapping("/tradePassword/insert/{token}")
+    public RestServiceResult<Boolean> insertTradePassword(@RequestBody UserTradeDto userTradeDto, @PathVariable String token) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加提现密码Controller类",true);
-        if (!verificationService.verification(userTradeDto, token, time, md5str, result)) {
+        if (!verificationService.verification(userTradeDto, token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }
@@ -40,15 +41,16 @@ public class UserTradeController {
     }
 
 
-    @RequestMapping("/tradePassword/update/{time}/{md5str}/{token}")
-    public RestServiceResult<Boolean> updateTradePassword(@RequestBody UserTradeDto userTradeDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+    @RequestMapping("/tradePassword/update/{token}")
+    public RestServiceResult<Boolean> updateTradePassword(@RequestBody ModifyTradeDto modifyTradeDto,@PathVariable String token) {
+
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入修改提现密码Controller类!",true);
-        if (!verificationService.verification(userTradeDto, token, time, md5str, result)) {
+        if (!verificationService.verification(modifyTradeDto, token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }
             return result;
         }
-        return userTradeService.updateTradePassword(userTradeDto,token);
+        return userTradeService.updateTradePassword(modifyTradeDto,token);
     }
 }

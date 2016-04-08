@@ -27,15 +27,14 @@ public class OverseerController {
     @Resource(name = "verificationService")
     private VerificationService verificationService;
 
-    @RequestMapping("/insert/{time}/{md5str}/{token}")
-    public RestServiceResult<Boolean> insertOverseer(@RequestBody OverseerDto overseerDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+    @RequestMapping("/insert/{token}")
+    public RestServiceResult<Boolean> insertOverseer(@RequestBody OverseerDto overseerDto,@PathVariable String token) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加监督人Controller类", true);
-        if (!verificationService.verification(overseerDto, token, time, md5str, result)) {
+        if (!verificationService.verification(overseerDto, token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }
         }
-
         return overseerService.insertOverseer(overseerDto, token);
 
     }
@@ -43,7 +42,7 @@ public class OverseerController {
     @RequestMapping("/select/{token}")
     public RestServiceResult<List<MsklOverseer>> getOverseersByUserId(@PathVariable String token) {
         RestServiceResult<List<MsklOverseer>> result = new RestServiceResult<List<MsklOverseer>>("进入查询监督人Controller类", true);
-        if (!verificationService.verification(token, result)) {
+        if (!verificationService.verificationToken(token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }

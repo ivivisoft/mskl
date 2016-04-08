@@ -1,13 +1,13 @@
 package com.mskl.common.dto;
 
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 public class TreatLogDto implements Serializable{
 
-
-    private String msklMedicineId;
-
+    @NotEmpty
     private String date;
 
     public String getDate() {
@@ -16,13 +16,5 @@ public class TreatLogDto implements Serializable{
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getMsklMedicineId() {
-        return msklMedicineId;
-    }
-
-    public void setMsklMedicineId(String msklMedicineId) {
-        this.msklMedicineId = msklMedicineId;
     }
 }

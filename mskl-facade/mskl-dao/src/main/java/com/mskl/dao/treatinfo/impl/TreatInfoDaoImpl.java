@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository(value = "treatInfo.treatInfoDao")
-public class TreatInfoDaoImpl extends MsklBaseDao<MsklTreatInfo,Serializable> implements TreatInfoDao{
+public class TreatInfoDaoImpl extends MsklBaseDao<MsklTreatInfo, Serializable> implements TreatInfoDao {
 
     @Override
     public String getIbatisSqlMapNamespace() {
@@ -22,10 +22,13 @@ public class TreatInfoDaoImpl extends MsklBaseDao<MsklTreatInfo,Serializable> im
 
     public List<TreatInfoVo> getAllTreatInfo(TreatInfoDto treatInfoDto, Long userId) {
         Map map = new HashMap();
-        map.put("userId",userId);
-        map.put("beginDate",treatInfoDto.getBeginDate());
-        map.put("endDate",treatInfoDto.getEndDate());
-        //map.put("medicineId",treatInfoDto.getMedicineId());
+        map.put("userId", userId);
+        map.put("beginDate", treatInfoDto.getBeginDate());
+        map.put("endDate", treatInfoDto.getEndDate());
         return super.getSqlSession().selectList("getAllTreatInfo", map);
+    }
+
+    public void deleteTreatInfoByUserIdDateAndMedicineId(Map param) {
+        super.deleteByStatementName("deleteTreatInfoByUserIdDateAndMedicineId", param);
     }
 }

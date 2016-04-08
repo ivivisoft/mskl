@@ -92,14 +92,11 @@ public class TreatLogServiceImpl extends BaseServiceImpl<MsklTreatLog, Serializa
 
             //更新统计
             treatInfoService.updateTakeAmountByUserIDAndMedicineID(msklMedbox.getUserId(), msklMedbox.getMsklMedicineId());
-
-
             msklTreatLog.setTakenStatus(2);
             msklTreatLog.setFinishAt(new Date());
             msklTreatLog.setUpdateDatetime(new Date());
             msklTreatLog.setTakenMood(Integer.parseInt(takeMedicineDto.getTakenMood()));
             msklTreatLog.setTakenWords(takeMedicineDto.getTakenWords());
-
             updateObject(msklTreatLog);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);

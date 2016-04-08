@@ -40,6 +40,9 @@ public class OverseerServiceImpl extends BaseServiceImpl<MsklOverseer, Serializa
             msklOverseer.setUserId(userId);
             msklOverseer.setUpdateDatetime(new Date());
             saveObject(msklOverseer);
+            result.setSuccess(true);
+            result.setData(Boolean.TRUE);
+            return result;
         } catch (Exception e) {
             result.setMessage("保存监护人异常!");
             if (logger.isErrorEnabled()) {
@@ -47,9 +50,6 @@ public class OverseerServiceImpl extends BaseServiceImpl<MsklOverseer, Serializa
             }
             return result;
         }
-        result.setSuccess(true);
-        result.setData(Boolean.TRUE);
-        return result;
     }
 
     public RestServiceResult<List<MsklOverseer>> getOverseersByUserId(String token) {

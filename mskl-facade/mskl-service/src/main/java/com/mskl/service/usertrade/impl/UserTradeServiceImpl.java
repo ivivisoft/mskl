@@ -1,5 +1,6 @@
 package com.mskl.service.usertrade.impl;
 
+import com.mskl.common.dto.ModifyTradeDto;
 import com.mskl.common.dto.RestServiceResult;
 import com.mskl.common.dto.UserTradeDto;
 import com.mskl.common.util.MD5Util;
@@ -35,71 +36,77 @@ public class UserTradeServiceImpl extends BaseServiceImpl<MsklUserTrade, Seriali
     }
 
     public RestServiceResult<Boolean> insertTradePassword(UserTradeDto userTradeDto, String token) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加提现密码服务！",false);
-
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入添加提现密码服务！", false);
         Long userId = TokenUtil.getUserIdFromToken(token);
         MsklUser msklUser = msklUserService.getObjectById(userId);
         if (null == msklUser) {
             result.setMessage("用户ID不正确!");
             if (logger.isInfoEnabled()) {
-                logger.info("添加交易密码" + result.toString());
+                logger.info(result.toString());
             }
             return result;
 
         }
-        MsklUserTrade userTrade = new MsklUserTrade();
-        userTrade.setUserTradePwd(MD5Util.encode(userTradeDto.getUserTradePwd()));
-        userTrade.setUserTradePwdStrength(userTradeDto.getUserTradePwdStrength());
-        userTrade.setUserId(userId);
-        if (saveObject(userTrade) > 0) {
+        try {
+            MsklUserTrade userTrade = new MsklUserTrade();
+            userTrade.setUserTradePwd(MD5Util.encode(userTradeDto.getUserTradePwd()));
+            userTrade.setUserTradePwdStrength(userTradeDto.getUserTradePwdStrength());
+            userTrade.setUserId(userId);
+            saveObject(userTrade);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
-            result.setMessage("添加成功！");
+            return result;
+        } catch (Exception e) {
+            result.setMessage("添加提现密码失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
             return result;
         }
-        result.setMessage("添加失败!");
-        return result;
     }
 
-    public RestServiceResult<Boolean> updateTradePassword(UserTradeDto userTradeDto, String token) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入修改提现密码服务",false);
-
+    public RestServiceResult<Boolean> updateTradePassword(ModifyTradeDto modifyTradeDto, String token) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入修改提现密码服务", false);
         Long userId = TokenUtil.getUserIdFromToken(token);
         MsklUserTrade userTrade = userTradeDao.getTradeByUserId(userId);
         if (null == userTrade) {
             result.setMessage("用户ID不正确!");
             if (logger.isInfoEnabled()) {
-                logger.info("修改交易密码" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }
         //原交易密码
-        String tradePassword = MD5Util.encode(userTradeDto.getUserTradePwd());
+        String tradePassword = MD5Util.encode(modifyTradeDto.getUserTradePwd());
         if (!StringUtils.equals(tradePassword, userTrade.getUserTradePwd())) {
             result.setMessage("原交易密码不正确!");
             if (logger.isInfoEnabled()) {
-                logger.info("修改交易密码" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }
         //新交易密码
-        String newTradePassword = MD5Util.encode(userTradeDto.getNewUserTradePwd());
+        String newTradePassword = MD5Util.encode(modifyTradeDto.getNewUserTradePwd());
         if (StringUtils.equals(tradePassword, newTradePassword)) {
             result.setMessage("交易密码与原密码相同!");
             if (logger.isInfoEnabled()) {
-                logger.info("修改交易密码" + result.toString());
+                logger.info(result.toString());
             }
             return result;
         }
-        userTrade.setUserTradePwd(newTradePassword);
-        userTrade.setUserTradePwdStrength(userTradeDto.getUserTradePwdStrength());
-        if (updateObject(userTrade) > 0) {
+        try {
+            userTrade.setUserTradePwd(newTradePassword);
+            userTrade.setUserTradePwdStrength(modifyTradeDto.getUserTradePwdStrength());
+            updateObject(userTrade);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
-            result.setMessage("修改成功！");
+            return result;
+        } catch (Exception e) {
+            result.setMessage("修改失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
             return result;
         }
-        result.setMessage("修改失败!");
-        return result;
     }
 }

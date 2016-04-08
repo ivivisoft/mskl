@@ -32,4 +32,8 @@ public class TreatPlanDaoImpl extends MsklBaseDao<MsklTreatPlan,Serializable> im
         param.put("msklMedicineId",msklMedicineId);
         return (MsklTreatPlan) selectOneObject("getMedicineInPlan",param);
     }
+
+    public void insertSelectiveBackId(MsklTreatPlan msklTreatPlan) {
+        super.getSqlSession().insert(".MsklTreatPlanMapper.insertSelectiveBackId", msklTreatPlan);
+    }
 }

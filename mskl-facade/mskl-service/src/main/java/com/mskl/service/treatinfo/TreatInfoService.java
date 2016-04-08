@@ -10,6 +10,7 @@ import com.mskl.service.base.BaseService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface TreatInfoService extends BaseService<MsklTreatInfo,Serializable> {
     /**
@@ -39,4 +40,10 @@ public interface TreatInfoService extends BaseService<MsklTreatInfo,Serializable
      * @return
      */
     RestServiceResult<List<TreatInfoVo>> getAllTreatInfo(TreatInfoDto treatInfoDto, String token);
+
+    /**
+     * 按照日期,用户ID和药品ID删除统计信息
+     * @param param
+     */
+    void deleteTreatInfoByUserIdDateAndMedicineId(Map param);
 }

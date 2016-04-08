@@ -4,13 +4,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 
-public class UserTradeDto implements Serializable{
+public class UserTradeDto implements Serializable {
 
     @NotEmpty
     private String userTradePwd;
-    @NotEmpty
-    private String newUserTradePwd;
-    @NotEmpty
     private String userTradePwdStrength;
 
     public String getUserTradePwd() {
@@ -27,13 +24,5 @@ public class UserTradeDto implements Serializable{
 
     public void setUserTradePwdStrength(String userTradePwdStrength) {
         this.userTradePwdStrength = userTradePwdStrength;
-    }
-
-    public String getNewUserTradePwd() {
-        return newUserTradePwd;
-    }
-
-    public void setNewUserTradePwd(String newUserTradePwd) {
-        this.newUserTradePwd = newUserTradePwd;
     }
 }

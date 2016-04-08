@@ -25,10 +25,10 @@ public class UserCashoutController {
     @Resource(name = "verificationService")
     private VerificationService verificationService;
 
-    @RequestMapping("/apply/{time}/{md5str}/{token}")
-    public RestServiceResult<Boolean> applyCashout(@RequestBody UserCashoutDto userCashoutDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+    @RequestMapping("/apply/{token}")
+    public RestServiceResult<Boolean> applyCashout(@RequestBody UserCashoutDto userCashoutDto, @PathVariable String token) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入提现申请controller类", true);
-        if (!verificationService.verification(userCashoutDto, token, time, md5str, result)) {
+        if (!verificationService.verification(userCashoutDto, token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }

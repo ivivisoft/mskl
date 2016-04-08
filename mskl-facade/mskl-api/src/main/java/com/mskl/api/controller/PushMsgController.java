@@ -28,10 +28,10 @@ public class PushMsgController {
     private PushMsgService pushMsgService;
 
 
-    @RequestMapping("/select/{time}/{md5str}/{token}")
-    public RestServiceResult<List<MsklPushMsg>> getPushMsgByDateAndUserId(@RequestBody PushMsgDto pushMsgDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+    @RequestMapping("/select/{token}")
+    public RestServiceResult<List<MsklPushMsg>> getPushMsgByDateAndUserId(@RequestBody PushMsgDto pushMsgDto, @PathVariable String token) {
         RestServiceResult<List<MsklPushMsg>> result = new RestServiceResult<List<MsklPushMsg>>("进入推送消息Controller类", true);
-        if (!verificationService.verification(pushMsgDto, token, time, md5str, result)) {
+        if (!verificationService.verification(pushMsgDto, token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }

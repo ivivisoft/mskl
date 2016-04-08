@@ -33,9 +33,7 @@ public class MsklFileServiceImpl extends BaseServiceImpl<MsklFile, Serializable>
     public RestServiceResult<Boolean> uploadIdentityFile(UploadFileDto uploadFileDto, String token) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("上传实名认证服务", false);
         Long userId = TokenUtil.getUserIdFromToken(token);
-
         MsklFile msklFile = new MsklFile();
-
         msklFile.setMobile(uploadFileDto.getMobile());
         msklFile.setUserId(userId);
         msklFile.setType(1);
@@ -46,15 +44,14 @@ public class MsklFileServiceImpl extends BaseServiceImpl<MsklFile, Serializable>
             saveObject(msklFile);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
-            result.setMessage("上传图片成功!");
             return result;
         } catch (Exception e) {
-            result.setMessage("上传图片到数据库失败!");
+            result.setMessage("上传身份证图片失败!");
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
+            return result;
         }
-        return result;
     }
 
     public RestServiceResult<Boolean> uploadCaseFile(UploadFileDto uploadFileDto, String token) {
@@ -73,15 +70,14 @@ public class MsklFileServiceImpl extends BaseServiceImpl<MsklFile, Serializable>
             saveObject(msklFile);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
-            result.setMessage("上传图片成功!");
             return result;
         } catch (Exception e) {
-            result.setMessage("上传图片到数据库失败!");
+            result.setMessage("上传病历图片到数据库失败!");
             if (logger.isErrorEnabled()) {
                 logger.error(result.toString());
             }
+            return result;
         }
-        return result;
     }
 
     private boolean updateCaseImg(UploadFileDto uploadFileDto, RestServiceResult<Boolean> result, MsklFile msklFile) {

@@ -9,12 +9,6 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface PushMsgService extends BaseService<MsklPushMsg,Serializable>{
-    /**
-     * 通过服药记录id查找消息
-     * @param msklTreatlogId
-     * @return
-     */
-    MsklPushMsg getMsgsByTreatLogId(Long msklTreatlogId);
 
     /**
      * 根据日期和userId查询消息

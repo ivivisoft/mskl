@@ -41,24 +41,25 @@ public class MsklSmsCheckcodeServiceImpl extends BaseServiceImpl<MsklSmsCheckcod
     public RestServiceResult<String> getRegisterCheckcode(String mobile) {
         RestServiceResult<String> result = new RestServiceResult<String>("获取手机注册验证码服务", false);
         sendVerificationCode(mobile, CheckcodeType.REGISTER, result);
-        if (logger.isInfoEnabled()) {
-            logger.info(result.toString());
-        }
         return result;
     }
 
     public boolean checkSmsCode(String mobile, String verificationCode, CheckcodeType checkcodeType) {
-        String redisKey = getRedisKey(mobile, checkcodeType);
-        String checkCodeInRedis =   redisClient.get(redisKey);
-        if (StringUtils.isNotBlank(checkCodeInRedis)) {
-            return StringUtils.equals(checkCodeInRedis, verificationCode);
+        try {
+            String redisKey = getRedisKey(mobile, checkcodeType);
+            String checkCodeInRedis = redisClient.get(redisKey);
+            if (StringUtils.isNotBlank(checkCodeInRedis)) {
+                return StringUtils.equals(checkCodeInRedis, verificationCode);
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
         }
-        return false;
     }
 
     private String getRedisKey(String mobile, CheckcodeType checkcodeType) {
         String redisKey = StringUtils.EMPTY;
-        switch (checkcodeType){
+        switch (checkcodeType) {
             case REGISTER:
                 redisKey = RedisKeyConstant.REGISTORCHECKCODEPRE + mobile;
                 break;
@@ -72,39 +73,51 @@ public class MsklSmsCheckcodeServiceImpl extends BaseServiceImpl<MsklSmsCheckcod
     public RestServiceResult<String> getGetLoginPswCheckcode(String mobile) {
         RestServiceResult<String> result = new RestServiceResult<String>("获取找回密码手机注册验证码服务", false);
         sendVerificationCode(mobile, CheckcodeType.GETLOGINPSW, result);
-        if (logger.isInfoEnabled()) {
-            logger.info(result.toString());
-        }
         return result;
     }
 
     /**
      * 发送手机验证码
-     * @param mobile 手机号
+     *
+     * @param mobile        手机号
      * @param checkcodeType 业务类型
-     * @param result 处理结果
+     * @param result        处理结果
      */
-    private void sendVerificationCode(String mobile, CheckcodeType checkcodeType, RestServiceResult<String> result) {
+    private boolean sendVerificationCode(String mobile, CheckcodeType checkcodeType, RestServiceResult<String> result) {
 
-        //1.获取或者产生验证码
-        MsklSmsCheckcode msklSmsCheckcode = getMsklSmsCheckcode(mobile, checkcodeType);
+        try {
+            //1.获取或者产生验证码
+            MsklSmsCheckcode msklSmsCheckcode = getMsklSmsCheckcode(mobile, checkcodeType);
 
-        //2.保存redis
-        saveVerifyCodeToRedis(mobile, checkcodeType, msklSmsCheckcode.getCheckCode());
+            //2.保存redis
+            ServiceResult saveToRedis = saveVerifyCodeToRedis(mobile, checkcodeType, msklSmsCheckcode.getCheckCode());
+            if (!saveToRedis.isSuccess()) {
+                result.setMessage(saveToRedis.getMessage());
+                return false;
+            }
+            //3.发送验证码
+            ServiceResult serviceResult = smsClient.sendVerificationCode(mobile, msklSmsCheckcode.getCheckCode(), checkcodeType);
+            if (!serviceResult.isSuccess()) {
+                result.setMessage("发送手机验证码失败!" + serviceResult.getMessage());
+                return false;
+            }
+            result.setSuccess(true);
+            result.setData(msklSmsCheckcode.getCheckCode());
+            return true;
 
-        //3.发送验证码
-        ServiceResult serviceResult = smsClient.sendVerificationCode(mobile, msklSmsCheckcode.getCheckCode(),checkcodeType);
-        if (!serviceResult.isSuccess()) {
-            result.setMessage("发送手机验证码失败!" + serviceResult.getMessage());
-            return;
+        } catch (Exception e) {
+            result.setMessage("获取或者产生验证码!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
+            return false;
         }
-        result.setSuccess(true);
-        result.setData(msklSmsCheckcode.getCheckCode());
     }
 
     /**
      * 获取或者产生验证码
-     * @param mobile 手机
+     *
+     * @param mobile        手机
      * @param checkcodeType 验证码类型
      * @return
      */
@@ -133,12 +146,24 @@ public class MsklSmsCheckcodeServiceImpl extends BaseServiceImpl<MsklSmsCheckcod
 
     /**
      * 保存验证码到redis中
-     * @param mobile 手机号
+     *
+     * @param mobile        手机号
      * @param checkcodeType 验证码类型
-     * @param checkcode 验证码
+     * @param checkcode     验证码
      */
-    private void saveVerifyCodeToRedis(String mobile, CheckcodeType checkcodeType, String  checkcode) {
-        redisClient.set(getRedisKey(mobile,checkcodeType), checkcode,1800);
+    private ServiceResult saveVerifyCodeToRedis(String mobile, CheckcodeType checkcodeType, String checkcode) {
+        ServiceResult serviceResult = new ServiceResult(false);
+        try {
+            redisClient.set(getRedisKey(mobile, checkcodeType), checkcode, 1800);
+            serviceResult.setSuccess(true);
+            return serviceResult;
+        } catch (Exception e) {
+            serviceResult.setMessage("保存验证码到redis错误!");
+            if (logger.isErrorEnabled()) {
+                logger.error("保存验证码到redis错误!");
+            }
+            return serviceResult;
+        }
     }
 
     public MsklSmsCheckcode getSmsCheckCodeByMobileAndBizType(String mobile, CheckcodeType smsBizType) {

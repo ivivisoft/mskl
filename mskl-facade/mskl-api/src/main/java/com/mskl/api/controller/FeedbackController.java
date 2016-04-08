@@ -26,17 +26,17 @@ public class FeedbackController {
     private VerificationService verificationService;
 
 
-    @RequestMapping("/insert/{time}/{md5str}/{token}")
-    public RestServiceResult<Boolean> insertFeedback(@RequestBody FeedbackDto feedbackDto, @PathVariable Long time, @PathVariable String md5str, @PathVariable String token) {
+    @RequestMapping("/insert/{token}")
+    public RestServiceResult<Boolean> insertFeedback(@RequestBody FeedbackDto feedbackDto, @PathVariable String token) {
 
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入意见反馈Controller类", true);
-        if (!verificationService.verification(feedbackDto, token, time, md5str, result)) {
+        if (!verificationService.verification(feedbackDto, token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }
             return result;
         }
-        return feedbackService.insertFeedback(feedbackDto,token);
+        return feedbackService.insertFeedback(feedbackDto, token);
     }
 
 }

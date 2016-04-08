@@ -55,14 +55,12 @@ public class MsklMedicineServiceImpl extends BaseServiceImpl<MsklMedicine, Strin
             List<MsklMedicine> lists = msklMedicineDao.getAllMedicine();
             result.setSuccess(true);
             result.setData(lists);
-            result.setMessage("查询成功");
-        }catch (Exception e){
-            if (logger.isInfoEnabled()){
-                logger.error("查询所有药品信息失败！",e);
-            }
+        } catch (Exception e) {
             result.setMessage("查询失败！");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
         }
-
         return result;
     }
 }

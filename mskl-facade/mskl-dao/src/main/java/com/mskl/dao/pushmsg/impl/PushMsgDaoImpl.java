@@ -17,11 +17,6 @@ public class PushMsgDaoImpl extends MsklBaseDao<MsklPushMsg,Serializable> implem
         return ".MsklPushMsgMapper";
     }
 
-    public MsklPushMsg getMsgsByTreatLogId(Long msklTreatlogId) {
-
-        return (MsklPushMsg) selectOneObject("getMsgsByTreatLogId",msklTreatlogId);
-    }
-
     public List<MsklPushMsg> getPushMsgByDateAndUserId(Map param) {
         return queryForList("getPushMsgByDateAndUserId",param);
     }

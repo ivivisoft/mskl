@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service(value = "userCashout.userCashoutService")
 public class UserCashoutServiceImpl extends BaseServiceImpl<MsklUserCashoutApplication, Serializable> implements UserCashoutService {
@@ -75,21 +76,15 @@ public class UserCashoutServiceImpl extends BaseServiceImpl<MsklUserCashoutAppli
             }
             return result;
         }
-
         MsklUserBankcard userBankcard = userBankcards.get(0);
-
         MsklAccountJour accountJour = new MsklAccountJour();
         accountJour.setMsklAccountId(msklAccount.getMsklAccountId());
         accountJour.setUserId(userId);
         accountJour.setTransDatetime(new Date());
         accountJour.setAccountBizType("03");
-//        accountJour.setTransAmount(Long.parseLong(userCashoutDto.getAmount()));
-//        accountJour.setPreAmount(msklAccount.getAvalaibleAmount());
-//        accountJour.setPostAmount(msklAccount.getAvalaibleAmount() - Long.parseLong(userCashoutDto.getAmount()));
         accountJour.setSeqFlag("1");
-        //流水号暂定
-        //accountJour.setRefSerialNo();
-        accountJour.setRemark("用户申请100块");
+        accountJour.setRefSerialNo(UUID.randomUUID().toString());
+        accountJour.setRemark("用户提现申请");
         accountJour.setWorkDate("");
         accountJour.setVersion(1L);
         try {
@@ -102,14 +97,12 @@ public class UserCashoutServiceImpl extends BaseServiceImpl<MsklUserCashoutAppli
         }
 
         MsklUserCashoutApplication userCashoutApplication = new MsklUserCashoutApplication();
-
         userCashoutApplication.setAmount(Long.parseLong(userCashoutDto.getAmount()));
         userCashoutApplication.setUserId(userId);
         userCashoutApplication.setBankNo(userBankcard.getBankNo());
         userCashoutApplication.setBankAddrNo(userBankcard.getBankAddrNo());
         userCashoutApplication.setBankName(userBankcard.getBankName());
         userCashoutApplication.setApplicationDatetime(new Date());
-
         try {
             saveObject(userCashoutApplication);
             result.setSuccess(true);

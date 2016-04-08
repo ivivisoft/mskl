@@ -15,12 +15,14 @@ import com.mskl.common.constant.CheckcodeType;
 import com.mskl.service.mskluser.MsklUserExtService;
 import com.mskl.service.mskluser.MsklUserService;
 import com.mskl.service.mskluserloginlog.MsklUserLoginLogService;
+import com.mskl.service.otherserviceresult.ServiceResult;
 import com.mskl.service.redis.RedisClient;
 import com.mskl.service.smscheckcode.MsklSmsCheckcodeService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -72,19 +74,20 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
             }
             return result;
         }
-        msklUser = new MsklUser();
-        msklUser.setMobile(registerDto.getMobile());
-        msklUser.setUserPwd(MD5Util.encode(registerDto.getPassword()));
-        msklUser.setRegisterDatetime(new Date());
-        msklUser.setUserInit("2");
-        msklUser.setUserStatus("1");
-        msklUser.setErrorCount(0);
-        msklUser.setLoginCount(0);
-        msklUser.setUserKind("01");
-        if (StringUtils.isNotBlank(registerDto.getInvitationCode())) {
-            msklUser.setRefUserId(Long.parseLong(registerDto.getInvitationCode()));
-        }
         try {
+            msklUser = new MsklUser();
+            msklUser.setMobile(registerDto.getMobile());
+            msklUser.setUserPwd(MD5Util.encode(registerDto.getPassword()));
+            msklUser.setRegisterDatetime(new Date());
+            msklUser.setUserInit("2");
+            msklUser.setUserStatus("1");
+            msklUser.setErrorCount(0);
+            msklUser.setLoginCount(0);
+            msklUser.setUserKind("01");
+            if (StringUtils.isNotBlank(registerDto.getInvitationCode())) {
+                msklUser.setRefUserId(Long.parseLong(registerDto.getInvitationCode()));
+            }
+
             saveObject(msklUser);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
@@ -97,6 +100,7 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         return result;
     }
 
+    @Transactional
     public RestServiceResult<String> login(LoginDto loginDto) {
         RestServiceResult<String> result = new RestServiceResult<String>("用户登录服务", false);
         MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(loginDto.getUsername());
@@ -117,21 +121,51 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         }
 
         //产生登录token并将她存入redis
-        String loginKey = RedisKeyConstant.LOGINPRE + msklUser.getUserId();
-        String token = UUID.randomUUID().toString().replace("-", "") + "|" + msklUser.getUserId();
-        redisClient.set(loginKey, token);
-        //更新登录次数
-        msklUserDao.increaseLoginCountAndChangeLastLoginTime(loginDto.getUsername());
-        //添加登录流水
-        MsklUserLoginLog msklUserLoginLog = new MsklUserLoginLog();
-        msklUserLoginLog.setIsSuccess("1");
-        msklUserLoginLog.setLoginDatetime(new Date());
-        msklUserLoginLog.setUserId(msklUser.getUserId());
-        msklUserLoginLogService.saveObject(msklUserLoginLog);
-        result.setSuccess(true);
-        result.setData(token);
-        return result;
+        ServiceResult serviceResult = saveTokenToRedis(msklUser);
+        if (!serviceResult.isSuccess()) {
+            result.setMessage(serviceResult.getMessage());
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
+        }
+        try {
+            //更新登录次数
+            msklUserDao.increaseLoginCountAndChangeLastLoginTime(loginDto.getUsername());
+            //添加登录流水
+            MsklUserLoginLog msklUserLoginLog = new MsklUserLoginLog();
+            msklUserLoginLog.setIsSuccess("1");
+            msklUserLoginLog.setLoginDatetime(new Date());
+            msklUserLoginLog.setUserId(msklUser.getUserId());
+            msklUserLoginLogService.saveObject(msklUserLoginLog);
+            result.setSuccess(true);
+            result.setData(serviceResult.getMessage());
+            return result;
+        } catch (Exception e) {
+            if (logger.isErrorEnabled()) {
+                logger.error("登录更新相关数据库失败!");
+            }
+            result.setMessage("登录更新相关数据库失败!");
+            return result;
+        }
+    }
 
+    private ServiceResult saveTokenToRedis(MsklUser msklUser) {
+        ServiceResult serviceResult = new ServiceResult(false);
+        try {
+            String loginKey = RedisKeyConstant.LOGINPRE + msklUser.getUserId();
+            String token = UUID.randomUUID().toString().replace("-", "") + "|" + msklUser.getUserId();
+            redisClient.set(loginKey, token);
+            serviceResult.setSuccess(true);
+            serviceResult.setMessage(token);
+            return serviceResult;
+        } catch (Exception e) {
+            if (logger.isErrorEnabled()) {
+                logger.error("保存验证码到redis错误!");
+            }
+            serviceResult.setMessage("保存验证码到redis错误!");
+            return serviceResult;
+        }
     }
 
     public RestServiceResult<Boolean> modifyPassword(ModifyPasswordDto modifyPasswordDto) {
@@ -160,17 +194,23 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
             }
             return result;
         }
-        String newPasswd = MD5Util.encode(modifyPasswordDto.getNewPassword());
-        msklUser.setUserPwd(newPasswd);
-        msklUser.setUserPwdStrength(modifyPasswordDto.getUserPwdStrength());
-        if (updateObject(msklUser) > 0) {
+        try {
+            String newPasswd = MD5Util.encode(modifyPasswordDto.getNewPassword());
+            msklUser.setUserPwd(newPasswd);
+            msklUser.setUserPwdStrength(modifyPasswordDto.getUserPwdStrength());
+            updateObject(msklUser);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
             result.setMessage("修改密码成功");
             return result;
+        } catch (Exception e) {
+            result.setMessage("修改密码失败");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
+            return result;
         }
-        result.setMessage("修改密码失败");
-        return result;
+
     }
 
     public RestServiceResult<Boolean> findLoginPassword(FindLoginPswDto findLoginPswDto, String token) {
@@ -210,54 +250,63 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         return result;
     }
 
+    @Transactional
     public RestServiceResult<Boolean> addUserExtInfo(UserExtDto userExtDto, String token) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("添加用户扩展信息服务", false);
-        MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(userExtDto.getMobile());
-        if (null == msklUser) {
-            result.setMessage("查无此账号!");
-            if (logger.isInfoEnabled()) {
-                logger.info(result.toString());
+        try {
+            MsklUser msklUser = msklUserDao.selectMsklUserByMobileOrEmail(userExtDto.getMobile());
+            if (null == msklUser) {
+                result.setMessage("查无此账号!");
+                if (logger.isInfoEnabled()) {
+                    logger.info(result.toString());
+                }
+                return result;
+            }
+            boolean updateMsklUser = false;
+            if (StringUtils.isNotBlank(userExtDto.getEmail())) {
+                msklUser.setEmail(userExtDto.getEmail());
+                updateMsklUser = true;
+            }
+            if (StringUtils.isNotBlank(userExtDto.getNickName())) {
+                msklUser.setUserNickName(userExtDto.getNickName());
+                updateMsklUser = true;
+            }
+            //更新主用户信息
+            if (updateMsklUser) {
+                updateObject(msklUser);
+            }
+            //获取原来信息
+            MsklUserExt msklUserExt = msklUserExtService.getObjectById(msklUser.getUserId());
+            if (null == msklUserExt) {
+                msklUserExt = new MsklUserExt();
+                msklUserExt.setGender(userExtDto.getSex());
+                msklUserExt.setUserComefrom(userExtDto.getComeFrom());
+                msklUserExt.setUserId(msklUser.getUserId());
+                msklUserExt.setUserAge(userExtDto.getAge());
+                msklUserExt.setUserPhone(userExtDto.getMobile());
+                if (!updateHeaderImg(userExtDto, result, msklUserExt)) {
+                    return result;
+                }
+                msklUserExtService.saveObject(msklUserExt);
+            } else {
+                msklUserExt.setGender(userExtDto.getSex());
+                msklUserExt.setUserComefrom(userExtDto.getComeFrom());
+                msklUserExt.setUserAge(userExtDto.getAge());
+                if (!updateHeaderImg(userExtDto, result, msklUserExt)) {
+                    return result;
+                }
+                msklUserExtService.updateObject(msklUserExt);
+            }
+            result.setSuccess(true);
+            result.setData(Boolean.TRUE);
+            return result;
+        } catch (Exception e) {
+            result.setMessage("添加用户信息失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
             }
             return result;
         }
-        boolean updateMsklUser = false;
-        if (StringUtils.isNotBlank(userExtDto.getEmail())) {
-            msklUser.setEmail(userExtDto.getEmail());
-            updateMsklUser = true;
-        }
-        if (StringUtils.isNotBlank(userExtDto.getNickName())) {
-            msklUser.setUserNickName(userExtDto.getNickName());
-            updateMsklUser = true;
-        }
-        //更新主用户信息
-        if (updateMsklUser) {
-            updateObject(msklUser);
-        }
-        //获取原来信息
-        MsklUserExt msklUserExt = msklUserExtService.getObjectById(msklUser.getUserId());
-        if (null == msklUserExt) {
-            msklUserExt = new MsklUserExt();
-            msklUserExt.setGender(userExtDto.getSex());
-            msklUserExt.setUserComefrom(userExtDto.getComeFrom());
-            msklUserExt.setUserId(msklUser.getUserId());
-            msklUserExt.setUserAge(userExtDto.getAge());
-            msklUserExt.setUserPhone(userExtDto.getMobile());
-            if (!updateHeaderImg(userExtDto, result, msklUserExt)) {
-                return result;
-            }
-            msklUserExtService.saveObject(msklUserExt);
-        } else {
-            msklUserExt.setGender(userExtDto.getSex());
-            msklUserExt.setUserComefrom(userExtDto.getComeFrom());
-            msklUserExt.setUserAge(userExtDto.getAge());
-            if (!updateHeaderImg(userExtDto, result, msklUserExt)) {
-                return result;
-            }
-            msklUserExtService.updateObject(msklUserExt);
-        }
-        result.setSuccess(true);
-        result.setData(Boolean.TRUE);
-        return result;
     }
 
     public RestServiceResult<UserInfoVo> getUserInfo(String token) {
@@ -304,7 +353,5 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
         }
         return true;
     }
-
-
 }
 

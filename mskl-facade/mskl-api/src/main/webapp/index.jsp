@@ -29,7 +29,6 @@
 <input type="button" onclick="apllyAmount()" name="button" id="apllyAmount" value="用户提现申请">
 <input type="button" onclick="takeMedicine()" name="button" id="takeMedicine" value="服药">
 <input type="button" onclick="insertTreatPlan()" name="button" id="insertTreatPlan" value="添加服药计划">
-<input type="button" onclick="selectTreatPlan()" name="button" id="selectTreatPlan" value="查询服药计划">
 <input type="button" onclick="insertBankCard()" name="button" id="insertBankCard" value="添加银行卡">
 <input type="button" onclick="selectBankCard()" name="button" id="selectBankCard" value="查询银行卡">
 <input type="button" onclick="insertTradePassword()" name="button" id="insertTradePassword" value="添加提现密码">
@@ -178,7 +177,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/feedback/insert/122341514514/f9d8a2c3db7e3a5db324bfea29df5efe/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/feedback/insert/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(feedbackDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -201,7 +200,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/overseer/insert/122341514514/f9d8a2c3db7e3a5db324bfea29df5efe/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/overseer/insert/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(overseerDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -241,7 +240,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/userCashout/apply/122341514514/0f7d375f9201371fea1e21e59b6986e9/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/userCashout/apply/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(userCashoutDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -265,7 +264,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/treat/takeMedicine/122341514514/c1a1b8eabc85f35765954ebd4890dff6/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/treat/takeMedicine/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(takeMedicineDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -280,7 +279,7 @@
 
         var treatPlanDto = {
             "treatPlanId": "",
-            "msklMedicineId": "1",
+            "msklMedicineId": "2",
             "dailyTimes": "3",
             "dose": "2",
 
@@ -289,32 +288,15 @@
             "noonAlarm": "12:23:32",
 
             "takenAmount": "2",
-            "packageAmount": "3",
-            "medicineUnit": "片"
+            "packageAmount": "60"
         }
 
         $.ajax({
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/treatPlan/insertOrUpdate/122341514514/c8a893462e37beac3f30e47786cb5a7a/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/treatPlan/insertOrUpdate/122341514514/16d26afc7f7473c7468870bc3ec12325/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(treatPlanDto),
-            success: function (data) {
-                var data = JSON.stringify(data);
-                alert(data)
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
-            }
-        })
-    }
-
-    function selectTreatPlan() {
-        $.ajax({
-            type: "post",
-            contentType: "application/json",
-            dataType: "json",
-            url: "api/treatPlan/all/18b04227c42748498c2227e20c66e3b4|999999",
             success: function (data) {
                 var data = JSON.stringify(data);
                 alert(data)
@@ -328,7 +310,7 @@
     function insertBankCard() {
         var userBankcardDto = {
             "bankNo": "2",
-            "bankName": "杨旭速度",
+            "bankName": "速度",
             "isDefault": "2",
             "bankAddrNo": "2",
             "cardNo": "2"
@@ -338,7 +320,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/userBankcard/insert/122341514514/b28cd78249e11c2f73d22f6423ae2bc9/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/userBankcard/insert/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(userBankcardDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -369,7 +351,6 @@
     function insertTradePassword() {
         var userTradeDto = {
             "userTradePwd": "2",
-            "newUserTradePwd": "222",
             "userTradePwdStrength": "2"
         }
 
@@ -377,7 +358,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/userTrade/tradePassword/insert/122341514514/dd0997b2ee086a0352b6fc7b67e26743/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/userTrade/tradePassword/insert/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(userTradeDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -400,7 +381,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/userTrade/tradePassword/update/122341514514/dd0997b2ee086a0352b6fc7b67e26743/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/userTrade/tradePassword/update/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(userTradeDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -474,7 +455,7 @@
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/pushMsg/select/122341514514/a19533ad0d33b664993007b0f450fe9d/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/pushMsg/select/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(treatLogDto),
             success: function (data) {
                 var data = JSON.stringify(data);
@@ -506,13 +487,12 @@
         var treatInfoDto = {
             "beginDate": "2016-04-04",
             "endDate": "2016-04-06"
-            //  "medicineId":"2"
         }
         $.ajax({
             type: "post",
             contentType: "application/json",
             dataType: "json",
-            url: "api/treatInfo/select/122341514514/607ca1c1cc2643562de351392c9d1907/18b04227c42748498c2227e20c66e3b4|999999",
+            url: "api/treatInfo/select/18b04227c42748498c2227e20c66e3b4|999999",
             data: JSON.stringify(treatInfoDto),
             success: function (data) {
                 var data = JSON.stringify(data);

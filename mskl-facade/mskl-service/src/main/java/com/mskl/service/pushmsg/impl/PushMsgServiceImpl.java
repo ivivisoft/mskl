@@ -32,23 +32,23 @@ public class PushMsgServiceImpl extends BaseServiceImpl<MsklPushMsg, Serializabl
         super.setBaseDaoImpl(pushMsgDao);
     }
 
-    public MsklPushMsg getMsgsByTreatLogId(Long msklTreatlogId) {
-        return pushMsgDao.getMsgsByTreatLogId(msklTreatlogId);
-    }
-
     public RestServiceResult<List<MsklPushMsg>> getPushMsgByDateAndUserId(PushMsgDto pushMsgDto, String token) {
 
         RestServiceResult<List<MsklPushMsg>> result = new RestServiceResult<List<MsklPushMsg>>("进入查询推送消息服务", false);
-
-        Long userId = TokenUtil.getUserIdFromToken(token);
-        Map param = buildDateparam(pushMsgDto, userId, result);
-
-        List<MsklPushMsg> lists = pushMsgDao.getPushMsgByDateAndUserId(param);
-
-        result.setData(lists);
-        result.setSuccess(true);
-
-        return result;
+        try {
+            Long userId = TokenUtil.getUserIdFromToken(token);
+            Map param = buildDateparam(pushMsgDto, userId, result);
+            List<MsklPushMsg> lists = pushMsgDao.getPushMsgByDateAndUserId(param);
+            result.setData(lists);
+            result.setSuccess(true);
+            return result;
+        } catch (Exception e) {
+            result.setMessage("获取消息失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
+            return result;
+        }
     }
 
     public int generatorPushMsg(MsklPushMsg msklPushMsg) {

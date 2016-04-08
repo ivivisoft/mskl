@@ -29,7 +29,7 @@ public class MsklMedicineController {
 
     @RequestMapping("/{barCode}")
     public RestServiceResult<MsklMedicine> getMsklMedicineByBarCode(@PathVariable String barCode) {
-        RestServiceResult<MsklMedicine> result = new RestServiceResult<MsklMedicine>("进入根据药品二维码获取药品信息controller类", false);
+        RestServiceResult<MsklMedicine> result = new RestServiceResult<MsklMedicine>("进入根据药品二维码获取药品信息controller类", true);
         if (!verificationService.verification(barCode, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
@@ -39,9 +39,9 @@ public class MsklMedicineController {
         return msklMedicineService.getMsklMedicineByBarCode(barCode);
     }
 
-    @RequestMapping("/name/{normalName}")
+    @RequestMapping("/name/{medicalName}")
     public RestServiceResult<List<MsklMedicine>> getMsklMedicineByNormalName(@PathVariable String normalName){
-        RestServiceResult<List<MsklMedicine>> result = new RestServiceResult<List<MsklMedicine>>("进入根据药品通用名获取药品信息controller类", false);
+        RestServiceResult<List<MsklMedicine>> result = new RestServiceResult<List<MsklMedicine>>("进入根据药品通用名获取药品信息controller类", true);
         if (!verificationService.verification(normalName, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
@@ -53,9 +53,7 @@ public class MsklMedicineController {
 
     @RequestMapping("/all")
     public RestServiceResult<List<MsklMedicine>> getAllMedicine(){
-        RestServiceResult<List<MsklMedicine>> result = new RestServiceResult<List<MsklMedicine>>("进入查询所有药品信息controller类", false);
         return msklMedicineService.getAllMedicine();
-
     }
 
 

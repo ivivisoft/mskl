@@ -30,25 +30,24 @@ public class FeedbackServiceImpl extends BaseServiceImpl<MsklFeedback, Serializa
 
     public RestServiceResult<Boolean> insertFeedback(FeedbackDto feedbackDto, String token) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("添加用户拓展信息服务", false);
-        Long userId = TokenUtil.getUserIdFromToken(token);
-
-        MsklFeedback msklFeedback = new MsklFeedback();
-        msklFeedback.setFeedbackMsg(feedbackDto.getFeedbackMsg());
-        msklFeedback.setUserId(userId);
-        msklFeedback.setUserMobile(feedbackDto.getUserMobile());
-        msklFeedback.setUserName(feedbackDto.getUserName());
-        msklFeedback.setUpdateDatetime(new Date());
-
-        if (saveObject(msklFeedback) > 0) {
+        try {
+            Long userId = TokenUtil.getUserIdFromToken(token);
+            MsklFeedback msklFeedback = new MsklFeedback();
+            msklFeedback.setFeedbackMsg(feedbackDto.getFeedbackMsg());
+            msklFeedback.setUserId(userId);
+            msklFeedback.setUserMobile(feedbackDto.getUserMobile());
+            msklFeedback.setUserName(feedbackDto.getUserName());
+            msklFeedback.setUpdateDatetime(new Date());
+            saveObject(msklFeedback);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
-            if (logger.isInfoEnabled()) {
-                logger.info(result.toString());
+            return result;
+        } catch (Exception e) {
+            result.setMessage("添加反馈信息失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
             }
             return result;
         }
-
-        return result;
-
     }
 }
