@@ -34,10 +34,10 @@ public class VerificationCodeController {
         return msklSmsCheckcodeService.getRegisterCheckcode(mobile);
     }
 
-    @RequestMapping("/getLoginPsw/{mobile}/{token}")
-    public RestServiceResult<String> getGetLoginPswVerificationCode(@PathVariable String mobile, @PathVariable String token) {
+    @RequestMapping("/getLoginPsw/{mobile}")
+    public RestServiceResult<String> getGetLoginPswVerificationCode(@PathVariable String mobile) {
         RestServiceResult<String> result = new RestServiceResult<String>("进入找回密码服务验证码controller类", false);
-        if (!verificationService.verification(mobile, token, result)) {
+        if (!verificationService.verification(mobile,result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }

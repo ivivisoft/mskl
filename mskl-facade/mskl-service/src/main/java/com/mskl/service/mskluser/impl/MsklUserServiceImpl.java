@@ -213,7 +213,7 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
 
     }
 
-    public RestServiceResult<Boolean> findLoginPassword(FindLoginPswDto findLoginPswDto, String token) {
+    public RestServiceResult<Boolean> findLoginPassword(FindLoginPswDto findLoginPswDto) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("用户找回登录密码服务", false);
         if (!msklSmsCheckcodeService.checkSmsCode(findLoginPswDto.getMobile(), findLoginPswDto.getVerificationCode(), CheckcodeType.GETLOGINPSW)) {
             result.setMessage("找回密码验证码不正确!");
@@ -237,9 +237,7 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
             result.setMessage("找回密码成功!");
-            //清除token
-            String redisKey = RedisKeyConstant.LOGINPRE + TokenUtil.getUserIdFromToken(token);
-            redisClient.delete(redisKey);
+
             return result;
         } catch (Exception e) {
             result.setMessage("找回密码更新用户到数据库失败!");

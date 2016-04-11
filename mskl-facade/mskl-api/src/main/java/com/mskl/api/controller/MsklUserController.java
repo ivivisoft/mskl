@@ -62,16 +62,16 @@ public class MsklUserController {
         return msklUserService.login(loginDto);
     }
 
-    @RequestMapping("/getLoginPassword/{token}")
-    public RestServiceResult<Boolean> getLoginPassword(@RequestBody FindLoginPswDto findLoginPswDto, @PathVariable String token) {
+    @RequestMapping("/getLoginPassword")
+    public RestServiceResult<Boolean> getLoginPassword(@RequestBody FindLoginPswDto findLoginPswDto) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入找回密码服务controller类", true);
-        if (!verificationService.verification(findLoginPswDto, token, result)) {
+        if (!verificationService.verification(findLoginPswDto,result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }
             return result;
         }
-        return msklUserService.findLoginPassword(findLoginPswDto, token);
+        return msklUserService.findLoginPassword(findLoginPswDto);
     }
 
 

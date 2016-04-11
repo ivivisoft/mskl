@@ -34,10 +34,9 @@ public interface MsklUserService extends BaseService<MsklUser,Serializable>{
     /**
      * 找回用户密码
      * @param findLoginPswDto
-     * @param token
      * @return
      */
-    RestServiceResult<Boolean> findLoginPassword(FindLoginPswDto findLoginPswDto, String token);
+    RestServiceResult<Boolean> findLoginPassword(FindLoginPswDto findLoginPswDto);
 
     /**
      * 添加用户扩展信息

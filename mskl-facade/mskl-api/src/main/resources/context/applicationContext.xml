@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
    <context:component-scan base-package="com.mskl"/>
@@ -54,35 +54,14 @@
             </bean>
         </property>
     </bean>
-    <!--<bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
-        <!--<property name="dataSource" ref="dataSource"></property>-->
-    <!--</bean>-->
 
-    <!--<tx:advice id="userTxAdvice" transaction-manager="transactionManager">-->
-        <!--<tx:attributes>-->
-            <!--<tx:method name="delete*" propagation="REQUIRED" read-only="false"-->
-                       <!--rollback-for="java.lang.Exception" no-rollback-for="java.lang.RuntimeException"/>-->
-            <!--<tx:method name="insert*" propagation="REQUIRED" read-only="false"-->
-                       <!--rollback-for="java.lang.RuntimeException"/>-->
-            <!--<tx:method name="update*" propagation="REQUIRED" read-only="false"-->
-                       <!--rollback-for="java.lang.Exception"/>-->
-            <!--<tx:method name="use*" propagation="REQUIRED" read-only="false"-->
-                       <!--rollback-for="java.lang.Exception"/>-->
-            <!--<tx:method name="roughly*" propagation="REQUIRED" read-only="false"-->
-                       <!--rollback-for="java.lang.Exception"/>-->
-            <!--<tx:method name="share*" propagation="REQUIRED" read-only="false"-->
-                       <!--rollback-for="java.lang.Exception"/>-->
-            <!--<tx:method name="find*" propagation="SUPPORTS"/>-->
-            <!--<tx:method name="get*" propagation="SUPPORTS"/>-->
-            <!--<tx:method name="select*" propagation="SUPPORTS"/>-->
-        <!--</tx:attributes>-->
-    <!--</tx:advice>-->
+    <!-- 配置事务管理器 -->
+    <bean id="txManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+          p:dataSource-ref="dataSource">
+    </bean>
 
-    <!--<aop:config>-->
-        <!--<aop:pointcut id="pc"-->
-                      <!--expression="execution(public * com.jlc.bpo.write.*.*(..))"/>-->
-        <!--&lt;!&ndash;把事务控制在Service层&ndash;&gt;-->
-        <!--<aop:advisor pointcut-ref="pc" advice-ref="userTxAdvice"/>-->
-    <!--</aop:config>-->
+    <!-- enables scanning for @Transactional annotations -->
+    <tx:annotation-driven transaction-manager="txManager" />
 
 </beans>
