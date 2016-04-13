@@ -208,7 +208,7 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
             return result;
         }
         String passwd = MD5Util.encode(modifyPasswordDto.getPassword());
-        if (StringUtils.equals(msklUser.getUserPwd(), passwd)) {
+        if (!StringUtils.equals(msklUser.getUserPwd(), passwd)) {
             result.setMessage("原密码不正确!");
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
