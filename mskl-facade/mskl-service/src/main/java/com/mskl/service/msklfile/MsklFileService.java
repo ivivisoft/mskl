@@ -23,4 +23,14 @@ public interface MsklFileService extends BaseService<MsklFile,Serializable>{
      * @return
      */
     RestServiceResult<Boolean> uploadCaseFile(UploadFileDto uploadFileDto, String token);
+
+    /**
+     * 上传文件到服务器
+     * @param path
+     * @param file
+     * @param fileName
+     * @return
+     * @throws Exception
+     */
+    String saveFileToServer(String path, String file, String fileName) throws Exception;
 }

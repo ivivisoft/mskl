@@ -40,6 +40,8 @@
 <input type="button" onclick="selectAllMedicine()" name="button" id="selectAllMedicine" value="查询所有药品信息">
 <input type="button" onclick="selectTreatInfo()" name="button" id="selectTreatInfo" value="查询统计信息">
 <input type="button" onclick="getTreatLogDetial()" name="button" id="getTreatLogDetial" value="获取服药详情">
+<input type="button" onclick="addOrUpdateUserExtInfo()" name="button" id="addOrUpdateUserExtInfo" value="添加用户信息">
+<input type="button" onclick="getAccountInfo()" name="button" id="getAccountInfo" value="获取用户账户信息">
 
 
 <script type="text/javascript">
@@ -48,7 +50,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-            url: "api/verificationCode/register/18514208469",
+            url: "api/verificationCode/register/18513227788",
             data: "",
             success: function (data) {
                 alert(JSON.stringify(data));
@@ -116,8 +118,8 @@
     function register() {
 
         var registerDto = {
-            "mobile": "18514208469",
-            "verificationCode": "929333",
+            "mobile": "18513227788",
+            "verificationCode": "454440",
             "password": "123456",
             "invitationCode": ""
         };
@@ -511,6 +513,49 @@
             contentType: "application/json",
             dataType: "json",
             url: "api/treatLog/1/18b04227c42748498c2227e20c66e3b4|999999",
+            data: "",
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+    
+    function addOrUpdateUserExtInfo() {
+        var userExtInfo = {
+            "photo":"",
+            "nickName":"",
+            "sex":"",
+            "age":"",
+            "comeFrom":"",
+            "mobile":"13633810377",
+            "email":"673871621@qq.com"
+        }
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/mskluser/addOrUpdateUserExtInfo/c21d832267ff42d5aa4e651c001a1927|6",
+            data: JSON.stringify(userExtInfo),
+            success: function (data) {
+                var data = JSON.stringify(data);
+                alert(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + " : " + textStatus + " : " + errorThrown);
+            }
+        })
+    }
+
+    function getAccountInfo() {
+        $.ajax({
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            url: "api/account/18b04227c42748498c2227e20c66e3b4|999999",
             data: "",
             success: function (data) {
                 var data = JSON.stringify(data);

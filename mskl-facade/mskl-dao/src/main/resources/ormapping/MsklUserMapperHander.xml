@@ -15,4 +15,163 @@
     where mobile = #{username,jdbcType=VARCHAR} or email =#{username,jdbcType=VARCHAR}
   </update>
 
+
+    <insert id="insertSelectiveBackId" useGeneratedKeys="true" keyProperty="userId" parameterType="com.mskl.dao.model.MsklUser" >
+        insert into mskl_user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="userName != null" >
+                user_name,
+            </if>
+            <if test="userRealName != null" >
+                user_real_name,
+            </if>
+            <if test="userNickName != null" >
+                user_nick_name,
+            </if>
+            <if test="userGrade != null" >
+                user_grade,
+            </if>
+            <if test="userScore != null" >
+                user_score,
+            </if>
+            <if test="userPwd != null" >
+                user_pwd,
+            </if>
+            <if test="userPwdStrength != null" >
+                user_pwd_strength,
+            </if>
+            <if test="email != null" >
+                email,
+            </if>
+            <if test="mobile != null" >
+                mobile,
+            </if>
+            <if test="idcardKind != null" >
+                idcard_kind,
+            </if>
+            <if test="idcard != null" >
+                idcard,
+            </if>
+            <if test="userAddress != null" >
+                user_address,
+            </if>
+            <if test="registerDatetime != null" >
+                register_datetime,
+            </if>
+            <if test="registerIp != null" >
+                register_ip,
+            </if>
+            <if test="lastLoginDatetime != null" >
+                last_login_datetime,
+            </if>
+            <if test="lastLoginIp != null" >
+                last_login_ip,
+            </if>
+            <if test="loginCount != null" >
+                login_count,
+            </if>
+            <if test="userStatus != null" >
+                user_status,
+            </if>
+            <if test="errorCount != null" >
+                error_count,
+            </if>
+            <if test="isTrust != null" >
+                is_trust,
+            </if>
+            <if test="userInit != null" >
+                user_init,
+            </if>
+            <if test="userKind != null" >
+                user_kind,
+            </if>
+            <if test="salesChannel != null" >
+                sales_channel,
+            </if>
+            <if test="refUserId != null" >
+                ref_user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null" >
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userRealName != null" >
+                #{userRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="userNickName != null" >
+                #{userNickName,jdbcType=VARCHAR},
+            </if>
+            <if test="userGrade != null" >
+                #{userGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="userScore != null" >
+                #{userScore,jdbcType=INTEGER},
+            </if>
+            <if test="userPwd != null" >
+                #{userPwd,jdbcType=VARCHAR},
+            </if>
+            <if test="userPwdStrength != null" >
+                #{userPwdStrength,jdbcType=CHAR},
+            </if>
+            <if test="email != null" >
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null" >
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="idcardKind != null" >
+                #{idcardKind,jdbcType=CHAR},
+            </if>
+            <if test="idcard != null" >
+                #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="userAddress != null" >
+                #{userAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="registerDatetime != null" >
+                #{registerDatetime,jdbcType=INTEGER},
+            </if>
+            <if test="registerIp != null" >
+                #{registerIp,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginDatetime != null" >
+                #{lastLoginDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLoginIp != null" >
+                #{lastLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="loginCount != null" >
+                #{loginCount,jdbcType=INTEGER},
+            </if>
+            <if test="userStatus != null" >
+                #{userStatus,jdbcType=CHAR},
+            </if>
+            <if test="errorCount != null" >
+                #{errorCount,jdbcType=INTEGER},
+            </if>
+            <if test="isTrust != null" >
+                #{isTrust,jdbcType=CHAR},
+            </if>
+            <if test="userInit != null" >
+                #{userInit,jdbcType=VARCHAR},
+            </if>
+            <if test="userKind != null" >
+                #{userKind,jdbcType=VARCHAR},
+            </if>
+            <if test="salesChannel != null" >
+                #{salesChannel,jdbcType=VARCHAR},
+            </if>
+            <if test="refUserId != null" >
+                #{refUserId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
 </mapper>

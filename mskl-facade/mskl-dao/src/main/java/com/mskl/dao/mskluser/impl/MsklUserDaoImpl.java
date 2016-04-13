@@ -22,5 +22,9 @@ public class MsklUserDaoImpl extends MsklBaseDao<MsklUser, Serializable> impleme
     public int increaseLoginCountAndChangeLastLoginTime(String username) {
         return updateByStatementName("increaseLoginCountAndChangeLastLoginTime",username);
     }
+
+    public void insertSelectiveBackId(MsklUser msklUser) {
+        super.getSqlSession().insert(".MsklUserMapper.insertSelectiveBackId", msklUser);
+    }
 }
 

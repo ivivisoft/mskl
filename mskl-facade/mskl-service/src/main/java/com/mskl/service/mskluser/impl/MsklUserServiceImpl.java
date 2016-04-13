@@ -1,17 +1,19 @@
 package com.mskl.service.mskluser.impl;
 
+import com.mskl.common.constant.CheckcodeType;
 import com.mskl.common.constant.RedisKeyConstant;
 import com.mskl.common.dto.*;
-import com.mskl.common.util.FileUtil;
 import com.mskl.common.util.MD5Util;
 import com.mskl.common.util.TokenUtil;
 import com.mskl.common.vo.UserInfoVo;
+import com.mskl.dao.model.MsklAccount;
 import com.mskl.dao.model.MsklUser;
 import com.mskl.dao.model.MsklUserExt;
 import com.mskl.dao.model.MsklUserLoginLog;
 import com.mskl.dao.mskluser.MsklUserDao;
+import com.mskl.service.account.AccountService;
 import com.mskl.service.base.impl.BaseServiceImpl;
-import com.mskl.common.constant.CheckcodeType;
+import com.mskl.service.msklfile.MsklFileService;
 import com.mskl.service.mskluser.MsklUserExtService;
 import com.mskl.service.mskluser.MsklUserService;
 import com.mskl.service.mskluserloginlog.MsklUserLoginLogService;
@@ -45,6 +47,9 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
     @Resource
     private RedisClient redisClient;
 
+    @Resource(name = "msklFile.msklFileService")
+    private MsklFileService msklFileService;
+
 
     @Resource(name = "smscheckcode.msklSmsCheckcodeService")
     private MsklSmsCheckcodeService msklSmsCheckcodeService;
@@ -55,6 +60,10 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
     @Resource(name = "mskluser.msklUserExtService")
     private MsklUserExtService msklUserExtService;
 
+    @Resource(name = "account.accountService")
+    private AccountService accountService;
+
+    @Transactional
     public RestServiceResult<Boolean> register(RegisterDto registerDto) {
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("用户注册服务", false);
         result.setData(Boolean.FALSE);
@@ -88,7 +97,19 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
                 msklUser.setRefUserId(Long.parseLong(registerDto.getInvitationCode()));
             }
 
-            saveObject(msklUser);
+            msklUserDao.insertSelectiveBackId(msklUser);
+            //初始化账户余额
+            MsklAccount msklAccount = new MsklAccount();
+            msklAccount.setUserId(msklUser.getUserId());
+            msklAccount.setAccountStatus("1");
+            msklAccount.setAvalaibleAmount(0L);
+            msklAccount.setCreateDatetime(new Date());
+            msklAccount.setCurrencyType("1");
+            msklAccount.setFreezeAmount(0L);
+            msklAccount.setVersion(1L);
+            msklAccount.setUpdateDatetime(new Date());
+            msklAccount.setUserRealName(msklUser.getUserRealName());
+            accountService.saveObject(msklAccount);
             result.setSuccess(true);
             result.setData(Boolean.TRUE);
         } catch (Exception e) {
@@ -336,13 +357,14 @@ public class MsklUserServiceImpl extends BaseServiceImpl<MsklUser, String> imple
     }
 
     private boolean updateHeaderImg(UserExtDto userExtDto, RestServiceResult<Boolean> result, MsklUserExt msklUserExt) {
-        if (StringUtils.isBlank(userExtDto.getPhoto())) {
+        if (StringUtils.isNotBlank(userExtDto.getPhoto())) {
             try {
-                String filePath = FileUtil.mobileFileUpload("/upload/image/", userExtDto.getPhoto(), "header.png");
+                String filePath = msklFileService.saveFileToServer("/upload/image/header/", userExtDto.getPhoto(), "header.png");
                 msklUserExt.setUserPhoto(filePath);
                 return true;
             } catch (Exception e) {
                 result.setMessage("更新图像失败!");
+                e.printStackTrace();
                 if (logger.isErrorEnabled()) {
                     logger.error(result.toString());
                 }

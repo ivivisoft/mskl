@@ -20,4 +20,10 @@ public interface MsklUserDao extends Dao<MsklUser, Serializable> {
      */
     int increaseLoginCountAndChangeLastLoginTime(String username);
 
+    /**
+     * 插入用户,并且返回userId
+     * @param msklUser
+     */
+    void insertSelectiveBackId(MsklUser msklUser);
+
 }

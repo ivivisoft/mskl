@@ -8,8 +8,8 @@ import com.mskl.dao.model.MsklAccountJour;
 import com.mskl.dao.model.MsklUserBankcard;
 import com.mskl.dao.model.MsklUserCashoutApplication;
 import com.mskl.dao.usercashout.UserCashoutDao;
-import com.mskl.service.amount.AmountJourService;
-import com.mskl.service.amount.AmountService;
+import com.mskl.service.account.AccountService;
+import com.mskl.service.account.AccountJourService;
 import com.mskl.service.base.impl.BaseServiceImpl;
 import com.mskl.service.userBankcard.UserBankcardServcie;
 import com.mskl.service.usercashout.UserCashoutService;
@@ -39,11 +39,11 @@ public class UserCashoutServiceImpl extends BaseServiceImpl<MsklUserCashoutAppli
     @Resource(name = "userBankcard.userBankcardService")
     private UserBankcardServcie userBankcardServcie;
 
-    @Resource(name = "amount.amountService")
-    private AmountService amountService;
+    @Resource(name = "account.accountService")
+    private AccountService accountService;
 
-    @Resource(name = "amountJour.amountJourService")
-    private AmountJourService amountJourService;
+    @Resource(name = "accountJour.accountJourService")
+    private AccountJourService accountJourService;
 
 
     public RestServiceResult<Boolean> applyCashout(UserCashoutDto userCashoutDto, String token) {
@@ -51,7 +51,7 @@ public class UserCashoutServiceImpl extends BaseServiceImpl<MsklUserCashoutAppli
         RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入体现申请服务", false);
         Long userId = TokenUtil.getUserIdFromToken(token);
 
-        MsklAccount msklAccount = amountService.getAmountByUserId(userId);
+        MsklAccount msklAccount = accountService.getAccountByUserId(userId);
         if (null == msklAccount) {
             result.setMessage("查询账户余额异常!");
             if (logger.isInfoEnabled()) {
@@ -88,7 +88,7 @@ public class UserCashoutServiceImpl extends BaseServiceImpl<MsklUserCashoutAppli
         accountJour.setWorkDate("");
         accountJour.setVersion(1L);
         try {
-            amountJourService.saveObject(accountJour);
+            accountJourService.saveObject(accountJour);
         } catch (Exception e) {
             result.setMessage("增加账户流水到数据库失败!");
             if (logger.isErrorEnabled()) {
