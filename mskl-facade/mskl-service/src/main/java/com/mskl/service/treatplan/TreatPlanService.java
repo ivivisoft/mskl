@@ -34,4 +34,6 @@ public interface TreatPlanService extends BaseService<MsklTreatPlan,Serializable
     void generatorPlanLog(MsklTreatPlan treatPlan);
 
     RestServiceResult<Boolean> updateTreatPlan(TreatPlanDto treatPlanDto, String token);
+
+    RestServiceResult<Boolean> deleteTreatPlan(String msklTreatplanId);
 }

@@ -45,7 +45,7 @@ public class TreatPlanController {
     @RequestMapping("/all/{token}")
     public RestServiceResult<List<MsklTreatPlan>> getAllTreatPlan(@PathVariable String token) {
         RestServiceResult<List<MsklTreatPlan>> result = new RestServiceResult<List<MsklTreatPlan>>("进入查询服药计划Controller类!", true);
-        if (!verificationService.verification(token, result)) {
+        if (!verificationService.verificationToken(token, result)) {
             if (logger.isInfoEnabled()) {
                 logger.info(result.toString());
             }
@@ -54,5 +54,23 @@ public class TreatPlanController {
         return treatPlanService.getAllTreatPlan(token);
     }
 
+    @RequestMapping("/delete/{treatPlanId}/{token}")
+    public RestServiceResult<Boolean> deleteTreatPlan(@PathVariable String treatPlanId,@PathVariable String token){
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("进入删除服药计划controller类", false);
+        if (StringUtils.isBlank(treatPlanId)) {
+            result.setMessage("传入服药计划ID为空!");
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
+        }
+        if (!verificationService.verificationToken(token, result)) {
+            if (logger.isInfoEnabled()) {
+                logger.info(result.toString());
+            }
+            return result;
+        }
+        return treatPlanService.deleteTreatPlan(treatPlanId);
+    }
 
 }

@@ -300,7 +300,7 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
 
     @Transactional
     public RestServiceResult<Boolean> updateTreatPlan(TreatPlanDto treatPlanDto, String token) {
-        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("更新服药计划服务服务", false);
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("更新服药计划服务", false);
 
         Long userId = TokenUtil.getUserIdFromToken(token);
         MsklTreatPlan msklTreatPlan = getObjectById(treatPlanDto.getTreatPlanId());
@@ -340,6 +340,23 @@ public class TreatPlanServiceImpl extends BaseServiceImpl<MsklTreatPlan, Seriali
         result.setSuccess(true);
         result.setData(Boolean.TRUE);
         return result;
+    }
+
+    public RestServiceResult<Boolean> deleteTreatPlan(String msklTreatplanId) {
+        RestServiceResult<Boolean> result = new RestServiceResult<Boolean>("删除服药计划服务", false);
+        try {
+            deleteObjectById(Long.parseLong(msklTreatplanId));
+            result.setSuccess(true);
+            result.setData(Boolean.TRUE);
+            return result;
+        } catch (Exception e) {
+            result.setMessage("删除服药计划到数据库失败!");
+            if (logger.isErrorEnabled()) {
+                logger.error(result.toString());
+            }
+            return result;
+        }
+
     }
 
     private boolean dealTreatLog(TreatPlanDto treatPlanDto, RestServiceResult<Boolean> result, MsklTreatPlan msklTreatPlan, Long userId) {
